@@ -42,7 +42,6 @@ export const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    marginBottom: 5,
     fontSize: 16,
     color: colors.mainColorLight2
   },

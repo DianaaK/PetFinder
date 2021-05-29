@@ -1,14 +1,31 @@
+import { useNavigation } from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
-import { View, StatusBar, FlatList, Keyboard } from 'react-native';
+import { View, StatusBar, FlatList, Keyboard, BackHandler } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
-import { Router } from '../../utils';
-import { HeaderComponent, TextComponent } from '../general';
-import { AnimalCardComponent, SearchComponent } from './components';
+import { HeaderComponent } from '../general';
+import { PetCardComponent, SearchComponent } from './components';
 import { styles } from './styles';
 
 function HomeContainer(props: any) {
+  const navigation = useNavigation();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+
   const renderItem = ({ item }: { item: any }) => {
-    return <AnimalCardComponent key={item.id} item={item} />;
+    return <PetCardComponent key={item.id} item={item} onPress={onPressItem} />;
   };
 
   const onMenuOpen = () => {
@@ -17,6 +34,10 @@ function HomeContainer(props: any) {
   };
 
   const onMapOpen = () => {};
+
+  const onPressItem = (id: string) => {
+    navigation.navigate('Details', { itemId: id });
+  };
 
   return (
     <View style={styles.container}>
@@ -61,7 +82,7 @@ const dispatchToProps = {};
 
 export default reduxContainer(HomeContainer, mapStateToProps, dispatchToProps);
 
-const data = [
+export const data = [
   {
     id: '1',
     type: 'Found',

@@ -39,12 +39,12 @@ function ProfileContainer(props: any) {
             <TextComponent style={styles.text}>
               {user.firstname + ' ' + user.lastname}
             </TextComponent>
+            <TextComponent style={[styles.fadedText, { fontSize: 10 }]}>
+              Member since: {user.created}
+            </TextComponent>
           </View>
         </View>
         <TextComponent style={styles.fadedText}>{user.email}</TextComponent>
-        <TextComponent style={styles.fadedText}>
-          Member since {user.created}
-        </TextComponent>
       </View>
       <View style={styles.menu}>
         <MenuButtonComponent
@@ -66,12 +66,12 @@ function ProfileContainer(props: any) {
           iconName="my-library-books"
           onPress={() => {}}
         />
-        <MenuButtonComponent
+        {/* <MenuButtonComponent
           title="Favorites"
           iconType="FontAwesome"
           iconName="heart"
           onPress={() => {}}
-        />
+        /> */}
       </View>
       <View style={styles.bottomMenu}>
         <MenuButtonComponent

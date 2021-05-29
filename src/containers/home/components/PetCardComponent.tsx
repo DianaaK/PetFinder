@@ -5,16 +5,16 @@ import { IconComponent, TextComponent } from '../../general';
 
 const placeHolder = 'https://i.stack.imgur.com/y9DpT.jpg';
 
-export function AnimalCardComponent(props: any) {
-  const onPress = () => {
-    // onPressItem(props.item.id);
+export function PetCardComponent(props: any) {
+  const onPressItem = () => {
+    props.onPress(props.item.id);
   };
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={styles.container}
-      onPress={onPress}>
+      onPress={onPressItem}>
       <View style={styles.imageContainer}>
         <View style={styles.genderContainer}>
           <IconComponent
