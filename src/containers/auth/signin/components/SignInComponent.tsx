@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Keyboard, View, Animated} from 'react-native';
-import {assets} from '../../../../../assets/images';
-import {InputComponent} from '../../../general';
-import {ButtonComponent} from '../../general';
-import {styles} from './styles';
-import {DEVICE_HEIGHT, isIOS} from '../../../../styles/deviceHelper';
-import {Router} from '../../../../utils';
+import React, { useEffect, useState } from 'react';
+import { Keyboard, View, Animated } from 'react-native';
+import { assets } from '../../../../../assets/images';
+import { InputComponent } from '../../../general';
+import { ButtonComponent } from '../../general';
+import { styles } from './styles';
+import { DEVICE_HEIGHT, isIOS } from '../../../../styles/deviceHelper';
 
-const SignInComponent = () => {
-  const [user, setUser] = useState({email: '', password: ''});
+const SignInComponent = (props: any) => {
+  const [user, setUser] = useState({ email: '', password: '' });
 
   const imageHeight = new Animated.Value(180);
   const backImageHeight = new Animated.Value(DEVICE_HEIGHT / 3);
@@ -32,13 +31,13 @@ const SignInComponent = () => {
       Animated.timing(imageHeight, {
         duration: event.duration,
         toValue: 0,
-        useNativeDriver: false,
+        useNativeDriver: false
       }),
       Animated.timing(backImageHeight, {
         duration: event.duration,
         toValue: 100,
-        useNativeDriver: false,
-      }),
+        useNativeDriver: false
+      })
     ]).start();
   };
 
@@ -47,23 +46,23 @@ const SignInComponent = () => {
       Animated.timing(imageHeight, {
         duration: event ? event.duration : 100,
         toValue: 180,
-        useNativeDriver: false,
+        useNativeDriver: false
       }),
       Animated.timing(backImageHeight, {
         duration: event ? event.duration : 100,
         toValue: DEVICE_HEIGHT / 3,
-        useNativeDriver: false,
-      }),
+        useNativeDriver: false
+      })
     ]).start();
   };
 
   const handleInputChange = (field: string, text: any) => {
     switch (field) {
       case 'email':
-        setUser({...user, email: text});
+        setUser({ ...user, email: text });
         break;
       case 'password':
-        setUser({...user, password: text});
+        setUser({ ...user, password: text });
       default:
         break;
     }
@@ -71,20 +70,24 @@ const SignInComponent = () => {
 
   const handleLogin = () => {
     Keyboard.dismiss();
-    Router.push('logIn');
+    props.handleLogin();
   };
 
   const handleSignIn = () => {
     Keyboard.dismiss();
-    Router.push('home');
+    props.handleSignIn();
   };
 
   return (
     <View style={styles.container}>
-      <Animated.View style={styles.logoContainer}>
+      <Animated.View
+        style={[
+          styles.logoContainer,
+          { display: imageHeight ? 'flex' : 'none' }
+        ]}>
         <Animated.Image
           source={assets.logoSmall}
-          style={{height: imageHeight}}
+          style={{ height: imageHeight }}
           resizeMode="contain"
         />
       </Animated.View>
@@ -118,7 +121,7 @@ const SignInComponent = () => {
             label="Email"
             id="email"
             keyboardType="email-address"
-            iconName="account"
+            iconName="email"
             iconType="MaterialCommunityIcons"
           />
           <InputComponent

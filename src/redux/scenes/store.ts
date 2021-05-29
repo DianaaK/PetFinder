@@ -1,9 +1,9 @@
 export const initialState = {
   scene: {
-    routeName: "home"
+    routeName: 'main'
   }
 };
 
 export const ActionTypes = {
-  CHANGE_SCENE: "CHANGE_SCENE"
+  CHANGE_SCENE: 'CHANGE_SCENE'
 };

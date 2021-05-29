@@ -5,9 +5,8 @@ import { InputComponent } from '../../../general';
 import { ButtonComponent } from '../../general';
 import { styles } from './styles';
 import { DEVICE_HEIGHT, isIOS } from '../../../../styles/deviceHelper';
-import { Router } from '../../../../utils';
 
-const LogInComponent = () => {
+const LogInComponent = (props: any) => {
   const [user, setUser] = useState({ email: '', password: '' });
 
   const imageHeight = new Animated.Value(180);
@@ -32,28 +31,28 @@ const LogInComponent = () => {
       Animated.timing(imageHeight, {
         duration: event.duration,
         toValue: 0,
-        useNativeDriver: false,
+        useNativeDriver: false
       }),
       Animated.timing(backImageHeight, {
         duration: event.duration,
         toValue: 100,
-        useNativeDriver: false,
-      }),
+        useNativeDriver: false
+      })
     ]).start();
   };
 
   const keyboardHide = (event: any) => {
     Animated.parallel([
       Animated.timing(imageHeight, {
-        duration: event ? event.duration : 100,
+        duration: event ? event.duration : 200,
         toValue: 180,
-        useNativeDriver: false,
+        useNativeDriver: false
       }),
       Animated.timing(backImageHeight, {
-        duration: event ? event.duration : 100,
+        duration: event ? event.duration : 200,
         toValue: DEVICE_HEIGHT / 3,
-        useNativeDriver: false,
-      }),
+        useNativeDriver: false
+      })
     ]).start();
   };
 
@@ -71,12 +70,12 @@ const LogInComponent = () => {
 
   const handleLogin = () => {
     Keyboard.dismiss();
-    Router.push('home');
+    props.handleLogin();
   };
 
   const handleSignIn = () => {
     Keyboard.dismiss();
-    Router.push('signIn');
+    props.handleSignIn();
   };
 
   return (

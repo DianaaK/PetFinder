@@ -1,42 +1,54 @@
 import React from 'react';
-import { View, StatusBar, Text, FlatList, SafeAreaView } from 'react-native';
+import { View, StatusBar, FlatList, Keyboard } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
-import { ListHeaderComponent } from '../general';
+import { Router } from '../../utils';
+import { HeaderComponent, TextComponent } from '../general';
 import { AnimalCardComponent, SearchComponent } from './components';
 import { styles } from './styles';
 
-class HomeContainer extends React.Component {
-  componentDidMount() {
-    // Router.delayer(this.props.getAppDataAction);
-  }
-
-  renderItem = ({ item }: { item: any }) => {
+function HomeContainer(props: any) {
+  const renderItem = ({ item }: { item: any }) => {
     return <AnimalCardComponent key={item.id} item={item} />;
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar
-          backgroundColor="transparent"
-          barStyle="dark-content"
-          translucent
+  const onMenuOpen = () => {
+    Keyboard.dismiss();
+    props.navigation.openDrawer();
+  };
+
+  const onMapOpen = () => {};
+
+  return (
+    <View style={styles.container}>
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent
+      />
+      <HeaderComponent
+        title="Lost & Found"
+        leftButtonAction={onMenuOpen}
+        leftButtonIcon={{
+          type: 'MaterialIcons',
+          name: 'menu'
+        }}
+        rightButtonAction={onMapOpen}
+        rightButtonIcon={{
+          type: 'FontAwesome',
+          name: 'globe'
+        }}
+      />
+      <View style={styles.contentContainer}>
+        <FlatList
+          ListHeaderComponent={<SearchComponent />}
+          data={data}
+          renderItem={renderItem}
+          contentContainerStyle={styles.list}
+          keyExtractor={(item) => item.id}
         />
-        <ListHeaderComponent />
-        <View style={styles.contentContainer}>
-          <SafeAreaView style={styles.listContainer}>
-            <FlatList
-              ListHeaderComponent={<SearchComponent />}
-              data={data}
-              renderItem={this.renderItem}
-              contentContainerStyle={styles.list}
-              keyExtractor={(item) => item.id}
-            />
-          </SafeAreaView>
-        </View>
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 function mapStateToProps(state: any) {
@@ -67,7 +79,7 @@ const data = [
       ''
     ],
     location: 'Bucharest',
-    distance: '3.6 Km'
+    distance: '1.2 Km'
   },
   {
     id: '2',
@@ -85,13 +97,14 @@ const data = [
       'https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg',
       ''
     ],
-    location: 'Bucharest',
-    distance: '1.2 Km'
+
+    location: 'Constanta',
+    distance: '233.6 Km'
   },
   {
     id: '3',
     type: 'Found',
-    name: 'Orange kitten long name',
+    name: 'Orange kitten that looks lost',
     species: 'Cat',
     breed: 'Common breed',
     gender: 'male',

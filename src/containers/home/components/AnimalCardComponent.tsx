@@ -1,16 +1,13 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
 const placeHolder = 'https://i.stack.imgur.com/y9DpT.jpg';
 
 export function AnimalCardComponent(props: any) {
-  const { onPressItem } = props;
-
   const onPress = () => {
-    onPressItem(props.item.id);
+    // onPressItem(props.item.id);
   };
 
   return (
