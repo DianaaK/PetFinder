@@ -16,9 +16,7 @@ function HomeContainer(props: any) {
         BackHandler.exitApp();
         return true;
       };
-
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
       return () =>
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
@@ -97,7 +95,8 @@ export const data = [
     userContact: '0732783868',
     media: [
       'https://www.petbarn.com.au/petspot/app/uploads/2011/09/PB387_Blog-Genral-In-Post-800x533px.jpg',
-      ''
+      'https://thepedigreepaws.b-cdn.net/web/kitten_breed/3/1594236709-birman-unusual-markings-cat-breed.jpg',
+      'https://media.istockphoto.com/photos/sacred-birma-cat-in-interior-picture-id623368372?k=6&m=623368372&s=170667a&w=0&h=qPgfMb-SC5l0u3gXaRHu-K5uZylLeE-MtMzG6y3Oc60='
     ],
     location: 'Bucharest',
     distance: '1.2 Km'
@@ -116,7 +115,7 @@ export const data = [
     userContact: 'mail@gmail.com',
     media: [
       'https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg',
-      ''
+      'https://www.thesprucepets.com/thmb/kwGfWsJ_HgbqSw9fRmQIhdLpCa4=/1553x1553/smart/filters:no_upscale()/bengalcat-56a2bcd95f9b58b7d0cdf798.jpg'
     ],
 
     location: 'Constanta',
@@ -135,8 +134,7 @@ export const data = [
     userName: 'Ana',
     userContact: 'mail@gmail.com',
     media: [
-      'https://media1.popsugar-assets.com/files/thumbor/1TCL1Ddne0jKYDztzjA-8K5RjF4/fit-in/728xorig/filters:format_auto-!!-:strip_icc-!!-/2020/03/31/067/n/1922243/tmp_dsoLCh_f9da2c804d46c59b_IMG_2098.jpeg',
-      ''
+      'https://media1.popsugar-assets.com/files/thumbor/1TCL1Ddne0jKYDztzjA-8K5RjF4/fit-in/728xorig/filters:format_auto-!!-:strip_icc-!!-/2020/03/31/067/n/1922243/tmp_dsoLCh_f9da2c804d46c59b_IMG_2098.jpeg'
     ],
     location: 'Bucharest',
     distance: '2.3 Km'
@@ -155,7 +153,7 @@ export const data = [
     userContact: 'mail2@gmail.com',
     media: [
       'https://cdn.shopify.com/s/files/1/0994/0236/articles/siberian-husky_2319x.jpg?v=1502391918',
-      ''
+      'https://www.taramulanimalelor.com/wp-content/uploads/2019/12/Ce-trebuie-sa-stii-despre-Husky-Siberian.png'
     ],
     location: 'Bucharest',
     distance: '6 Km'
