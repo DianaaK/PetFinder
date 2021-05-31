@@ -7,6 +7,7 @@ import {
   statusBarHeight
 } from '../../styles';
 import { HeaderComponent } from '../general';
+import MapComponent from './components/MapComponent';
 
 export default function MapContainer(props: any) {
   const onBack = () => {
@@ -22,21 +23,20 @@ export default function MapContainer(props: any) {
         barStyle="light-content"
         translucent
       />
-      <View>
-        <HeaderComponent
-          title="Map"
-          leftButtonAction={onBack}
-          leftButtonIcon={{
-            type: 'MaterialIcons',
-            name: 'arrow-back'
-          }}
-          rightButtonAction={toggleFilters}
-          rightButtonIcon={{
-            type: 'MaterialIcons',
-            name: 'filter-list'
-          }}
-        />
-      </View>
+      <HeaderComponent
+        title="Map"
+        leftButtonAction={onBack}
+        leftButtonIcon={{
+          type: 'MaterialIcons',
+          name: 'arrow-back'
+        }}
+        rightButtonAction={toggleFilters}
+        rightButtonIcon={{
+          type: 'MaterialIcons',
+          name: 'filter-list'
+        }}
+      />
+      <MapComponent />
     </View>
   );
 }
@@ -45,15 +45,5 @@ const styles = StyleSheet.create({
   container: {
     marginTop: statusBarHeight,
     flex: 1
-  },
-  detailsContainer: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    width: '100%',
-    minHeight: DEVICE_HEIGHT / 2 - statusBarHeight
-  },
-  cardContainer: {
-    marginTop: -30,
-    marginHorizontal: DEVICE_WIDTH / 14
   }
 });
