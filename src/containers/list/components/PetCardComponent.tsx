@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { assets } from '../../../../assets/images';
+import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
@@ -18,7 +19,7 @@ export function PetCardComponent(props: any) {
         <View style={styles.genderContainer}>
           <IconComponent
             type="Ionicons"
-            name={props.item.gender}
+            name={props.item.gender === PetGender.MALE ? 'male' : 'female'}
             style={styles.genderIcon}
           />
         </View>
@@ -33,9 +34,14 @@ export function PetCardComponent(props: any) {
           <TextComponent
             style={[
               styles.reportType,
-              { color: props.item.type == 'Lost' ? colors.red : colors.green }
+              {
+                color:
+                  props.item.type === ReportType.LOST
+                    ? colors.red
+                    : colors.green
+              }
             ]}>
-            {props.item.type}
+            {props.item.type === ReportType.LOST ? 'Lost' : 'Found'}
           </TextComponent>
         </View>
       </View>
@@ -59,14 +65,14 @@ export function PetCardComponent(props: any) {
           <View style={styles.detailsFlexContainer}>
             <IconComponent
               type={
-                props.item.species === 'other'
+                props.item.species === PetSpecies.OTHER
                   ? 'MaterialIcons'
                   : 'FontAwesome5'
               }
               name={
-                props.item.species === 'Cat'
+                props.item.species === PetSpecies.CAT
                   ? 'cat'
-                  : props.item.species === 'Dog'
+                  : props.item.species === PetSpecies.DOG
                   ? 'dog'
                   : 'pets'
               }

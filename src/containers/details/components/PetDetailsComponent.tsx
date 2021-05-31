@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { assets } from '../../../../assets/images';
+import { ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
@@ -47,7 +48,7 @@ export default function PetDetailsComponent(props: any) {
             </View>
           </View>
           <TextComponent style={styles.userType}>
-            {pet.type === 'Lost' ? 'Owner' : 'Rescuer'}
+            {pet.type === ReportType.LOST ? 'Owner' : 'Rescuer'}
           </TextComponent>
           {pet.user.email && (
             <TextComponent style={styles.userType}>

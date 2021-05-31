@@ -3,6 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { View, StatusBar, FlatList, Keyboard, BackHandler } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
+import { PetGender, PetSpecies, ReportType } from '../../redux/types';
 import { HeaderComponent } from '../general';
 import { PetCardComponent, SearchComponent } from './components';
 import { styles } from './styles';
@@ -85,11 +86,11 @@ export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
 export const data = [
   {
     id: '1',
-    type: 'Found',
+    type: ReportType.FOUND,
     name: 'Ari',
-    species: 'Cat',
+    species: PetSpecies.CAT,
+    gender: PetGender.MALE,
     breed: 'Birman',
-    gender: 'male',
     age: '2 years',
     description: 'Fluffy cat with blue eyes',
     date: '28.05.2021',
@@ -109,11 +110,11 @@ export const data = [
   },
   {
     id: '2',
-    type: 'Lost',
+    type: ReportType.LOST,
     name: 'Suki',
-    species: 'Cat',
+    species: PetSpecies.CAT,
     breed: 'Common breed',
-    gender: 'female',
+    gender: PetGender.FEMALE,
     age: '6 years',
     description:
       'Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc.',
@@ -135,11 +136,11 @@ export const data = [
   },
   {
     id: '3',
-    type: 'Found',
+    type: ReportType.FOUND,
     name: 'Orange kitten that looks lost',
-    species: 'Cat',
+    species: PetSpecies.CAT,
     breed: 'Common breed',
-    gender: 'male',
+    gender: PetGender.MALE,
     age: '3 months',
     description: 'Orange kitten',
     date: '10.04.2021',
@@ -155,11 +156,11 @@ export const data = [
   },
   {
     id: '4',
-    type: 'Lost',
+    type: ReportType.LOST,
     name: 'Yuna',
-    species: 'Dog',
+    species: PetSpecies.DOG,
     breed: 'Husky',
-    gender: 'female',
+    gender: PetGender.FEMALE,
     age: '4 years',
     description:
       'Vestibulum tempor fringilla placerat. Maecenas ipsum nibh, porta finibus tempus in, blandit non libero. Vivamus ac sapien nisl. Curabitur dui massa, efficitur sit amet aliquam vel, malesuada nec diam. Vestibulum et suscipit nunc, non pellentesque libero. Nulla sed ante vitae magna efficitur imperdiet. Praesent sed urna rutrum, sagittis dolor in, congue erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam quis neque faucibus, fermentum nisi at, blandit dolor.',

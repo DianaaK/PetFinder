@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
@@ -11,13 +12,17 @@ export default function PetCardComponent(props: any) {
       <TextComponent
         style={[
           styles.reportType,
-          { color: pet.type == 'Lost' ? colors.red : colors.green }
+          { color: pet.type === ReportType.LOST ? colors.red : colors.green }
         ]}>
-        {pet.type}
+        {pet.type === ReportType.LOST ? 'Lost' : 'Found'}
       </TextComponent>
       <View style={styles.contentHeader}>
         <TextComponent style={styles.petName}>{pet.name}</TextComponent>
-        <IconComponent type="Ionicons" name={pet.gender} style={styles.icon} />
+        <IconComponent
+          type="Ionicons"
+          name={pet.gender === PetGender.MALE ? 'male' : 'female'}
+          style={styles.icon}
+        />
       </View>
       <View
         style={{
@@ -28,12 +33,14 @@ export default function PetCardComponent(props: any) {
         <View style={styles.flexRowContainer}>
           <IconComponent
             type={
-              props.item.species === 'other' ? 'MaterialIcons' : 'FontAwesome5'
+              props.item.species === PetSpecies.OTHER
+                ? 'MaterialIcons'
+                : 'FontAwesome5'
             }
             name={
-              props.item.species === 'Cat'
+              props.item.species === PetSpecies.CAT
                 ? 'cat'
-                : props.item.species === 'Dog'
+                : props.item.species === PetSpecies.DOG
                 ? 'dog'
                 : 'pets'
             }
