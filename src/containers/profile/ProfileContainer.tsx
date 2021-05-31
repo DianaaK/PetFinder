@@ -10,7 +10,13 @@ function ProfileContainer(props: any) {
   const chooseAvatarHandler = () => {};
 
   const logOutAction = () => {
+    props.navigation.closeDrawer();
     props.navigation.navigate('LogIn');
+  };
+
+  const redirectToAddAction = () => {
+    props.navigation.closeDrawer();
+    props.navigation.navigate('Add');
   };
 
   return (
@@ -58,7 +64,7 @@ function ProfileContainer(props: any) {
           title="Add pet"
           iconType="FontAwesome"
           iconName="plus"
-          onPress={() => {}}
+          onPress={redirectToAddAction}
         />
         <MenuButtonComponent
           title="My pets"

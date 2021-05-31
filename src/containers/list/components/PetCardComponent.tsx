@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { assets } from '../../../../assets/images';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
-
-const placeHolder = 'https://i.stack.imgur.com/y9DpT.jpg';
 
 export function PetCardComponent(props: any) {
   const onPressItem = () => {
@@ -25,9 +24,20 @@ export function PetCardComponent(props: any) {
         </View>
         <Image
           resizeMode="cover"
-          source={{ uri: props.item.media[0] || placeHolder }}
+          source={
+            props.item.media ? { uri: props.item.media[0] } : assets.placeholder
+          }
           style={styles.imageStyle}
         />
+        <View style={styles.reportTypeContainer}>
+          <TextComponent
+            style={[
+              styles.reportType,
+              { color: props.item.type == 'Lost' ? colors.red : colors.green }
+            ]}>
+            {props.item.type}
+          </TextComponent>
+        </View>
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.flexRowContainer}>
@@ -127,6 +137,22 @@ const styles = StyleSheet.create({
     padding: 2,
     zIndex: 2,
     opacity: 0.8
+  },
+  reportTypeContainer: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: colors.mainColorLight,
+    borderRadius: 8,
+    margin: 8,
+    padding: 5,
+    zIndex: 2,
+    opacity: 0.8
+  },
+  reportType: {
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    fontFamily: fonts.secondFont
   },
   genderIcon: {
     color: colors.mainColor5,

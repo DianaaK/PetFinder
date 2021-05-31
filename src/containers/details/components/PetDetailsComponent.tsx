@@ -1,56 +1,110 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { TextComponent } from '../../general';
+import { Image, StyleSheet, View } from 'react-native';
+import { assets } from '../../../../assets/images';
+import { colors, fonts } from '../../../styles';
+import { IconComponent, TextComponent } from '../../general';
 
 export default function PetDetailsComponent(props: any) {
   const pet = props.item;
 
   return (
-    <View style={styles.ownerSectionContainer}>
+    <View style={styles.container}>
+      <TextComponent style={styles.description}>
+        {pet.description}
+      </TextComponent>
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: 20
+          marginTop: 20
         }}>
-        <View
-          style={{
-            height: 45,
-            width: 45,
-            backgroundColor: '#bfcbce',
-            borderRadius: 23
-          }}
-        />
         <View style={{ flex: 1, paddingLeft: 8, paddingVertical: 4 }}>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TextComponent
-              style={{ flex: 1, color: '#636363', fontWeight: '700' }}>
-              Maya Berkovskaya
-            </TextComponent>
-            <TextComponent style={{ color: '#a3a3a3' }}>
-              May 25, 2019
-            </TextComponent>
+          <View style={styles.rowContainer}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {pet.user.image ? (
+                <Image
+                  source={{ uri: pet.user.image || '' }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={assets.placeholder}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              )}
+              <TextComponent style={styles.username}>
+                {pet.user.firstname}
+              </TextComponent>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <IconComponent
+                type="MaterialIcons"
+                name="calendar-today"
+                style={styles.icon}
+              />
+              <TextComponent style={styles.date}>{pet.date}</TextComponent>
+            </View>
           </View>
-          <TextComponent style={{ color: '#a3a3a3' }}>Owner</TextComponent>
+          <TextComponent style={styles.userType}>
+            {pet.type === 'Lost' ? 'Owner' : 'Rescuer'}
+          </TextComponent>
+          {pet.user.email && (
+            <TextComponent style={styles.userType}>
+              Mail: {pet.user.email}
+            </TextComponent>
+          )}
+          {pet.user.phone && (
+            <TextComponent style={styles.userType}>
+              Phone: {pet.user.phone}
+            </TextComponent>
+          )}
         </View>
       </View>
-
-      <TextComponent
-        style={{ color: '#969696', fontWeight: '500', lineHeight: 20 }}>
-        My job requires moving to another country. I dont have the opportunity
-        to take cat with me. I am looking for good people who will shelter my{' '}
-        {pet.name}. My job requires moving to another country. I dont have the
-        opportunity to take cat with me. I am looking for good people who will
-        shelter my {pet.name}. My job requires moving to another country. I dont
-        have the opportunity to take cat with me. I am looking for good people
-        who will shelter my {pet.name}. My job requires moving to another
-        country. I dont have the opportunity to take cat with me. I am looking
-        for good people who will shelter my {pet.name}.
-      </TextComponent>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  ownerSectionContainer: { flex: 1, padding: 32 }
+  container: {
+    flex: 1,
+    padding: 32
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  description: {
+    color: colors.mainColor4,
+    lineHeight: 20,
+    fontFamily: fonts.secondFont
+  },
+  username: {
+    fontSize: 16,
+    color: colors.mainColor2,
+    fontFamily: fonts.mainFont
+  },
+  userType: {
+    marginLeft: 38,
+    fontSize: 13,
+    color: colors.mainColor4,
+    fontFamily: fonts.secondFont
+  },
+  date: {
+    fontSize: 14,
+    color: colors.mainColor2,
+    fontFamily: fonts.mainFont
+  },
+  icon: {
+    color: colors.mainColor5,
+    paddingRight: 5,
+    fontSize: 12
+  },
+  image: {
+    height: 30,
+    width: 30,
+    borderRadius: 20,
+    marginRight: 8
+  }
 });

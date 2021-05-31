@@ -151,11 +151,11 @@ const styles = {
   },
   success: {
     borderBottomWidth: 0.5,
-    borderBottomColor: colors.authInputSuccess
+    borderBottomColor: colors.green
   },
   error: {
     borderBottomWidth: 0.5,
-    borderBottomColor: colors.authInputError
+    borderBottomColor: colors.red
   },
   showPassButton: {
     position: 'absolute',

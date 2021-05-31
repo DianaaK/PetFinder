@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors } from '../../../styles';
+import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
 export default function PetCardComponent(props: any) {
@@ -8,6 +8,13 @@ export default function PetCardComponent(props: any) {
 
   return (
     <View style={styles.container}>
+      <TextComponent
+        style={[
+          styles.reportType,
+          { color: pet.type == 'Lost' ? colors.red : colors.green }
+        ]}>
+        {pet.type}
+      </TextComponent>
       <View style={styles.contentHeader}>
         <TextComponent style={styles.petName}>{pet.name}</TextComponent>
         <IconComponent type="Ionicons" name={pet.gender} style={styles.icon} />
@@ -65,6 +72,14 @@ const styles = StyleSheet.create({
     elevation: 1,
     zIndex: 4
   },
+  reportType: {
+    top: -12,
+    left: -5,
+    fontSize: 14,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    fontFamily: fonts.secondFont
+  },
   contentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between'
@@ -80,21 +95,21 @@ const styles = StyleSheet.create({
   },
   petType: {
     color: colors.mainColor3,
-    fontSize: 16,
     fontWeight: '500',
-    paddingVertical: 8
+    paddingVertical: 8,
+    fontFamily: fonts.secondFont
   },
   petAge: {
-    color: colors.mainColor3,
-    fontSize: 14,
+    color: colors.mainColor4,
     fontWeight: '500',
-    paddingVertical: 4
+    paddingVertical: 4,
+    fontFamily: fonts.secondFont
   },
   location: {
-    color: '#a3a3a3',
-    fontSize: 16,
+    color: colors.mainColor3,
     fontWeight: '500',
-    paddingVertical: 4
+    paddingVertical: 4,
+    fontFamily: fonts.secondFont
   },
   icon: {
     color: colors.mainColor5,

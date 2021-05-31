@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeContainer } from './home';
+import { ListContainer } from './list';
 import { ProfileContainer } from './profile';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -9,7 +9,7 @@ function DrawerContainer(props: any) {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <ProfileContainer {...props} />}>
-      <Drawer.Screen name="List" component={HomeContainer} />
+      <Drawer.Screen name="List" component={ListContainer} />
     </Drawer.Navigator>
   );
 }

@@ -6,7 +6,7 @@ import reduxContainer from '../../../redux/reduxContainer';
 
 function LogInContainer(props: any) {
   const loginAction = () => {
-    props.navigation.navigate('Home');
+    props.navigation.navigate('List');
   };
 
   const signinAction = () => {

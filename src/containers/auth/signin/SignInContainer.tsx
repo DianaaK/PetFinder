@@ -10,7 +10,7 @@ function SignInContainer(props: any) {
   };
 
   const signinAction = () => {
-    props.navigation.navigate('Home');
+    props.navigation.navigate('List');
   };
 
   return (
