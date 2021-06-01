@@ -10,9 +10,10 @@ import GeneralMapComponent from './components/GeneralMapComponent';
 export default function MapContainer(props: any) {
   const route: any = useRoute();
 
-  const [position, setPosition] = useState<
-    { latitude: number; longitude: number } | {}
-  >({});
+  const [position, setPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  }>({ latitude: 44.4268, longitude: 26.1025 });
   const [positionPending, setPositionPending] = useState(true);
 
   useEffect(() => {
@@ -44,19 +45,13 @@ export default function MapContainer(props: any) {
   };
 
   const setInitialPosition = (coordinates: any) => {
-    let myPosition = {};
     if (coordinates && coordinates.length === 2) {
-      myPosition = {
+      const myPosition = {
         latitude: coordinates[1],
         longitude: coordinates[0]
       };
-    } else {
-      myPosition = {
-        latitude: 44.4268,
-        longitude: 26.1025
-      };
+      setPosition(myPosition);
     }
-    setPosition(myPosition);
     setPositionPending(false);
   };
 

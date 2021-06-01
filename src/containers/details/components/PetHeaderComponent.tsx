@@ -46,8 +46,8 @@ export default function PetHeaderComponent(props: any) {
             });
           }}>
           <IconComponent
-            type="FontAwesome"
-            name="globe"
+            type="MaterialCommunityIcons"
+            name="map-search"
             style={[styles.icon, { fontSize: 30 }]}
           />
         </TouchableOpacity>

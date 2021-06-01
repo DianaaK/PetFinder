@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Animated, ActivityIndicator } from 'react-native';
+import { Popup } from 'react-native-map-link';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { PetReportDTO, ReportType } from '../../../redux/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
@@ -8,7 +9,10 @@ import { ListItemComponent } from '../../list/components';
 
 interface IProps {
   data: PetReportDTO[];
-  position: any;
+  position: {
+    latitude: number;
+    longitude: number;
+  };
   positionPending: boolean;
   forPet?: boolean;
   petReport?: PetReportDTO;
@@ -24,6 +28,7 @@ export default function GeneralMap(props: IProps) {
   const navigation = useNavigation();
   const [preview, setPreview] = useState<boolean>(false);
   const [pet, setPet] = useState<PetReportDTO | null>(null);
+  const [showNavigate, setShowNavigate] = useState<boolean>(false);
 
   useEffect(() => {
     if (props.forPet && props.petReport) {
@@ -90,6 +95,34 @@ export default function GeneralMap(props: IProps) {
     navigation.navigate('Details', { itemId: _id });
   };
 
+  const closeNavigationHandler = () => {
+    setShowNavigate(false);
+  };
+
+  const openNavigationHandler = () => {
+    setShowNavigate(true);
+  };
+
+  const renderExternalNavigation = () => (
+    <Popup
+      isVisible={showNavigate}
+      onCancelPressed={closeNavigationHandler}
+      onAppPressed={closeNavigationHandler}
+      onBackButtonPressed={closeNavigationHandler}
+      modalProps={{
+        animationIn: 'slideInUp'
+      }}
+      appsWhiteList={['google-maps', 'waze', 'uber']}
+      options={{
+        latitude: props.position.latitude + '',
+        longitude: props.position.longitude + '',
+        dialogTitle: `Navigate to ${props.petReport?.name}`,
+        dialogMessage: 'Choose application',
+        cancelText: 'Cancel'
+      }}
+    />
+  );
+
   return (
     <View style={{ flex: 1 }}>
       {props.positionPending ? (
@@ -116,9 +149,15 @@ export default function GeneralMap(props: IProps) {
         </MapView>
       )}
       {preview && pet && (
-        <Animated.View style={[styles.preview, { bottom: previewBottom }]}>
-          <ListItemComponent item={pet} onPress={redirectToPet} />
-        </Animated.View>
+        <>
+          <Animated.View style={[styles.preview, { bottom: previewBottom }]}>
+            <ListItemComponent
+              item={pet}
+              onPress={props.forPet ? openNavigationHandler : redirectToPet}
+            />
+          </Animated.View>
+          {renderExternalNavigation()}
+        </>
       )}
     </View>
   );
