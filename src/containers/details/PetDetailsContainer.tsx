@@ -19,7 +19,7 @@ export default function PetDetailsContainer(props: any) {
   const route: any = useRoute();
 
   const itemId = route.params.itemId;
-  const animal = data.filter((item: any) => item.id === itemId)[0] || {};
+  const petReport = data.filter((item: any) => item._id === itemId)[0] || {};
 
   return (
     <View style={styles.container}>
@@ -29,12 +29,12 @@ export default function PetDetailsContainer(props: any) {
         translucent
       />
       <ScrollView>
-        <PetHeaderComponent item={animal} />
+        <PetHeaderComponent item={petReport} />
         <View style={styles.detailsContainer}>
           <View style={styles.cardContainer}>
-            <PetCardComponent item={animal} />
+            <PetCardComponent item={petReport} />
           </View>
-          <PetDetailsComponent item={animal} />
+          <PetDetailsComponent item={petReport} />
         </View>
       </ScrollView>
     </View>

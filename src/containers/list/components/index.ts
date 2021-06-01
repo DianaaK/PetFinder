@@ -1,2 +1,2 @@
 export { SearchComponent } from './SearchComponent';
-export { PetCardComponent } from './PetCardComponent';
+export { ListItemComponent } from './ListItemComponent';

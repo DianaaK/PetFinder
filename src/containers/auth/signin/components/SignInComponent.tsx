@@ -24,7 +24,7 @@ const SignInComponent = (props: any) => {
       Keyboard.removeListener('keyboardDidShow', keyboardShow);
       Keyboard.removeListener('keyboardDidHide', keyboardHide);
     };
-  });
+  }, []);
 
   const keyboardShow = (event: any) => {
     Animated.parallel([

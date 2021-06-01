@@ -11,6 +11,13 @@ export class PetReportDTO {
   media: string[] = [];
   user: ReportUserDTO = new ReportUserDTO();
   location?: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  } = {
+    latitude: 0,
+    longitude: 0
+  };
 }
 
 export class ReportUserDTO {

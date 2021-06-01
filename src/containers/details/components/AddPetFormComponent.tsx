@@ -114,6 +114,7 @@ export default function AddPetFormComponent(props: any) {
                   <RadioButton
                     value={ReportType.LOST + ''}
                     color={colors.mainColor2}
+                    uncheckedColor={colors.mainColor2}
                   />
                   <TextComponent>Lost</TextComponent>
                 </View>
@@ -121,6 +122,7 @@ export default function AddPetFormComponent(props: any) {
                   <RadioButton
                     value={ReportType.FOUND + ''}
                     color={colors.mainColor2}
+                    uncheckedColor={colors.mainColor2}
                   />
                   <TextComponent>Found</TextComponent>
                 </View>
@@ -156,6 +158,7 @@ export default function AddPetFormComponent(props: any) {
                   <RadioButton
                     value={PetGender.MALE + ''}
                     color={colors.mainColor2}
+                    uncheckedColor={colors.mainColor2}
                   />
                   <TextComponent>Male</TextComponent>
                 </View>
@@ -163,6 +166,7 @@ export default function AddPetFormComponent(props: any) {
                   <RadioButton
                     value={PetGender.FEMALE + ''}
                     color={colors.mainColor2}
+                    uncheckedColor={colors.mainColor2}
                   />
                   <TextComponent>Female</TextComponent>
                 </View>
@@ -183,6 +187,7 @@ export default function AddPetFormComponent(props: any) {
                 <RadioButton
                   value={PetSpecies.CAT + ''}
                   color={colors.mainColor2}
+                  uncheckedColor={colors.mainColor2}
                 />
                 <TextComponent>Cat</TextComponent>
               </View>
@@ -190,6 +195,7 @@ export default function AddPetFormComponent(props: any) {
                 <RadioButton
                   value={PetSpecies.DOG + ''}
                   color={colors.mainColor2}
+                  uncheckedColor={colors.mainColor2}
                 />
                 <TextComponent>Dog</TextComponent>
               </View>
@@ -197,6 +203,7 @@ export default function AddPetFormComponent(props: any) {
                 <RadioButton
                   value={PetSpecies.OTHER + ''}
                   color={colors.mainColor2}
+                  uncheckedColor={colors.mainColor2}
                 />
                 <TextComponent>Other</TextComponent>
               </View>
@@ -249,6 +256,7 @@ export default function AddPetFormComponent(props: any) {
                   setPhoneContact(!phoneContact);
                 }}
                 color={colors.mainColor2}
+                uncheckedColor={colors.mainColor2}
               />
               <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
                 Phone number
@@ -273,6 +281,7 @@ export default function AddPetFormComponent(props: any) {
                   setEmailContact(!emailContact);
                 }}
                 color={colors.mainColor2}
+                uncheckedColor={colors.mainColor2}
               />
               <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
                 Email

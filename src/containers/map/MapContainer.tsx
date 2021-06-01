@@ -1,20 +1,72 @@
-import React from 'react';
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
-import {
-  colors,
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-  statusBarHeight
-} from '../../styles';
+import Geolocation from 'react-native-geolocation-service';
+import { colors, statusBarHeight } from '../../styles';
 import { HeaderComponent } from '../general';
-import MapComponent from './components/MapComponent';
+import { data } from '../list/ListContainer';
+import GeneralMapComponent from './components/GeneralMapComponent';
 
 export default function MapContainer(props: any) {
+  const route: any = useRoute();
+
+  const [position, setPosition] = useState<
+    { latitude: number; longitude: number } | {}
+  >({});
+  const [positionPending, setPositionPending] = useState(true);
+
+  useEffect(() => {
+    const forPet = route.params.forPet;
+    const petReport = route.params.petReport;
+    if (!forPet) {
+      Geolocation.getCurrentPosition(
+        getCurrentPositionSuccess,
+        setInitialPosition,
+        { timeout: 3000 }
+      );
+    } else {
+      const petPosition = {
+        latitude: petReport.coordinates.latitude,
+        longitude: petReport.coordinates.longitude
+      };
+      setPosition(petPosition);
+      setPositionPending(false);
+    }
+  }, []);
+
+  const getCurrentPositionSuccess = (position: any) => {
+    const myPosition = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+    setPosition(myPosition);
+    setPositionPending(false);
+  };
+
+  const setInitialPosition = (coordinates: any) => {
+    let myPosition = {};
+    if (coordinates && coordinates.length === 2) {
+      myPosition = {
+        latitude: coordinates[1],
+        longitude: coordinates[0]
+      };
+    } else {
+      myPosition = {
+        latitude: 44.4268,
+        longitude: 26.1025
+      };
+    }
+    setPosition(myPosition);
+    setPositionPending(false);
+  };
+
   const onBack = () => {
-    props.navigation.navigate('List');
+    props.navigation.goBack();
   };
 
   const toggleFilters = () => {};
+
+  const reportList = data;
 
   return (
     <View style={styles.container}>
@@ -36,7 +88,13 @@ export default function MapContainer(props: any) {
           name: 'filter-list'
         }}
       />
-      <MapComponent />
+      <GeneralMapComponent
+        data={reportList}
+        position={position}
+        positionPending={positionPending}
+        forPet={route.params.forPet}
+        petReport={route.params.petReport}
+      />
     </View>
   );
 }

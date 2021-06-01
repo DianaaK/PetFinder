@@ -40,7 +40,10 @@ export default function PetHeaderComponent(props: any) {
         <TouchableOpacity
           style={{ paddingVertical: 8, paddingHorizontal: 12 }}
           onPress={() => {
-            // navigation.canGoBack() && navigation.goBack();
+            navigation.navigate('GeneralMap', {
+              forPet: true,
+              petReport: props.item
+            });
           }}>
           <IconComponent
             type="FontAwesome"

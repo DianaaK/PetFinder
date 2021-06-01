@@ -4,8 +4,9 @@ import React from 'react';
 import { View, StatusBar, FlatList, Keyboard, BackHandler } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
 import { PetGender, PetSpecies, ReportType } from '../../redux/types';
+import { requestLocationPermission } from '../../utils/permissions';
 import { HeaderComponent } from '../general';
-import { PetCardComponent, SearchComponent } from './components';
+import { ListItemComponent, SearchComponent } from './components';
 import { styles } from './styles';
 
 function ListContainer(props: any) {
@@ -24,7 +25,9 @@ function ListContainer(props: any) {
   );
 
   const renderItem = ({ item }: { item: any }) => {
-    return <PetCardComponent key={item.id} item={item} onPress={onPressItem} />;
+    return (
+      <ListItemComponent key={item._id} item={item} onPress={onPressItem} />
+    );
   };
 
   const onMenuOpen = () => {
@@ -32,12 +35,13 @@ function ListContainer(props: any) {
     props.navigation.openDrawer();
   };
 
-  const onMapOpen = () => {
-    navigation.navigate('GeneralMap');
+  const onMapOpen = async () => {
+    await requestLocationPermission();
+    navigation.navigate('GeneralMap', { forPet: false });
   };
 
-  const onPressItem = (id: string) => {
-    navigation.navigate('Details', { itemId: id });
+  const onPressItem = (_id: string) => {
+    navigation.navigate('Details', { itemId: _id });
   };
 
   return (
@@ -66,7 +70,7 @@ function ListContainer(props: any) {
           data={data}
           renderItem={renderItem}
           contentContainerStyle={styles.list}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
       </View>
     </View>
@@ -85,7 +89,7 @@ export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
 
 export const data = [
   {
-    id: '1',
+    _id: '1',
     type: ReportType.FOUND,
     name: 'Ari',
     species: PetSpecies.CAT,
@@ -106,10 +110,14 @@ export const data = [
       'https://media.istockphoto.com/photos/sacred-birma-cat-in-interior-picture-id623368372?k=6&m=623368372&s=170667a&w=0&h=qPgfMb-SC5l0u3gXaRHu-K5uZylLeE-MtMzG6y3Oc60='
     ],
     location: 'Bucharest',
-    distance: '1.2 Km'
+    distance: '1.2 Km',
+    coordinates: {
+      latitude: 44.46291,
+      longitude: 26.09333
+    }
   },
   {
-    id: '2',
+    _id: '2',
     type: ReportType.LOST,
     name: 'Suki',
     species: PetSpecies.CAT,
@@ -117,7 +125,7 @@ export const data = [
     gender: PetGender.FEMALE,
     age: '6 years',
     description:
-      'Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper id nunc.',
+      'Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper _id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper _id nunc. Ut erat metus, scelerisque tristique porttitor in, volutpat sed quam. Donec lorem nulla, sollicitudin in sagittis non, semper _id nunc.',
     date: '15.04.2021',
     user: {
       firstname: 'Marius',
@@ -131,11 +139,15 @@ export const data = [
       'https://www.thesprucepets.com/thmb/kwGfWsJ_HgbqSw9fRmQIhdLpCa4=/1553x1553/smart/filters:no_upscale()/bengalcat-56a2bcd95f9b58b7d0cdf798.jpg'
     ],
 
-    location: 'Constanta',
-    distance: '233.6 Km'
+    location: 'Bucharest',
+    distance: '0.2 Km',
+    coordinates: {
+      latitude: 44.45291,
+      longitude: 26.11333
+    }
   },
   {
-    id: '3',
+    _id: '3',
     type: ReportType.FOUND,
     name: 'Orange kitten that looks lost',
     species: PetSpecies.CAT,
@@ -152,10 +164,14 @@ export const data = [
       'https://media1.popsugar-assets.com/files/thumbor/1TCL1Ddne0jKYDztzjA-8K5RjF4/fit-in/728xorig/filters:format_auto-!!-:strip_icc-!!-/2020/03/31/067/n/1922243/tmp_dsoLCh_f9da2c804d46c59b_IMG_2098.jpeg'
     ],
     location: 'Bucharest',
-    distance: '2.3 Km'
+    distance: '2.3 Km',
+    coordinates: {
+      latitude: 44.42223,
+      longitude: 26.15289
+    }
   },
   {
-    id: '4',
+    _id: '4',
     type: ReportType.LOST,
     name: 'Yuna',
     species: PetSpecies.DOG,
@@ -174,6 +190,10 @@ export const data = [
       'https://www.taramulanimalelor.com/wp-content/uploads/2019/12/Ce-trebuie-sa-stii-despre-Husky-Siberian.png'
     ],
     location: 'Bucharest',
-    distance: '6 Km'
+    distance: '6 Km',
+    coordinates: {
+      latitude: 44.42851,
+      longitude: 26.05298
+    }
   }
 ];

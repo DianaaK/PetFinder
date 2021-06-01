@@ -5,9 +5,9 @@ import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
-export function PetCardComponent(props: any) {
+export function ListItemComponent(props: any) {
   const onPressItem = () => {
-    props.onPress(props.item.id);
+    props.onPress(props.item._id);
   };
 
   return (
