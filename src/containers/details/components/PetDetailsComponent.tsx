@@ -1,12 +1,44 @@
-import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { assets } from '../../../../assets/images';
-import { ReportType } from '../../../redux/types';
+import { PetGender, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
+import { Popup } from 'react-native-map-link';
 
 export default function PetDetailsComponent(props: any) {
+  const [showNavigate, setShowNavigate] = useState<boolean>(false);
+  const navigation = useNavigation();
   const pet = props.item;
+
+  const closeNavigationHandler = () => {
+    setShowNavigate(false);
+  };
+
+  const openNavigationHandler = () => {
+    setShowNavigate(true);
+  };
+
+  const renderExternalNavigation = () => (
+    <Popup
+      isVisible={showNavigate}
+      onCancelPressed={closeNavigationHandler}
+      onAppPressed={closeNavigationHandler}
+      onBackButtonPressed={closeNavigationHandler}
+      modalProps={{
+        animationIn: 'slideInUp'
+      }}
+      appsWhiteList={['google-maps', 'waze', 'uber']}
+      options={{
+        latitude: pet.coordinates.latitude + '',
+        longitude: pet.coordinates.longitude + '',
+        dialogTitle: `Navigate to ${pet.name}`,
+        dialogMessage: 'Choose application',
+        cancelText: 'Cancel'
+      }}
+    />
+  );
 
   return (
     <View style={styles.container}>
@@ -62,6 +94,42 @@ export default function PetDetailsComponent(props: any) {
           )}
         </View>
       </View>
+      {props.canNavigate ? (
+        <View style={styles.navigateContainer}>
+          {props.item.type === ReportType.LOST ? (
+            <View style={styles.centerText}>
+              <TextComponent style={styles.navigateText}>
+                Have you seen {pet.name}?
+              </TextComponent>
+              <TextComponent style={styles.navigateText}>
+                Mark {pet.gender == PetGender.FEMALE ? 'her' : 'his'} location
+                on the map!
+              </TextComponent>
+            </View>
+          ) : null}
+          <TouchableOpacity
+            style={styles.navigateButton}
+            onPress={() => {
+              navigation.navigate('GeneralMap', {
+                forPet: true,
+                petReport: props.item
+              });
+            }}>
+            <TextComponent style={styles.navigateButtonText}>
+              Go to map!
+            </TextComponent>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.navigateButton}
+          onPress={openNavigationHandler}>
+          <TextComponent style={styles.navigateButtonText}>
+            Navigate to {pet.name}!
+          </TextComponent>
+        </TouchableOpacity>
+      )}
+      {renderExternalNavigation()}
     </View>
   );
 }
@@ -107,5 +175,29 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 20,
     marginRight: 8
+  },
+  centerText: {
+    alignItems: 'center'
+  },
+  navigateContainer: {
+    flex: 1,
+    marginTop: 40,
+    alignItems: 'center'
+  },
+  navigateText: {
+    fontSize: 22,
+    color: colors.mainColor2
+  },
+  navigateButton: {
+    flex: 1,
+    alignSelf: 'center',
+    padding: 15,
+    marginTop: 10,
+    backgroundColor: colors.mainColor3,
+    borderRadius: 40
+  },
+  navigateButtonText: {
+    fontSize: 24,
+    color: 'white'
   }
 });

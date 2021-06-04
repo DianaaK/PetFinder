@@ -1,20 +1,29 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Animated, ActivityIndicator } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Animated,
+  ActivityIndicator,
+  TouchableOpacity
+} from 'react-native';
 import { Popup } from 'react-native-map-link';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { TextInput } from 'react-native-paper';
 import { PetReportDTO, ReportType } from '../../../redux/types';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
+import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
+import { getCoordinatesFromAddress } from '../../../utils';
+import { IconComponent } from '../../general';
 import { ListItemComponent } from '../../list/components';
 
 interface IProps {
+  viewMode: boolean;
   data: PetReportDTO[];
   position: {
     latitude: number;
     longitude: number;
   };
   positionPending: boolean;
-  forPet?: boolean;
   petReport?: PetReportDTO;
 }
 
@@ -24,53 +33,24 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function GeneralMap(props: IProps) {
   let previewBottom = new Animated.Value(-200);
-  let map: MapView | null = null;
   const navigation = useNavigation();
-  const [preview, setPreview] = useState<boolean>(false);
+  const [showPreviewCard, setShowPreviewCard] = useState<boolean>(false);
   const [pet, setPet] = useState<PetReportDTO | null>(null);
-  const [showNavigate, setShowNavigate] = useState<boolean>(false);
+  const [currentMarkerPosition, setCurrentMarkerPosition] = useState({
+    latitude: 0,
+    longitude: 0
+  });
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
-    if (props.forPet && props.petReport) {
-      setPet(props.petReport);
-      setPreview(true);
-    }
+    setCurrentMarkerPosition(props.position);
   }, []);
 
   useEffect(() => {
-    if (preview && pet) {
+    if (showPreviewCard && pet) {
       showPreview();
     }
-  }, [preview, pet]);
-
-  const renderPetMarker = (item: PetReportDTO) => (
-    <Marker
-      key={item._id}
-      coordinate={item.coordinates}
-      pinColor={item.type === ReportType.LOST ? 'tomato' : 'turquoise'}
-      onPress={onMarkerPress(item)}
-    />
-  );
-
-  const onPressMap = () => {
-    if (preview && pet) {
-      hidePreview();
-    }
-  };
-
-  const onMarkerPress = (item: PetReportDTO) => (event: any) => {
-    if (item !== pet) {
-      const coordinates = item.coordinates || { coordinates: [0, 0] };
-      map?.animateCamera({
-        center: coordinates,
-        heading: 0,
-        pitch: 0
-      });
-      setPet(item);
-      setPreview(true);
-      event.stopPropagation();
-    }
-  };
+  }, [showPreviewCard, pet]);
 
   const showPreview = () => {
     Animated.timing(previewBottom, {
@@ -87,41 +67,55 @@ export default function GeneralMap(props: IProps) {
       useNativeDriver: false
     }).start(() => {
       setPet(null);
-      setPreview(false);
+      setShowPreviewCard(false);
     });
   };
 
   const redirectToPet = (_id: string) => {
-    navigation.navigate('Details', { itemId: _id });
+    navigation.navigate('Details', { itemId: _id, canNavigate: false });
   };
 
-  const closeNavigationHandler = () => {
-    setShowNavigate(false);
-  };
-
-  const openNavigationHandler = () => {
-    setShowNavigate(true);
-  };
-
-  const renderExternalNavigation = () => (
-    <Popup
-      isVisible={showNavigate}
-      onCancelPressed={closeNavigationHandler}
-      onAppPressed={closeNavigationHandler}
-      onBackButtonPressed={closeNavigationHandler}
-      modalProps={{
-        animationIn: 'slideInUp'
-      }}
-      appsWhiteList={['google-maps', 'waze', 'uber']}
-      options={{
-        latitude: props.position.latitude + '',
-        longitude: props.position.longitude + '',
-        dialogTitle: `Navigate to ${props.petReport?.name}`,
-        dialogMessage: 'Choose application',
-        cancelText: 'Cancel'
-      }}
+  const renderPetMarker = (item: PetReportDTO) => (
+    <Marker
+      key={item._id}
+      coordinate={item.coordinates}
+      pinColor={item.type === ReportType.LOST ? 'tomato' : 'turquoise'}
+      tracksViewChanges={false}
+      onPress={onMarkerPress(item)}
     />
   );
+
+  const onPressMap = () => {
+    if (showPreviewCard && pet) {
+      hidePreview();
+    }
+  };
+
+  const onMarkerPress = (item: PetReportDTO) => (event: any) => {
+    if (item !== pet) {
+      setPet(item);
+      setShowPreviewCard(true);
+      event.stopPropagation();
+    }
+  };
+
+  const setMarkerPosition = (event: any) => {
+    setCurrentMarkerPosition(event.nativeEvent.coordinate);
+  };
+
+  const onSearchAddress = async () => {
+    getCoordinatesFromAddress(address)
+      .then((result: any) => {
+        const coords = result.geometry?.location;
+        const address = result.formatted_address;
+        setCurrentMarkerPosition({
+          latitude: coords.lat,
+          longitude: coords.lng
+        });
+        setAddress(address);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -129,9 +123,6 @@ export default function GeneralMap(props: IProps) {
         <ActivityIndicator size="large" />
       ) : (
         <MapView
-          ref={(mapRef) => {
-            map = mapRef;
-          }}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           initialRegion={{
@@ -140,24 +131,40 @@ export default function GeneralMap(props: IProps) {
             longitudeDelta: LONGITUDE_DELTA
           }}
           showsUserLocation={true}
-          showsMyLocationButton={true}
-          followsUserLocation={true}
           loadingEnabled={true}
           rotateEnabled={true}
           onPress={onPressMap}>
-          {props.data.map((item) => renderPetMarker(item))}
+          {props.viewMode && props.data.map((item) => renderPetMarker(item))}
+          {!props.viewMode && (
+            <Marker
+              coordinate={currentMarkerPosition}
+              draggable
+              onDragEnd={setMarkerPosition}
+            />
+          )}
         </MapView>
       )}
-      {preview && pet && (
+      {props.viewMode && showPreviewCard && pet && (
         <>
           <Animated.View style={[styles.preview, { bottom: previewBottom }]}>
-            <ListItemComponent
-              item={pet}
-              onPress={props.forPet ? openNavigationHandler : redirectToPet}
-            />
+            <ListItemComponent item={pet} onPress={redirectToPet} />
           </Animated.View>
-          {renderExternalNavigation()}
         </>
+      )}
+      {!props.viewMode && (
+        <View style={styles.addressInputContainer}>
+          <TextInput
+            placeholder={'Write an address'}
+            value={address}
+            onChangeText={setAddress}
+            style={styles.addressInput}
+          />
+          <TouchableOpacity
+            style={styles.sendAddressButton}
+            onPress={onSearchAddress}>
+            <IconComponent type="Ionicons" name="send" style={styles.icon} />
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -174,5 +181,28 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: 180
+  },
+  addressInputContainer: {
+    position: 'absolute',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    bottom: 0,
+    marginHorizontal: '10%',
+    marginBottom: 10
+  },
+  addressInput: {
+    backgroundColor: colors.mainColor2,
+    width: '90%'
+  },
+  sendAddressButton: {
+    left: -4,
+    width: 50,
+    backgroundColor: colors.mainColor,
+    justifyContent: 'center'
+  },
+  icon: {
+    fontSize: 20,
+    color: 'white'
   }
 });

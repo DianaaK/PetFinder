@@ -18,6 +18,7 @@ import {
   ReportUserDTO
 } from '../../../redux/types';
 import { colors, DEVICE_WIDTH, fonts, isIOS } from '../../../styles';
+import { requestLocationPermission } from '../../../utils';
 import { IconComponent, TextComponent } from '../../general';
 
 export default function AddPetFormComponent(props: any) {
@@ -85,6 +86,11 @@ export default function AddPetFormComponent(props: any) {
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  const onMapOpen = async () => {
+    await requestLocationPermission();
+    navigation.navigate('GeneralMap', { viewMode: false });
   };
 
   const onSaveReport = () => {
@@ -314,9 +320,9 @@ export default function AddPetFormComponent(props: any) {
             <TextComponent style={styles.questionText}>
               Set last seen location:
             </TextComponent>
-            <TouchableOpacity style={styles.formButton}>
+            <TouchableOpacity style={styles.formButton} onPress={onMapOpen}>
               <TextComponent style={styles.formButtonText}>
-                Location
+                Open Map
               </TextComponent>
             </TouchableOpacity>
           </View>

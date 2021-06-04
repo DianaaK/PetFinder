@@ -4,8 +4,9 @@ import { StatusBar, StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { colors, statusBarHeight } from '../../styles';
 import { HeaderComponent } from '../general';
-import { data } from '../list/ListContainer';
+import { data, petLocationsList } from '../list/ListContainer';
 import GeneralMapComponent from './components/GeneralMapComponent';
+import PetMapComponent from './components/PetMapComponent';
 
 export default function MapContainer(props: any) {
   const route: any = useRoute();
@@ -17,22 +18,11 @@ export default function MapContainer(props: any) {
   const [positionPending, setPositionPending] = useState(true);
 
   useEffect(() => {
-    const forPet = route.params.forPet;
-    const petReport = route.params.petReport;
-    if (!forPet) {
-      Geolocation.getCurrentPosition(
-        getCurrentPositionSuccess,
-        setInitialPosition,
-        { timeout: 3000 }
-      );
-    } else {
-      const petPosition = {
-        latitude: petReport.coordinates.latitude,
-        longitude: petReport.coordinates.longitude
-      };
-      setPosition(petPosition);
-      setPositionPending(false);
-    }
+    Geolocation.getCurrentPosition(
+      getCurrentPositionSuccess,
+      setInitialPosition,
+      { timeout: 3000 }
+    );
   }, []);
 
   const getCurrentPositionSuccess = (position: any) => {
@@ -61,7 +51,12 @@ export default function MapContainer(props: any) {
 
   const toggleFilters = () => {};
 
+  const saveLocation = () => {};
+
   const reportList = data;
+  const petLocations = petLocationsList;
+  const petMap = route.params.forPet;
+  const viewMode = route.params.viewMode;
 
   return (
     <View style={styles.container}>
@@ -71,25 +66,51 @@ export default function MapContainer(props: any) {
         translucent
       />
       <HeaderComponent
-        title="Map"
+        title={
+          petMap
+            ? `${route.params.petReport.name}'s Location`
+            : viewMode
+            ? 'Map'
+            : 'Choose a location'
+        }
         leftButtonAction={onBack}
         leftButtonIcon={{
           type: 'MaterialIcons',
           name: 'arrow-back'
         }}
-        rightButtonAction={toggleFilters}
-        rightButtonIcon={{
-          type: 'MaterialIcons',
-          name: 'filter-list'
-        }}
+        rightButtonAction={
+          petMap ? undefined : viewMode ? toggleFilters : saveLocation
+        }
+        rightButtonIcon={
+          petMap
+            ? undefined
+            : viewMode
+            ? {
+                type: 'MaterialIcons',
+                name: 'filter-list'
+              }
+            : {
+                type: 'MaterialIcons',
+                name: 'done'
+              }
+        }
       />
-      <GeneralMapComponent
-        data={reportList}
-        position={position}
-        positionPending={positionPending}
-        forPet={route.params.forPet}
-        petReport={route.params.petReport}
-      />
+      {petMap ? (
+        <PetMapComponent
+          reportedLocations={petLocations}
+          position={route.params.petReport.coordinates}
+          positionPending={positionPending}
+          petReport={route.params.petReport}
+        />
+      ) : (
+        <GeneralMapComponent
+          viewMode={viewMode}
+          data={reportList}
+          position={position}
+          positionPending={positionPending}
+          petReport={route.params.petReport}
+        />
+      )}
     </View>
   );
 }

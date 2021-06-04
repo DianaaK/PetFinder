@@ -37,20 +37,22 @@ export default function PetHeaderComponent(props: any) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{ paddingVertical: 8, paddingHorizontal: 12 }}
-          onPress={() => {
-            navigation.navigate('GeneralMap', {
-              forPet: true,
-              petReport: props.item
-            });
-          }}>
-          <IconComponent
-            type="MaterialCommunityIcons"
-            name="map-search"
-            style={[styles.icon, { fontSize: 30 }]}
-          />
-        </TouchableOpacity>
+        {props.canNavigate && (
+          <TouchableOpacity
+            style={{ paddingVertical: 8, paddingHorizontal: 12 }}
+            onPress={() => {
+              navigation.navigate('GeneralMap', {
+                forPet: true,
+                petReport: props.item
+              });
+            }}>
+            <IconComponent
+              type="Ionicons"
+              name="navigate"
+              style={[styles.icon, { fontSize: 30 }]}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       {props.item.media?.length ? (
         <SliderBox
