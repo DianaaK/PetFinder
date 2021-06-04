@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'space-evenly',
     marginHorizontal: 20,
-    paddingBottom: 5,
     borderBottomColor: colors.mainColor3,
     borderBottomWidth: 1
   },
@@ -22,9 +21,9 @@ export const styles = StyleSheet.create({
   profileImageContainer: {
     justifyContent: 'center',
     alignSelf: 'center',
-    height: 80,
-    width: 80,
-    marginRight: DEVICE_WIDTH / 14,
+    height: 90,
+    width: 90,
+    marginRight: DEVICE_WIDTH / 20,
     borderRadius: 50,
     borderWidth: 1,
     borderColor: colors.mainColor2
@@ -42,8 +41,8 @@ export const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    fontSize: 16,
-    color: colors.mainColorLight2
+    fontSize: 18,
+    color: colors.mainColorLight
   },
   fadedText: {
     marginTop: 10,

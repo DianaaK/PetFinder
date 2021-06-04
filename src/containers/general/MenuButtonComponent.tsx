@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   icon: {
-    color: colors.mainColor3,
+    color: colors.mainColorLight,
     marginRight: 12,
     fontSize: 24
   },
   title: {
     fontSize: 16,
-    color: colors.mainColor3,
+    color: colors.mainColorLight,
     fontWeight: '600',
     fontFamily: fonts.mainFont
   }

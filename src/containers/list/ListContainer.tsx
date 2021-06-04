@@ -1,16 +1,19 @@
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { View, StatusBar, FlatList, Keyboard, BackHandler } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
 import { PetGender, PetSpecies, ReportType } from '../../redux/types';
-import { requestLocationPermission } from '../../utils/permissions';
+import { requestLocationPermission } from '../../utils';
 import { HeaderComponent } from '../general';
 import { ListItemComponent, SearchComponent } from './components';
 import { styles } from './styles';
 
 function ListContainer(props: any) {
+  const route: any = useRoute();
   const navigation = useNavigation();
+  const forUser = route.params?.forUser;
+  const forFavorites = route.params?.forFavorites;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -37,11 +40,11 @@ function ListContainer(props: any) {
 
   const onMapOpen = async () => {
     await requestLocationPermission();
-    navigation.navigate('GeneralMap', { forPet: false });
+    navigation.navigate('GeneralMap', { viewMode: true });
   };
 
   const onPressItem = (_id: string) => {
-    navigation.navigate('Details', { itemId: _id });
+    navigation.navigate('Details', { itemId: _id, canNavigate: true });
   };
 
   return (
@@ -52,7 +55,13 @@ function ListContainer(props: any) {
         translucent
       />
       <HeaderComponent
-        title="Lost & Found"
+        title={
+          forUser
+            ? 'My Reports'
+            : forFavorites
+            ? 'My Favorites'
+            : 'Lost & Found'
+        }
         leftButtonAction={onMenuOpen}
         leftButtonIcon={{
           type: 'MaterialIcons',
@@ -67,7 +76,7 @@ function ListContainer(props: any) {
       <View style={styles.contentContainer}>
         <FlatList
           ListHeaderComponent={<SearchComponent />}
-          data={data}
+          data={forUser ? userReports : forFavorites ? forFavoritesList : data}
           renderItem={renderItem}
           contentContainerStyle={styles.list}
           keyExtractor={(item) => item._id}
@@ -87,16 +96,53 @@ const dispatchToProps = {};
 
 export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
 
+export const petLocationsList = [
+  {
+    _id: '1',
+    petId: '1',
+    user: 'Marius',
+    date: '04.06.2021',
+    address: 'Strada Aviator Serban Petrescu nr. 24',
+    coordinates: {
+      latitude: 44.46321,
+      longitude: 26.09433
+    }
+  },
+  {
+    _id: '2',
+    petId: '1',
+    user: 'Ana',
+    date: '01.06.2021',
+    address: 'Str. Aviator Popa Marin',
+    coordinates: {
+      latitude: 44.46491,
+      longitude: 26.09533
+    }
+  },
+  {
+    _id: '3',
+    petId: '1',
+    user: 'Sasha',
+    date: '28.05.2021',
+    address: 'Iuliu Tetrat 5',
+    coordinates: {
+      latitude: 44.46591,
+      longitude: 26.09333
+    }
+  }
+];
+
 export const data = [
   {
     _id: '1',
-    type: ReportType.FOUND,
+    type: ReportType.LOST,
     name: 'Ari',
     species: PetSpecies.CAT,
     gender: PetGender.MALE,
     breed: 'Birman',
     age: '2 years',
-    description: 'Fluffy cat with blue eyes',
+    description:
+      'Ari is a 2 year old cat who has been living with our family since he was a kitten. He has always been indoors so he doesnt know how to survive on his own outside. He has been missing for 48 hours already so we are really scared he will not come home on his own',
     date: '28.05.2021',
     user: {
       firstname: 'Diana',
@@ -118,7 +164,7 @@ export const data = [
   },
   {
     _id: '2',
-    type: ReportType.LOST,
+    type: ReportType.FOUND,
     name: 'Suki',
     species: PetSpecies.CAT,
     breed: 'Common breed',
@@ -170,6 +216,67 @@ export const data = [
       longitude: 26.15289
     }
   },
+  {
+    _id: '4',
+    type: ReportType.LOST,
+    name: 'Yuna',
+    species: PetSpecies.DOG,
+    breed: 'Husky',
+    gender: PetGender.FEMALE,
+    age: '4 years',
+    description:
+      'Vestibulum tempor fringilla placerat. Maecenas ipsum nibh, porta finibus tempus in, blandit non libero. Vivamus ac sapien nisl. Curabitur dui massa, efficitur sit amet aliquam vel, malesuada nec diam. Vestibulum et suscipit nunc, non pellentesque libero. Nulla sed ante vitae magna efficitur imperdiet. Praesent sed urna rutrum, sagittis dolor in, congue erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam quis neque faucibus, fermentum nisi at, blandit dolor.',
+    date: '1.03.2021',
+    user: {
+      firstname: 'Sasha',
+      phone: '0765995115'
+    },
+    media: [
+      'https://cdn.shopify.com/s/files/1/0994/0236/articles/siberian-husky_2319x.jpg?v=1502391918',
+      'https://www.taramulanimalelor.com/wp-content/uploads/2019/12/Ce-trebuie-sa-stii-despre-Husky-Siberian.png'
+    ],
+    location: 'Bucharest',
+    distance: '6 Km',
+    coordinates: {
+      latitude: 44.42851,
+      longitude: 26.05298
+    }
+  }
+];
+
+export const userReports = [
+  {
+    _id: '1',
+    type: ReportType.LOST,
+    name: 'Ari',
+    species: PetSpecies.CAT,
+    gender: PetGender.MALE,
+    breed: 'Birman',
+    age: '2 years',
+    description:
+      'Ari is a 2 year old cat who has been living with our family since he was a kitten. He has always been indoors so he doesnt know how to survive on his own outside. He has been missing for 48 hours already so we are really scared he will not come home on his own',
+    date: '28.05.2021',
+    user: {
+      firstname: 'Diana',
+      image:
+        'https://scontent.fotp3-3.fna.fbcdn.net/v/t1.6435-9/129327920_3547153388686153_6776261588378670382_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHv_BdGlJ86z24HlquSHRPjGooxbLSMJFEaijFstIwkUYF4vW7IBTFqi4a2XzvM4fIVJMjWH8nYXLmYWJ-K3Bd2&_nc_ohc=NNHDu_3omGMAX-k4lw9&_nc_ht=scontent.fotp3-3.fna&oh=b91ddf5f233c1354105f9ce4a17b65f9&oe=60D79BDA',
+      phone: '0732783868'
+    },
+    media: [
+      'https://www.petbarn.com.au/petspot/app/uploads/2011/09/PB387_Blog-Genral-In-Post-800x533px.jpg',
+      'https://thepedigreepaws.b-cdn.net/web/kitten_breed/3/1594236709-birman-unusual-markings-cat-breed.jpg',
+      'https://media.istockphoto.com/photos/sacred-birma-cat-in-interior-picture-id623368372?k=6&m=623368372&s=170667a&w=0&h=qPgfMb-SC5l0u3gXaRHu-K5uZylLeE-MtMzG6y3Oc60='
+    ],
+    location: 'Bucharest',
+    distance: '1.2 Km',
+    coordinates: {
+      latitude: 44.46291,
+      longitude: 26.09333
+    }
+  }
+];
+
+export const forFavoritesList = [
   {
     _id: '4',
     type: ReportType.LOST,

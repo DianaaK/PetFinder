@@ -29,12 +29,18 @@ export default function PetDetailsContainer(props: any) {
         translucent
       />
       <ScrollView>
-        <PetHeaderComponent item={petReport} />
+        <PetHeaderComponent
+          item={petReport}
+          canNavigate={route.params.canNavigate}
+        />
         <View style={styles.detailsContainer}>
           <View style={styles.cardContainer}>
             <PetCardComponent item={petReport} />
           </View>
-          <PetDetailsComponent item={petReport} />
+          <PetDetailsComponent
+            item={petReport}
+            canNavigate={route.params.canNavigate}
+          />
         </View>
       </ScrollView>
     </View>

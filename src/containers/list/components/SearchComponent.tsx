@@ -11,10 +11,10 @@ export function SearchComponent(props: any) {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
+        <TextInput placeholder="Search pets" style={styles.searchInput} />
         <TouchableOpacity style={styles.searchButton}>
           <IconComponent type="Ionicons" name="search" style={styles.icon} />
         </TouchableOpacity>
-        <TextInput placeholder="Search pets" />
       </View>
       <View style={styles.filterContainer}>
         <TouchableOpacity style={styles.filterButton}>
@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.mainColorLight,
     borderWidth: 1
+  },
+  searchInput: {
+    marginLeft: 5,
+    width: '82%'
   },
   searchButton: {
     padding: 8

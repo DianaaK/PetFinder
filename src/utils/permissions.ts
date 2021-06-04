@@ -5,6 +5,7 @@ export async function requestLocationPermission() {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
     );
+    return granted;
   } catch (err) {
     console.warn(err);
   }

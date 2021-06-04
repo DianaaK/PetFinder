@@ -18,7 +18,11 @@ function MainContainer(props: any) {
       initialRouteName={isLogged ? 'List' : 'LogIn'}>
       <Stack.Screen name="LogIn" component={LogInContainer} />
       <Stack.Screen name="SignIn" component={SignInContainer} />
-      <Stack.Screen name="List" component={DrawerContainer} />
+      <Stack.Screen
+        name="List"
+        component={DrawerContainer}
+        initialParams={{ forUser: false, forFavorites: false }}
+      />
       <Stack.Screen name="Details" component={PetDetailsContainer} />
       <Stack.Screen name="Add" component={AddPetContainer} />
       <Stack.Screen name="GeneralMap" component={MapContainer} />

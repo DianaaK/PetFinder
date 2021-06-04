@@ -9,6 +9,11 @@ import { colors } from '../../styles';
 function ProfileContainer(props: any) {
   const chooseAvatarHandler = () => {};
 
+  const redirectToListAction = () => {
+    props.navigation.closeDrawer();
+    props.navigation.navigate('List', { forUser: false, forFavorites: false });
+  };
+
   const logOutAction = () => {
     props.navigation.closeDrawer();
     props.navigation.navigate('LogIn');
@@ -17,6 +22,16 @@ function ProfileContainer(props: any) {
   const redirectToAddAction = () => {
     props.navigation.closeDrawer();
     props.navigation.navigate('Add');
+  };
+
+  const redirectToMyReports = () => {
+    props.navigation.closeDrawer();
+    props.navigation.navigate('List', { forUser: true, forFavorites: false });
+  };
+
+  const redirectToFavorites = () => {
+    props.navigation.closeDrawer();
+    props.navigation.navigate('List', { forUser: false, forFavorites: true });
   };
 
   return (
@@ -57,8 +72,7 @@ function ProfileContainer(props: any) {
           title="Lost & Found"
           iconType="MaterialIcons"
           iconName="pets"
-          onPress={() => props.navigation.navigate('List')}
-          titleStyle={{ color: '#ebf5f5' }}
+          onPress={redirectToListAction}
         />
         <MenuButtonComponent
           title="Add pet"
@@ -67,17 +81,17 @@ function ProfileContainer(props: any) {
           onPress={redirectToAddAction}
         />
         <MenuButtonComponent
-          title="My pets"
+          title="My reports"
           iconType="MaterialIcons"
           iconName="my-library-books"
-          onPress={() => {}}
+          onPress={redirectToMyReports}
         />
-        {/* <MenuButtonComponent
-          title="Favorites"
+        <MenuButtonComponent
+          title="My Favorites"
           iconType="FontAwesome"
           iconName="heart"
-          onPress={() => {}}
-        /> */}
+          onPress={redirectToFavorites}
+        />
       </View>
       <View style={styles.bottomMenu}>
         <MenuButtonComponent

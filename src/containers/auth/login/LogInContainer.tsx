@@ -1,10 +1,23 @@
 import React from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, BackHandler } from 'react-native';
 import { styles } from './components/styles';
 import LogInComponent from './components/LogInComponent';
 import reduxContainer from '../../../redux/reduxContainer';
+import { useFocusEffect } from '@react-navigation/native';
 
 function LogInContainer(props: any) {
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+
   const loginAction = () => {
     props.navigation.navigate('List');
   };

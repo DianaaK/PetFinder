@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { colors, fonts } from '../../styles';
+import { colors } from '../../styles';
 import IconComponent from './IconComponent';
 import TextComponent from './TextComponent';
 
