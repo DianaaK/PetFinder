@@ -3,12 +3,11 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {TextComponent, IconComponent} from '../../general';
-// import {Router} from '../../../utils';
-import {DEVICE_WIDTH} from '../../../styles/deviceHelper';
+import { TextComponent, IconComponent } from '../../general';
+import { DEVICE_WIDTH } from '../../../styles/deviceHelper';
 
 interface IProps {
   buttonHandler: () => any;
@@ -22,17 +21,16 @@ interface IProps {
 
 const ButtonComponent = (props: IProps) => {
   const values = {
-    gradientStart: {x: 0, y: 0},
-    gradientEnd: {x: 1, y: 0},
+    gradientStart: { x: 0, y: 0 },
+    gradientEnd: { x: 1, y: 0 },
     logInGradient: ['rgba(66, 230, 149, 1)', 'rgba(51, 197, 142, 1)'],
-    signUpGradient: ['rgba(23, 234, 217, 1)', 'rgba(96, 120, 234, 1)'],
+    signUpGradient: ['rgba(23, 234, 217, 1)', 'rgba(96, 120, 234, 1)']
   };
 
   const buttonHandler = () => {
     if (props.buttonHandler) {
       props.buttonHandler();
     } else {
-      // Router.push(props.type);
     }
   };
 
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.3)',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowRadius: 4,
     shadowOpacity: 1,
@@ -84,36 +82,36 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     opacity: 0.8,
     elevation: 3,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   iconButtonContainer: {
     flex: 1,
     paddingLeft: 10,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   iconButton: {
     fontSize: 24,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   textButtonContainer: {
     flex: 6,
     paddingRight: 20,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   textButton: {
     textAlign: 'center',
     color: '#ffffff',
-    textTransform: 'uppercase',
+    textTransform: 'uppercase'
   },
   linearGradient: {
     position: 'absolute',
     height: '100%',
     width: '100%',
-    borderRadius: 24,
+    borderRadius: 24
   },
   icon: {
-    color: 'white',
-  },
+    color: 'white'
+  }
 });
 
 export default ButtonComponent;

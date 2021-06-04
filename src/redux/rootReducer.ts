@@ -1,25 +1,8 @@
-import {combineReducers} from 'redux';
-import {ActionConst, Reducer} from 'react-native-router-flux';
-import {store} from './store';
+import { combineReducers } from 'redux';
+import { AuthStore } from './authentication';
 
-import sceneReducer from './scenes/reducer';
-
-export const initSceneReducer = (params: any) => {
-  const defaultReducer = new Reducer(params);
-  return (state: any, action: any) => {
-    // if (action.type === ActionConst.FOCUS) {
-    //   store.dispatch({
-    //     type: 'CHANGE_SCENE',
-    //     payload: action,
-    //   });
-    // }
-    return defaultReducer(state, action);
-  };
-};
-
-const rootReducer = combineReducers({
-  scene: sceneReducer,
-  // auth: authReducer,
+export const rootReducer = combineReducers({
+  auth: AuthStore.reducer
   // appConfig: appConfigReducer,
   // notifications: notificationsReducer,
   // settings: settingsReducer,
@@ -27,7 +10,7 @@ const rootReducer = combineReducers({
   // animation: animationReducer
 });
 
-const appReducer = (state: any, action: any) => {
+export const appReducer = (state: any, action: any) => {
   // if (action.type === 'USER_LOGOUT') {
   //   if (state && state.appConfig) {
   //     const persistState = {appConfig: state.appConfig};
@@ -37,4 +20,8 @@ const appReducer = (state: any, action: any) => {
   return rootReducer(state, action);
 };
 
-export default appReducer;
+export namespace AppStore {
+  export type states = {
+    auth: AuthStore.IState;
+  };
+}

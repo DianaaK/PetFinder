@@ -1,0 +1,6 @@
+export interface ActionDTO<P> {
+  type: string;
+  payload: P;
+  error?: boolean;
+  meta?: Object;
+}

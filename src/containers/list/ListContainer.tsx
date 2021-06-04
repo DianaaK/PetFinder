@@ -151,9 +151,9 @@ export const data = [
       phone: '0732783868'
     },
     media: [
-      'https://www.petbarn.com.au/petspot/app/uploads/2011/09/PB387_Blog-Genral-In-Post-800x533px.jpg',
-      'https://thepedigreepaws.b-cdn.net/web/kitten_breed/3/1594236709-birman-unusual-markings-cat-breed.jpg',
-      'https://media.istockphoto.com/photos/sacred-birma-cat-in-interior-picture-id623368372?k=6&m=623368372&s=170667a&w=0&h=qPgfMb-SC5l0u3gXaRHu-K5uZylLeE-MtMzG6y3Oc60='
+      'https://i.gyazo.com/3053eb843600495227af715c1b393436.jpg',
+      'https://i.gyazo.com/ce34286ae3eea1f5d456c32b691f86d0.png',
+      'https://i.gyazo.com/f1341cf039299615d2792cb36d79bb52.jpg'
     ],
     location: 'Bucharest',
     distance: '1.2 Km',
