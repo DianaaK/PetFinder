@@ -17,7 +17,6 @@ export default function PetHeaderComponent(props: any) {
     'rgba(0, 0, 0, 0.0)'
   ];
   const gradientLocations = [0.1, 0.4, 0.7, 1];
-
   return (
     <View style={styles.contaier}>
       <View style={styles.header}>
@@ -40,16 +39,19 @@ export default function PetHeaderComponent(props: any) {
         {props.canNavigate && (
           <TouchableOpacity
             style={{ paddingVertical: 8, paddingHorizontal: 12 }}
-            onPress={() => {
-              navigation.navigate('GeneralMap', {
-                forPet: true,
-                petReport: props.item
-              });
-            }}>
+            onPress={() => {}}>
             <IconComponent
               type="Ionicons"
-              name="navigate"
-              style={[styles.icon, { fontSize: 30 }]}
+              name="md-heart"
+              style={[
+                styles.icon,
+                {
+                  fontSize: 30,
+                  color: props.item.isFavorite
+                    ? colors.red
+                    : colors.mainColorLight
+                }
+              ]}
             />
           </TouchableOpacity>
         )}

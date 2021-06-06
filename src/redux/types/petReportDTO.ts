@@ -18,6 +18,7 @@ export class PetReportDTO {
     latitude: 0,
     longitude: 0
   };
+  isFavorite?: boolean;
 }
 
 export class ReportUserDTO {

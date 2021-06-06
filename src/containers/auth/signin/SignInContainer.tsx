@@ -5,7 +5,7 @@ import SignInComponent from './components/SignInComponent';
 import reduxContainer from '../../../redux/reduxContainer';
 
 function SignInContainer(props: any) {
-  const loginAction = () => {
+  const loginRedirectAction = () => {
     props.navigation.navigate('LogIn');
   };
 
@@ -20,15 +20,16 @@ function SignInContainer(props: any) {
         barStyle="light-content"
         translucent
       />
-      <SignInComponent handleSignIn={signinAction} handleLogin={loginAction} />
+      <SignInComponent
+        handleSignIn={signinAction}
+        redirectToLogin={loginRedirectAction}
+      />
     </View>
   );
 }
 
 function mapStateToProps(state: any) {
-  return {
-    currentScene: state.scene.scene
-  };
+  return {};
 }
 
 const dispatchToProps = {};

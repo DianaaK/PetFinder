@@ -1,9 +1,6 @@
 import { ActionDTO } from '../types';
-import { AuthStore } from './';
-const crypto = require('crypto');
-/*
-  authReducer = reducer for all actionTypes for Auth
-*/
+import { AuthStore } from './index';
+
 function authReducer(
   state: AuthStore.IState = AuthStore.initialState,
   action: ActionDTO<any>

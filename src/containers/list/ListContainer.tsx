@@ -87,9 +87,7 @@ function ListContainer(props: any) {
 }
 
 function mapStateToProps(state: any) {
-  return {
-    currentScene: state.scene.scene
-  };
+  return {};
 }
 
 const dispatchToProps = {};
@@ -240,7 +238,8 @@ export const data = [
     coordinates: {
       latitude: 44.42851,
       longitude: 26.05298
-    }
+    },
+    isFavorite: true
   }
 ];
 
@@ -301,6 +300,7 @@ export const forFavoritesList = [
     coordinates: {
       latitude: 44.42851,
       longitude: 26.05298
-    }
+    },
+    isFavorite: true
   }
 ];

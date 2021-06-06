@@ -268,17 +268,6 @@ export default function AddPetFormComponent(props: any) {
                 Phone number
               </TextComponent>
             </View>
-            <View>
-              <TextInput
-                style={[styles.input, { width: DEVICE_WIDTH / 1.5 }]}
-                keyboardType="numeric"
-                onChangeText={(value) => {
-                  const user = petReport.user || new ReportUserDTO();
-                  user.phone = value;
-                  setPetReport({ ...petReport, user });
-                }}
-              />
-            </View>
 
             <View style={styles.rowContainer}>
               <Checkbox
@@ -292,16 +281,6 @@ export default function AddPetFormComponent(props: any) {
               <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
                 Email
               </TextComponent>
-            </View>
-            <View>
-              <TextInput
-                style={[styles.input, { width: DEVICE_WIDTH / 1.5 }]}
-                onChangeText={(value) => {
-                  const user = petReport.user || new ReportUserDTO();
-                  user.email = value;
-                  setPetReport({ ...petReport, user });
-                }}
-              />
             </View>
           </View>
 

@@ -70,7 +70,7 @@ const SignInComponent = (props: any) => {
 
   const handleLogin = () => {
     Keyboard.dismiss();
-    props.handleLogin();
+    props.redirectToLogin();
   };
 
   const handleSignIn = () => {

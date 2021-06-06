@@ -39,9 +39,7 @@ function LogInContainer(props: any) {
 }
 
 function mapStateToProps(state: any) {
-  return {
-    currentScene: state.scene.scene
-  };
+  return {};
 }
 
 const dispatchToProps = {};
