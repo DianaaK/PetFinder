@@ -49,11 +49,6 @@ function ListContainer(props: any) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor="transparent"
-        barStyle="dark-content"
-        translucent
-      />
       <HeaderComponent
         title={
           forUser

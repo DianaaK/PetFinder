@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { colors } from '../../styles';
+import { StyleSheet, View, TouchableOpacity, StatusBar } from 'react-native';
+import { colors, navbarStyles } from '../../styles';
 import IconComponent from './IconComponent';
 import TextComponent from './TextComponent';
 
@@ -20,6 +20,13 @@ interface IProps {
 
 export default function HeaderComponent(props: IProps) {
   return (
+    <>
+
+    <StatusBar
+        translucent
+        barStyle="dark-content"
+        backgroundColor="transparent"
+      />
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={props.leftButtonAction}>
         <IconComponent
@@ -47,6 +54,7 @@ export default function HeaderComponent(props: IProps) {
         <View style={styles.button} />
       )}
     </View>
+    </>
   );
 }
 
@@ -57,7 +65,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.mainColorLight,
     borderBottomWidth: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    paddingTop: navbarStyles.paddingTop
   },
   button: {
     padding: 10

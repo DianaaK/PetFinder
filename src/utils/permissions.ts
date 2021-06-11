@@ -1,10 +1,17 @@
-import { PermissionsAndroid } from 'react-native';
+import {
+  request,
+  PERMISSIONS,
+} from "react-native-permissions";
+import { isIOS } from "../styles";
 
 export async function requestLocationPermission() {
   try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
+    let granted;
+    if (isIOS) {
+      granted = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
+    } else {
+      granted = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    }
     return granted;
   } catch (err) {
     console.warn(err);

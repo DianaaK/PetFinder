@@ -1,47 +1,45 @@
-import {StatusBar, Platform, Dimensions, PixelRatio} from 'react-native';
-import {colors} from './colors';
+import { StatusBar, Platform, Dimensions, PixelRatio } from "react-native";
+import { initialWindowMetrics } from "react-native-safe-area-context";
+import { colors } from ".";
 
-export const DEVICE_HEIGHT = Dimensions.get('screen').height;
-export const WINDOW_HEIGHT = Dimensions.get('window').height;
-export const DEVICE_WIDTH = Dimensions.get('window').width;
+export const DEVICE_HEIGHT = Dimensions.get("screen").height;
+export const WINDOW_HEIGHT = Dimensions.get("window").height;
+export const DEVICE_WIDTH = Dimensions.get("window").width;
 
 const platform = Platform.OS;
-export const isIOS = platform === 'ios';
-export const isAndroid = platform === 'android';
+export const isIOS = platform === "ios";
+export const isAndroid = platform === "android";
 
-const iPhoneXHeight = 812;
-const iPhoneXRHeight = 896;
-export const isIphoneX =
-  isIOS &&
-  (DEVICE_HEIGHT === iPhoneXHeight ||
-    DEVICE_WIDTH === iPhoneXHeight ||
-    DEVICE_HEIGHT === iPhoneXRHeight ||
-    DEVICE_WIDTH === iPhoneXRHeight);
 export const statusBarHeight = StatusBar.currentHeight || 0;
+const windowMetrics: any = initialWindowMetrics?.insets || {};
 
 const hasNavigationBar = isAndroid && DEVICE_HEIGHT !== WINDOW_HEIGHT;
 export const navigationBarHeight = hasNavigationBar
   ? DEVICE_HEIGHT - WINDOW_HEIGHT - statusBarHeight
   : 0;
 
+const generalBorderWidth = 1 / PixelRatio.getPixelSizeForLayoutSize(1);
+const generalBorderColor = colors.itemBorderBottom;
+
 export const navbarStyles = {
-  height: isIOS ? (isIphoneX ? 22 + 64 : 64) : 56 + statusBarHeight,
-  paddingTop: isIOS ? (isIphoneX ? 30 : 15) : statusBarHeight,
-  paddingTopAndroid: isIOS ? (isIphoneX ? 30 : 15) : 0,
-  borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
-  borderBottomColor: colors.itemBorderBottom,
+  height: isIOS ? 46 + windowMetrics.top : 56 + statusBarHeight,
+  paddingTop: (isIOS ? windowMetrics.top : statusBarHeight) || 0,
+  borderBottomWidth: generalBorderWidth,
+  borderBottomColor: generalBorderColor
 };
 
 export const maxHeightScreenWithNavbar = DEVICE_HEIGHT - navbarStyles.height;
 
 export const tabbarStyles = {
-  height: isIphoneX ? 56 + 34 : 56,
-  borderTopWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
-  borderTopColor: colors.itemBorderBottom,
-  paddingBottom: isIphoneX ? 34 : 0,
+  height: 56 + (isIOS ? windowMetrics.bottom : 0),
+  borderTopWidth: generalBorderWidth,
+  borderTopColor: generalBorderColor,
+  paddingBottom: isIOS ? windowMetrics.bottom : 0
 };
 
-export const backIconName = isIOS ? 'ios-chevron-back' : 'md-arrow-back';
+export const doneButtonHeight = 56 + (isIOS ? windowMetrics.bottom / 2 : 0);
+
+export const backIconName = isIOS ? "ios-chevron-back" : "md-arrow-back";
 export const forwardIconName = isIOS
-  ? 'ios-chevron-forward'
-  : 'md-arrow-forward';
+  ? "ios-chevron-forward"
+  : "md-arrow-forward";

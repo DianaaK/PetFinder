@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { colors, statusBarHeight, DEVICE_WIDTH } from '../../styles';
+import { colors, DEVICE_WIDTH, navbarStyles } from '../../styles';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: statusBarHeight * 2,
+    paddingTop: navbarStyles.paddingTop,
     flex: 1,
     backgroundColor: colors.mainColor
   },
