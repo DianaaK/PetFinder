@@ -18,6 +18,8 @@ target 'PetFinder' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'PetFinderTests' do
     inherit! :complete
     # Pods for testing

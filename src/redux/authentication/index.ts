@@ -11,7 +11,7 @@ export namespace AuthStore {
     logout_error: string | null;
     register_pending: boolean;
     register_error: string | null;
-    user: UserDTO | null;
+    auth_user: UserDTO | null;
     token: string | null;
     change_password_pending: boolean;
     change_password_error: string | null;
@@ -24,7 +24,7 @@ export namespace AuthStore {
     logout_error: null,
     register_pending: false,
     register_error: null,
-    user: null,
+    auth_user: null,
     token: null,
     change_password_pending: false,
     change_password_error: null

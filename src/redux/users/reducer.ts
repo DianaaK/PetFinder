@@ -1,4 +1,3 @@
-import { IAction } from '../types';
 import { UserStore } from './index';
 
 function userReducer(
@@ -6,6 +5,29 @@ function userReducer(
   action: any
 ): UserStore.IState {
   switch (action.type) {
+    case UserStore.ActionTypes.GET_USER: {
+      return {
+        ...state,
+        get_user_pending: true,
+        get_user_error: null
+      };
+    }
+    case UserStore.ActionTypes.GET_USER_SUCCESS: {
+      const nextState = {
+        ...state,
+        user: action.payload,
+        get_user_pending: false,
+        get_user_error: null
+      };
+      return nextState;
+    }
+    case UserStore.ActionTypes.GET_USER_FAILED: {
+      return {
+        ...state,
+        get_user_pending: false,
+        get_user_error: action.payload
+      };
+    }
     case UserStore.ActionTypes.EDIT_USER: {
       return {
         ...state,
@@ -14,19 +36,9 @@ function userReducer(
       };
     }
     case UserStore.ActionTypes.EDIT_USER_SUCCESS: {
-      const newUserData = action.payload;
-      const currentStateUser = state.user;
-      const editedUser = {
-        ...currentStateUser,
-        _id: currentStateUser?._id || '',
-        email: newUserData.email,
-        firstname: newUserData.firstname,
-        lastname: newUserData.lastname,
-        phone: newUserData.phone
-      };
       const nextState = {
         ...state,
-        user: editedUser,
+        user: action.payload,
         edit_user_pending: false,
         edit_user_error: null
       };

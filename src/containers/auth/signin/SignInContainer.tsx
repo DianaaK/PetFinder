@@ -10,7 +10,7 @@ import { colors } from '../../../styles';
 
 function SignInContainer(props: any) {
   useEffect(() => {
-    if (props.user && !props.login_pending) {
+    if (props.auth_user && !props.login_pending) {
       props.navigation.navigate('List');
     }
   }, [props.login_pending]);
@@ -45,7 +45,7 @@ function SignInContainer(props: any) {
 
 function mapStateToProps(state: AppStore.states) {
   return {
-    user: state.auth.user,
+    auth_user: state.auth.auth_user,
     login_pending: state.auth.login_pending,
     register_pending: state.auth.register_pending,
     register_error: state.auth.register_error

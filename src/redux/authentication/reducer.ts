@@ -39,7 +39,7 @@ function authReducer(
         ...state,
         login_pending: false,
         login_error: null,
-        user: action.payload.user,
+        auth_user: action.payload.user,
         token: action.payload.token
       };
       return nextState;
@@ -48,12 +48,11 @@ function authReducer(
       return {
         ...state,
         login_pending: false,
-        user: null,
+        auth_user: null,
         token: null,
         login_error: action.payload
       };
     }
-
     case AuthStore.ActionTypes.LOGOUT: {
       return {
         login_pending: false,
@@ -62,7 +61,7 @@ function authReducer(
         logout_error: null,
         register_pending: false,
         register_error: null,
-        user: null,
+        auth_user: null,
         token: null,
         change_password_pending: false,
         change_password_error: null

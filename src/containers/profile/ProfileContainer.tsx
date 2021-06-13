@@ -1,20 +1,29 @@
 import React, { useEffect } from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
-import { MenuButtonComponent, TextComponent } from '../general';
-import { assets } from '../../../assets/images';
+import { MenuButtonComponent } from '../general';
 import { styles } from './styles';
 import authActions from '../../redux/authentication/actions';
 import { AppStore } from '../../redux';
+import ProfileSectionComponent from './components/ProfileSectionComponent';
+import userActions from '../../redux/users/actions';
 
 function ProfileContainer(props: any) {
   useEffect(() => {
-    if (!props.user && !props.logout_pending && !props.logout_error) {
+    if (!props.user || props.user._id !== props.auth_user._id) {
+      props.getUserAction(props.auth_user._id);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!props.auth_user && !props.logout_pending && !props.logout_error) {
       props.navigation.navigate('LogIn');
     }
-  }, [props.user]);
+  }, [props.auth_user]);
 
-  const chooseAvatarHandler = () => {};
+  const editUser = (newUser: any) => {
+    props.editUserAction(props.user._id, newUser);
+  };
 
   const redirectToListAction = () => {
     props.navigation.closeDrawer();
@@ -44,37 +53,7 @@ function ProfileContainer(props: any) {
   return (
     <View style={styles.container}>
       {props.user && (
-        <View style={styles.userDetails}>
-          <View style={styles.flexRowContainer}>
-            <TouchableOpacity
-              style={styles.profileImageContainer}
-              onPress={chooseAvatarHandler}>
-              {props.user.profileImage ? (
-                <Image
-                  source={{ uri: props.user.profileImage || '' }}
-                  style={styles.image}
-                />
-              ) : (
-                <Image
-                  source={assets.placeholder}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-              )}
-            </TouchableOpacity>
-            <View style={styles.details}>
-              <TextComponent style={styles.text}>
-                {props.user.firstname + ' ' + props.user.lastname}
-              </TextComponent>
-              <TextComponent style={[styles.fadedText, { fontSize: 10 }]}>
-                Member since: {props.user.created}
-              </TextComponent>
-            </View>
-          </View>
-          <TextComponent style={styles.fadedText}>
-            {props.user.email}
-          </TextComponent>
-        </View>
+        <ProfileSectionComponent user={props.user} editUser={editUser} />
       )}
       <View style={styles.menu}>
         <MenuButtonComponent
@@ -122,13 +101,16 @@ function ProfileContainer(props: any) {
 
 function mapStateToProps(state: AppStore.states) {
   return {
-    user: state.auth.user,
+    user: state.user.user,
+    auth_user: state.auth.auth_user,
     logout_pending: state.auth.logout_pending,
     logout_error: state.auth.logout_error
   };
 }
 
 const dispatchToProps = {
+  getUserAction: userActions.getUserAction,
+  editUserAction: userActions.editUserAction,
   logoutAction: authActions.logoutAction
 };
 

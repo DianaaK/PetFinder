@@ -23,7 +23,7 @@ function LogInContainer(props: any) {
   );
 
   useEffect(() => {
-    if (props.user && !props.login_error) {
+    if (props.auth_user && !props.login_error) {
       props.navigation.navigate('List');
     }
   }, [props.login_pending]);
@@ -55,7 +55,7 @@ function LogInContainer(props: any) {
 
 function mapStateToProps(state: AppStore.states) {
   return {
-    user: state.auth.user,
+    auth_user: state.auth.auth_user,
     login_pending: state.auth.login_pending,
     login_error: state.auth.login_error
   };
