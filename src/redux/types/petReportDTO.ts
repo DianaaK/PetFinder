@@ -1,17 +1,17 @@
 export class PetReportDTO {
   _id: string = '';
-  type: ReportType | null = null;
   name: string = '';
+  description: string = '';
+  type: ReportType | null = null;
   species: PetSpecies | null = null;
   gender: PetGender | null = null;
   breed: string = '';
   age: string = '';
-  description: string = '';
-  date: string = '';
   media: string[] = [];
-  userId?: string;
   user: ReportUserDTO = new ReportUserDTO();
-  location?: string;
+  phoneContact?: boolean;
+  emailContact?: boolean;
+  address?: string;
   coordinates: {
     latitude: number;
     longitude: number;
@@ -19,7 +19,9 @@ export class PetReportDTO {
     latitude: 0,
     longitude: 0
   };
+  date: string = '';
   isFavorite?: boolean;
+  status?: ReportStatus;
 }
 
 export class ReportUserDTO {
@@ -43,4 +45,9 @@ export enum PetSpecies {
 export enum PetGender {
   MALE,
   FEMALE
+}
+
+export enum ReportStatus {
+  ACTIVE,
+  INACTIVE
 }
