@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, View, Animated } from 'react-native';
+import { Keyboard, View, Animated, Alert } from 'react-native';
 import { assets } from '../../../../../assets/images';
 import { InputComponent } from '../../../general';
 import { ButtonComponent } from '../../general';
 import { styles } from './styles';
 import { DEVICE_HEIGHT, isIOS } from '../../../../styles/deviceHelper';
+import { RegisterUserDTO } from '../../../../redux/types';
 
 const SignInComponent = (props: any) => {
-  const [user, setUser] = useState({ email: '', password: '' });
+  const [user, setUser] = useState(new RegisterUserDTO());
 
   const imageHeight = new Animated.Value(180);
   const backImageHeight = new Animated.Value(DEVICE_HEIGHT / 3);
@@ -56,16 +57,8 @@ const SignInComponent = (props: any) => {
     ]).start();
   };
 
-  const handleInputChange = (field: string, text: any) => {
-    switch (field) {
-      case 'email':
-        setUser({ ...user, email: text });
-        break;
-      case 'password':
-        setUser({ ...user, password: text });
-      default:
-        break;
-    }
+  const handleInputChange = (field: string, text: string) => {
+    setUser({ ...user, [field]: text });
   };
 
   const handleLogin = () => {
@@ -75,7 +68,15 @@ const SignInComponent = (props: any) => {
 
   const handleSignIn = () => {
     Keyboard.dismiss();
-    props.handleSignIn();
+    if (user.email && user.password) {
+      props.handleSignIn(user);
+    } else {
+      Alert.alert(
+        'No credentials!',
+        'Please provide all the information required.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   return (
@@ -96,7 +97,7 @@ const SignInComponent = (props: any) => {
           <InputComponent
             theme="light"
             error={false}
-            value={user.email}
+            value={user.firstname}
             changeHandler={handleInputChange}
             label="First Name"
             id="firstname"
@@ -106,7 +107,7 @@ const SignInComponent = (props: any) => {
           <InputComponent
             theme="light"
             error={false}
-            value={user.email}
+            value={user.lastname}
             changeHandler={handleInputChange}
             label="Last Name"
             id="lastname"

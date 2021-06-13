@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, View, Animated } from 'react-native';
+import { Keyboard, View, Animated, Alert } from 'react-native';
 import { assets } from '../../../../../assets/images';
 import { InputComponent } from '../../../general';
 import { ButtonComponent } from '../../general';
@@ -56,21 +56,19 @@ const LogInComponent = (props: any) => {
     ]).start();
   };
 
-  const handleInputChange = (field: string, text: any) => {
-    switch (field) {
-      case 'email':
-        setUser({ ...user, email: text });
-        break;
-      case 'password':
-        setUser({ ...user, password: text });
-      default:
-        break;
-    }
+  const handleInputChange = (field: string, text: string) => {
+    setUser({ ...user, [field]: text });
   };
 
   const handleLogin = () => {
     Keyboard.dismiss();
-    props.handleLogin();
+    if (user.email && user.password) {
+      props.handleLogin(user);
+    } else {
+      Alert.alert('No credentials!', 'Please provide both email and password', [
+        { text: 'OK' }
+      ]);
+    }
   };
 
   const handleSignIn = () => {

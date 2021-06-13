@@ -22,5 +22,11 @@ export const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  loadingContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center'
   }
 });

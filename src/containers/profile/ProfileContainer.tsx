@@ -1,12 +1,19 @@
-import React from 'react';
-import { View, StatusBar, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
 import { MenuButtonComponent, TextComponent } from '../general';
 import { assets } from '../../../assets/images';
 import { styles } from './styles';
-import { colors } from '../../styles';
+import authActions from '../../redux/authentication/actions';
+import { AppStore } from '../../redux';
 
 function ProfileContainer(props: any) {
+  useEffect(() => {
+    if (!props.user && !props.logout_pending && !props.logout_error) {
+      props.navigation.navigate('LogIn');
+    }
+  }, [props.user]);
+
   const chooseAvatarHandler = () => {};
 
   const redirectToListAction = () => {
@@ -16,7 +23,7 @@ function ProfileContainer(props: any) {
 
   const logOutAction = () => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('LogIn');
+    props.logoutAction();
   };
 
   const redirectToAddAction = () => {
@@ -36,32 +43,39 @@ function ProfileContainer(props: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.userDetails}>
-        <View style={styles.flexRowContainer}>
-          <TouchableOpacity
-            style={styles.profileImageContainer}
-            onPress={chooseAvatarHandler}>
-            {user.image ? (
-              <Image source={{ uri: user.image || '' }} style={styles.image} />
-            ) : (
-              <Image
-                source={assets.placeholder}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            )}
-          </TouchableOpacity>
-          <View style={styles.details}>
-            <TextComponent style={styles.text}>
-              {user.firstname + ' ' + user.lastname}
-            </TextComponent>
-            <TextComponent style={[styles.fadedText, { fontSize: 10 }]}>
-              Member since: {user.created}
-            </TextComponent>
+      {props.user && (
+        <View style={styles.userDetails}>
+          <View style={styles.flexRowContainer}>
+            <TouchableOpacity
+              style={styles.profileImageContainer}
+              onPress={chooseAvatarHandler}>
+              {props.user.profileImage ? (
+                <Image
+                  source={{ uri: props.user.profileImage || '' }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={assets.placeholder}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              )}
+            </TouchableOpacity>
+            <View style={styles.details}>
+              <TextComponent style={styles.text}>
+                {props.user.firstname + ' ' + props.user.lastname}
+              </TextComponent>
+              <TextComponent style={[styles.fadedText, { fontSize: 10 }]}>
+                Member since: {props.user.created}
+              </TextComponent>
+            </View>
           </View>
+          <TextComponent style={styles.fadedText}>
+            {props.user.email}
+          </TextComponent>
         </View>
-        <TextComponent style={styles.fadedText}>{user.email}</TextComponent>
-      </View>
+      )}
       <View style={styles.menu}>
         <MenuButtonComponent
           title="Lost & Found"
@@ -106,23 +120,20 @@ function ProfileContainer(props: any) {
   );
 }
 
-function mapStateToProps(state: any) {
-  return {};
+function mapStateToProps(state: AppStore.states) {
+  return {
+    user: state.auth.user,
+    logout_pending: state.auth.logout_pending,
+    logout_error: state.auth.logout_error
+  };
 }
 
-const dispatchToProps = {};
+const dispatchToProps = {
+  logoutAction: authActions.logoutAction
+};
 
 export default reduxContainer(
   ProfileContainer,
   mapStateToProps,
   dispatchToProps
 );
-
-const user = {
-  lastname: 'Tugui',
-  firstname: 'Diana',
-  email: 'dianaa.ecaterina@gmail.com',
-  created: '25.05.2021',
-  image:
-    'https://scontent.fotp3-3.fna.fbcdn.net/v/t1.6435-9/129327920_3547153388686153_6776261588378670382_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHv_BdGlJ86z24HlquSHRPjGooxbLSMJFEaijFstIwkUYF4vW7IBTFqi4a2XzvM4fIVJMjWH8nYXLmYWJ-K3Bd2&_nc_ohc=NNHDu_3omGMAX-k4lw9&_nc_ht=scontent.fotp3-3.fna&oh=b91ddf5f233c1354105f9ce4a17b65f9&oe=60D79BDA'
-};

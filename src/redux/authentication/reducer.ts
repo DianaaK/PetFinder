@@ -1,11 +1,32 @@
-import { ActionDTO } from '../types';
 import { AuthStore } from './index';
 
 function authReducer(
   state: AuthStore.IState = AuthStore.initialState,
-  action: ActionDTO<any>
+  action: any
 ): AuthStore.IState {
   switch (action.type) {
+    case AuthStore.ActionTypes.REGISTER: {
+      return {
+        ...state,
+        register_pending: true,
+        register_error: null
+      };
+    }
+    case AuthStore.ActionTypes.REGISTER_SUCCESS: {
+      const nextState = {
+        ...state,
+        register_pending: false,
+        register_error: null
+      };
+      return nextState;
+    }
+    case AuthStore.ActionTypes.REGISTER_FAILED: {
+      return {
+        ...state,
+        register_pending: false,
+        register_error: action.payload
+      };
+    }
     case AuthStore.ActionTypes.LOGIN: {
       return {
         ...state,
@@ -32,6 +53,7 @@ function authReducer(
         login_error: action.payload
       };
     }
+
     case AuthStore.ActionTypes.LOGOUT: {
       return {
         login_pending: false,
@@ -42,43 +64,8 @@ function authReducer(
         register_error: null,
         user: null,
         token: null,
-        edit_user_pending: false,
-        edit_user_error: null,
         change_password_pending: false,
         change_password_error: null
-      };
-    }
-    case AuthStore.ActionTypes.EDIT_USER: {
-      return {
-        ...state,
-        edit_user_pending: true,
-        edit_user_error: null
-      };
-    }
-    case AuthStore.ActionTypes.EDIT_USER_SUCCESS: {
-      const newUserData = action.payload;
-      const currentStateUser = state.user;
-      const editedUser = {
-        ...currentStateUser,
-        _id: currentStateUser?._id || '',
-        email: newUserData.email,
-        firstname: newUserData.firstname,
-        lastname: newUserData.lastname,
-        phone: newUserData.phone
-      };
-      const nextState = {
-        ...state,
-        user: editedUser,
-        edit_user_pending: false,
-        edit_user_error: null
-      };
-      return nextState;
-    }
-    case AuthStore.ActionTypes.EDIT_USER_FAILED: {
-      return {
-        ...state,
-        edit_user_pending: false,
-        edit_user_error: action.payload
       };
     }
     default:

@@ -4,11 +4,12 @@ import { AddPetContainer, PetDetailsContainer } from './details';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerContainer from './DrawerContainer';
 import MapContainer from './map/MapContainer';
+import { AuthUtil } from '../utils';
 
 const Stack = createStackNavigator();
 
 function MainContainer(props: any) {
-  const isLogged = true;
+  const isLogged = AuthUtil.isLogged();
 
   return (
     <Stack.Navigator

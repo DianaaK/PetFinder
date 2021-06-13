@@ -9,14 +9,14 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ['auth', 'appConfig']
+  whitelist: ['auth']
 };
 
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
-const composeEnhancers = compose;
+const composeEnhancer = compose;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(
-  appReducer,
-  composeEnhancers(applyMiddleware(thunk))
+  persistedReducer,
+  composeEnhancer(applyMiddleware(thunk))
 );
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);

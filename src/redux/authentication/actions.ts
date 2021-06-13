@@ -1,26 +1,44 @@
 import { Dispatch } from 'redux';
-import { AuthStore } from './';
+import { AuthStore } from './index';
 import { Server } from '../../utils';
+import { RegisterUserDTO } from '../types';
 
-/*
-  IAuthActions interface definition, which contains every redux action asociated with Auth State.
-*/
 export interface IAuthActions {
-  loginAction(email: string, password: string, player_id: string): any;
-  logoutAction(player_id: string): any;
-  editProfileAction(user: any): any;
+  registerAction(user: RegisterUserDTO): any;
+  loginAction(email: string, password: string): any;
+  logoutAction(): any;
 }
 
-/*
-  class AuthActions that implements redux actions defined in IAuthActions interface
-*/
 class AuthActions implements IAuthActions {
+  registerAction(user: RegisterUserDTO) {
+    return (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: AuthStore.ActionTypes.REGISTER
+      });
+      Server.post('auth/register', user)
+        .then((user: any) => {
+          dispatch({
+            type: AuthStore.ActionTypes.REGISTER_SUCCESS
+          });
+          dispatch(
+            AuthStore.actions.loginAction(user.data.email, user.data.password)
+          );
+        })
+        .catch((error) => {
+          dispatch({
+            type: AuthStore.ActionTypes.REGISTER_FAILED,
+            payload: error
+          });
+        });
+    };
+  }
+
   loginAction(email: string, password: string) {
     return (dispatch: Dispatch<any>) => {
       dispatch({
         type: AuthStore.ActionTypes.LOGIN
       });
-      return Server.login(email, password)
+      return Server.login({ username: email, password: password })
         .then(async (user) => {
           dispatch({
             type: AuthStore.ActionTypes.LOGIN_SUCCESS,
@@ -41,27 +59,6 @@ class AuthActions implements IAuthActions {
       Server.logout().then(() => {
         dispatch({ type: AuthStore.ActionTypes.LOGOUT });
       });
-    };
-  }
-
-  editProfileAction(user: any) {
-    return async (dispatch: Dispatch<any>) => {
-      dispatch({
-        type: AuthStore.ActionTypes.EDIT_USER
-      });
-      await Server.put(`users/${user._id}`, user)
-        .then((response: any) => {
-          dispatch({
-            type: AuthStore.ActionTypes.EDIT_USER_SUCCESS,
-            payload: response.data as any
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: AuthStore.ActionTypes.EDIT_USER_FAILED,
-            payload: Server.errorParse(error)
-          });
-        });
     };
   }
 }

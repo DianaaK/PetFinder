@@ -1,22 +1,18 @@
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 import { AuthStore } from './authentication';
+import authReducer from './authentication/reducer';
 
-export const rootReducer = combineReducers({
-  auth: AuthStore.reducer
-  // appConfig: appConfigReducer,
-  // notifications: notificationsReducer,
-  // settings: settingsReducer,
-  // photo: photoReducer,
-  // animation: animationReducer
+export const rootReducer: Reducer<any> = combineReducers({
+  auth: authReducer
 });
 
 export const appReducer = (state: any, action: any) => {
-  // if (action.type === 'USER_LOGOUT') {
-  //   if (state && state.appConfig) {
-  //     const persistState = {appConfig: state.appConfig};
-  //     state = persistState;
-  //   }
-  // }
+  if (action.type === 'LOGOUT') {
+    if (state && state.appConfig) {
+      const persistState = { appConfig: state.appConfig };
+      state = persistState;
+    }
+  }
   return rootReducer(state, action);
 };
 

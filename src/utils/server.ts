@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import { store, AuthStore } from '../redux';
 
-const defOrigin = 'http://192.168.0.104:3000';
+const defOrigin = 'http://192.168.1.4:3000';
 
 /*
   Class that implements all server functions.
@@ -29,8 +29,8 @@ class Server {
     return this.call('delete', url, data);
   }
 
-  login(username: string, password: string) {
-    return this.post('auth/login', { username, password })
+  login(user: { username: string; password: string }) {
+    return this.post('auth/login', user)
       .then((user: any) => {
         this.setToken(user.data.token);
         return user.data;
@@ -43,6 +43,7 @@ class Server {
   logout() {
     return this.get(`auth/logout`)
       .then((response) => {
+        this.removeToken();
         return response;
       })
       .catch((error: Error) => {
@@ -51,7 +52,7 @@ class Server {
   }
 
   call(method: Method, url: string, data: any) {
-    const axiosRequest = this.getMetadata(method, url);
+    const axiosRequest = this.getMetadata(method, url, data);
     return new Promise((resolve, reject) => {
       axios
         .request(axiosRequest)
@@ -66,7 +67,7 @@ class Server {
     });
   }
 
-  getMetadata(method: Method, url: string) {
+  getMetadata(method: Method, url: string, data: any) {
     const state = store.getState();
     let token = '';
     if (state && state.auth && state.auth && state.auth.token) {
@@ -76,6 +77,7 @@ class Server {
     axiosRequest = {
       baseURL: `${this.origin}/${url}`,
       method,
+      data,
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${token}`

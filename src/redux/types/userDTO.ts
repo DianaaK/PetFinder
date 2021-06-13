@@ -6,3 +6,10 @@ export class UserDTO {
   phone?: string | null;
   password?: string;
 }
+
+export class RegisterUserDTO {
+  firstname: string = '';
+  lastname: string = '';
+  email: string = '';
+  password: string = '';
+}
