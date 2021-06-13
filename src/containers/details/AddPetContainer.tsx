@@ -11,11 +11,6 @@ export default function AddPetContainer(props: any) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={colors.mainColor}
-        barStyle="light-content"
-        translucent
-      />
       <HeaderComponent
         title="Add Pet Report"
         leftButtonAction={onBack}
@@ -31,7 +26,6 @@ export default function AddPetContainer(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: statusBarHeight,
     flex: 1
   }
 });

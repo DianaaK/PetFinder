@@ -1,12 +1,16 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
-import { View, StatusBar, FlatList, Keyboard, BackHandler } from 'react-native';
+import { View, FlatList, Keyboard, BackHandler } from 'react-native';
 import reduxContainer from '../../redux/reduxContainer';
 import { PetGender, PetSpecies, ReportType } from '../../redux/types';
 import { requestLocationPermission } from '../../utils';
 import { HeaderComponent } from '../general';
-import { ListItemComponent, SearchComponent } from './components';
+import {
+  ListItemComponent,
+  SearchComponent,
+  EmptyComponent
+} from './components';
 import { styles } from './styles';
 
 function ListContainer(props: any) {
@@ -71,6 +75,7 @@ function ListContainer(props: any) {
       <View style={styles.contentContainer}>
         <FlatList
           ListHeaderComponent={<SearchComponent />}
+          ListEmptyComponent={<EmptyComponent />}
           data={forUser ? userReports : forFavorites ? forFavoritesList : data}
           renderItem={renderItem}
           contentContainerStyle={styles.list}
@@ -188,7 +193,7 @@ export const data = [
   {
     _id: '3',
     type: ReportType.FOUND,
-    name: 'Orange kitten that looks lost',
+    name: 'Orange kitten',
     species: PetSpecies.CAT,
     breed: 'Common breed',
     gender: PetGender.MALE,

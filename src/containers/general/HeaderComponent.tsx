@@ -21,39 +21,42 @@ interface IProps {
 export default function HeaderComponent(props: IProps) {
   return (
     <>
-
-    <StatusBar
+      <StatusBar
         translucent
         barStyle="dark-content"
         backgroundColor="transparent"
       />
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={props.leftButtonAction}>
-        <IconComponent
-          type={props.leftButtonIcon.type}
-          name={props.leftButtonIcon.name}
-          style={styles.icon}
-        />
-      </TouchableOpacity>
-      <View>
-        <View style={styles.headerContainer}>
-          <TextComponent style={styles.headerText}>{props.title}</TextComponent>
-        </View>
-      </View>
-      {props.rightButtonIcon ? (
+      <View style={styles.container}>
         <TouchableOpacity
           style={styles.button}
-          onPress={props.rightButtonAction}>
+          onPress={props.leftButtonAction}>
           <IconComponent
-            type={props.rightButtonIcon.type}
-            name={props.rightButtonIcon.name}
+            type={props.leftButtonIcon.type}
+            name={props.leftButtonIcon.name}
             style={styles.icon}
           />
         </TouchableOpacity>
-      ) : (
-        <View style={styles.button} />
-      )}
-    </View>
+        <View>
+          <View style={styles.headerContainer}>
+            <TextComponent style={styles.headerText}>
+              {props.title}
+            </TextComponent>
+          </View>
+        </View>
+        {props.rightButtonIcon ? (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={props.rightButtonAction}>
+            <IconComponent
+              type={props.rightButtonIcon.type}
+              name={props.rightButtonIcon.name}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.button} />
+        )}
+      </View>
     </>
   );
 }

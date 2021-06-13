@@ -111,7 +111,7 @@ export default function PetDetailsComponent(props: any) {
             style={styles.navigateButton}
             onPress={() => {
               navigation.navigate('GeneralMap', {
-                forPet: true,
+                petMode: true,
                 petReport: props.item
               });
             }}>

@@ -1,8 +1,5 @@
-import {
-  request,
-  PERMISSIONS,
-} from "react-native-permissions";
-import { isIOS } from "../styles";
+import { request, PERMISSIONS } from 'react-native-permissions';
+import { isIOS } from '../styles';
 
 export async function requestLocationPermission() {
   try {

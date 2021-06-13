@@ -36,11 +36,6 @@ function ProfileContainer(props: any) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={colors.mainColor}
-        barStyle="light-content"
-        translucent
-      />
       <View style={styles.userDetails}>
         <View style={styles.flexRowContainer}>
           <TouchableOpacity

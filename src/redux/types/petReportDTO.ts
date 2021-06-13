@@ -9,6 +9,7 @@ export class PetReportDTO {
   description: string = '';
   date: string = '';
   media: string[] = [];
+  userId?: string;
   user: ReportUserDTO = new ReportUserDTO();
   location?: string;
   coordinates: {

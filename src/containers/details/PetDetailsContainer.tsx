@@ -23,11 +23,6 @@ export default function PetDetailsContainer(props: any) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={colors.mainColor}
-        barStyle="light-content"
-        translucent
-      />
       <ScrollView>
         <PetHeaderComponent
           item={petReport}

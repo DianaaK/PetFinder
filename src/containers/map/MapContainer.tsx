@@ -20,7 +20,7 @@ export default function MapContainer(props: any) {
   useEffect(() => {
     Geolocation.getCurrentPosition(
       getCurrentPositionSuccess,
-      setInitialPosition,
+      setDefaultPosition,
       { timeout: 3000 }
     );
   }, []);
@@ -34,7 +34,7 @@ export default function MapContainer(props: any) {
     setPositionPending(false);
   };
 
-  const setInitialPosition = (coordinates: any) => {
+  const setDefaultPosition = (coordinates: any) => {
     if (coordinates && coordinates.length === 2) {
       const myPosition = {
         latitude: coordinates[1],
@@ -55,19 +55,14 @@ export default function MapContainer(props: any) {
 
   const reportList = data;
   const petLocations = petLocationsList;
-  const petMap = route.params.forPet;
+  const petMode = route.params.petMode;
   const viewMode = route.params.viewMode;
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={colors.mainColor}
-        barStyle="light-content"
-        translucent
-      />
       <HeaderComponent
         title={
-          petMap
+          petMode
             ? `${route.params.petReport.name}'s Location`
             : viewMode
             ? 'Map'
@@ -79,10 +74,10 @@ export default function MapContainer(props: any) {
           name: 'arrow-back'
         }}
         rightButtonAction={
-          petMap ? undefined : viewMode ? toggleFilters : saveLocation
+          petMode ? undefined : viewMode ? toggleFilters : saveLocation
         }
         rightButtonIcon={
-          petMap
+          petMode
             ? undefined
             : viewMode
             ? {
@@ -95,7 +90,7 @@ export default function MapContainer(props: any) {
               }
         }
       />
-      {petMap ? (
+      {petMode ? (
         <PetMapComponent
           reportedLocations={petLocations}
           position={route.params.petReport.coordinates}
@@ -117,7 +112,6 @@ export default function MapContainer(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: statusBarHeight,
     flex: 1
   }
 });

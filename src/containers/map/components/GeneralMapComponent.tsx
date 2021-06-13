@@ -7,8 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity
 } from 'react-native';
-import { Popup } from 'react-native-map-link';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, MAP_TYPES } from 'react-native-maps';
 import { TextInput } from 'react-native-paper';
 import { PetReportDTO, ReportType } from '../../../redux/types';
 import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
@@ -117,13 +116,18 @@ export default function GeneralMap(props: IProps) {
       .catch((error) => console.warn(error));
   };
 
+  const user = {
+    provider: PROVIDER_GOOGLE,
+    mapType: MAP_TYPES.STANDARD
+  };
   return (
     <View style={{ flex: 1 }}>
       {props.positionPending ? (
         <ActivityIndicator size="large" />
       ) : (
         <MapView
-          provider={PROVIDER_GOOGLE}
+          provider={user.provider}
+          mapType={user.mapType}
           style={styles.map}
           initialRegion={{
             ...props.position,

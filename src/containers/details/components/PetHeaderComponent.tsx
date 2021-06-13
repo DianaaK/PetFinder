@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors, DEVICE_HEIGHT } from '../../../styles';
@@ -18,56 +18,63 @@ export default function PetHeaderComponent(props: any) {
   ];
   const gradientLocations = [0.1, 0.4, 0.7, 1];
   return (
-    <View style={styles.contaier}>
-      <View style={styles.header}>
-        <LinearGradient
-          colors={gradientColors}
-          locations={gradientLocations}
-          style={styles.linearGradient}
-        />
-        <TouchableOpacity
-          style={{ paddingVertical: 8, paddingHorizontal: 12 }}
-          onPress={() => {
-            navigation.canGoBack() && navigation.goBack();
-          }}>
-          <IconComponent
-            type="MaterialIcons"
-            name="arrow-back"
-            style={styles.icon}
+    <>
+      <StatusBar
+        translucent
+        barStyle="dark-content"
+        backgroundColor="transparent"
+      />
+      <View style={styles.contaier}>
+        <View style={styles.header}>
+          <LinearGradient
+            colors={gradientColors}
+            locations={gradientLocations}
+            style={styles.linearGradient}
           />
-        </TouchableOpacity>
-        {props.canNavigate && (
           <TouchableOpacity
             style={{ paddingVertical: 8, paddingHorizontal: 12 }}
-            onPress={() => {}}>
+            onPress={() => {
+              navigation.canGoBack() && navigation.goBack();
+            }}>
             <IconComponent
-              type="Ionicons"
-              name="md-heart"
-              style={[
-                styles.icon,
-                {
-                  fontSize: 30,
-                  color: props.item.isFavorite
-                    ? colors.red
-                    : colors.mainColorLight
-                }
-              ]}
+              type="MaterialIcons"
+              name="arrow-back"
+              style={styles.icon}
             />
           </TouchableOpacity>
+          {props.canNavigate && (
+            <TouchableOpacity
+              style={{ paddingVertical: 8, paddingHorizontal: 12 }}
+              onPress={() => {}}>
+              <IconComponent
+                type="Ionicons"
+                name="md-heart"
+                style={[
+                  styles.icon,
+                  {
+                    fontSize: 30,
+                    color: props.item.isFavorite
+                      ? colors.red
+                      : colors.mainColorLight
+                  }
+                ]}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        {props.item.media?.length ? (
+          <SliderBox
+            images={props.item.media}
+            imageComponentStyle={styles.image}
+            imageLoadingColor={colors.mainColor}
+            customDotColor={colors.mainColor}
+            customInactiveDotColor={colors.mainColorLight3}
+          />
+        ) : (
+          <Image source={assets.placeholder} style={styles.image} />
         )}
       </View>
-      {props.item.media?.length ? (
-        <SliderBox
-          images={props.item.media}
-          imageComponentStyle={styles.image}
-          imageLoadingColor={colors.mainColor}
-          customDotColor={colors.mainColor}
-          customInactiveDotColor={colors.mainColorLight3}
-        />
-      ) : (
-        <Image source={assets.placeholder} style={styles.image} />
-      )}
-    </View>
+    </>
   );
 }
 
