@@ -1,19 +1,57 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { View, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { assets } from '../../../../assets/images';
 import { colors, DEVICE_WIDTH } from '../../../styles';
-import { formatDate } from '../../../utils';
+import { formatDate, requestCameraPermission } from '../../../utils';
 import { cloudinaryUpload } from '../../../utils';
 import { TextComponent } from '../../general';
 
 function ProfileSectionComponent(props: any) {
   const chooseAvatarHandler = () => {
+    Alert.alert(
+      'Do you want to take a photo or choose one from the gallery?',
+      '',
+      [
+        { text: 'Cancel' },
+        { text: 'Choose from the gallery', onPress: launchLibrary },
+        { text: 'Take a photo', onPress: launchPhoneCamera }
+      ]
+    );
+  };
+
+  const launchLibrary = async () => {
+    await requestCameraPermission();
     const options: any = {
       mediaType: 'photo'
     };
     launchImageLibrary(options, async (response: any) => {
-      if (response.assets.length) {
+      if (response.assets?.length) {
+        const item = response.assets[0];
+        const source = {
+          uri: item.uri,
+          type: item.type,
+          name: item.fileName
+        };
+        cloudinaryUpload(source)
+          .then((data: any) => {
+            if (data.secure_url) {
+              props.editUser({ profileImage: data.secure_url });
+            }
+          })
+          .catch((error) => console.warn(error));
+      }
+    });
+  };
+
+  const launchPhoneCamera = async () => {
+    await requestCameraPermission();
+    const options: any = {
+      mediaType: 'photo',
+      saveToPhotos: true
+    };
+    launchCamera(options, async (response: any) => {
+      if (response.assets?.length) {
         const item = response.assets[0];
         const source = {
           uri: item.uri,

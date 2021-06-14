@@ -1,11 +1,14 @@
 import { combineReducers, Reducer } from 'redux';
-import { AuthStore } from './authentication';
 import authReducer from './authentication/reducer';
-import { UserStore } from './users';
+import petReportReducer from './pet-reports/reducer';
 import userReducer from './users/reducer';
+import { AuthStore } from './authentication';
+import { PetReportStore } from './pet-reports';
+import { UserStore } from './users';
 
 export const rootReducer: Reducer<any> = combineReducers({
   auth: authReducer,
+  petReports: petReportReducer,
   user: userReducer
 });
 
@@ -24,5 +27,6 @@ export namespace AppStore {
   export type states = {
     auth: AuthStore.IState;
     user: UserStore.IState;
+    petReports: PetReportStore.IState;
   };
 }

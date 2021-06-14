@@ -1,5 +1,5 @@
 export class PetReportDTO {
-  _id: string = '';
+  _id?: string;
   name: string = '';
   description: string = '';
   type: ReportType | null = null;
@@ -8,7 +8,7 @@ export class PetReportDTO {
   breed: string = '';
   age: string = '';
   media: string[] = [];
-  user: ReportUserDTO = new ReportUserDTO();
+  user?: ReportUserDTO | string;
   phoneContact?: boolean;
   emailContact?: boolean;
   address?: string;
@@ -19,7 +19,7 @@ export class PetReportDTO {
     latitude: 0,
     longitude: 0
   };
-  date: string = '';
+  created?: string;
   isFavorite?: boolean;
   status?: ReportStatus;
 }

@@ -3,8 +3,8 @@ import { LogInContainer, SignInContainer } from './auth';
 import { AddPetContainer, PetDetailsContainer } from './details';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerContainer from './DrawerContainer';
-import MapContainer from './map/MapContainer';
 import { AuthUtil } from '../utils';
+import { AddMarkerContainer, MapContainer } from './map';
 
 const Stack = createStackNavigator();
 
@@ -25,8 +25,9 @@ function MainContainer(props: any) {
         initialParams={{ forUser: false, forFavorites: false }}
       />
       <Stack.Screen name="Details" component={PetDetailsContainer} />
-      <Stack.Screen name="Add" component={AddPetContainer} />
       <Stack.Screen name="GeneralMap" component={MapContainer} />
+      <Stack.Screen name="Add" component={AddPetContainer} />
+      <Stack.Screen name="AddMarkerMap" component={AddMarkerContainer} />
     </Stack.Navigator>
   );
 }

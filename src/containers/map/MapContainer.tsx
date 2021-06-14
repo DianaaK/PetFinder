@@ -1,8 +1,7 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { colors, statusBarHeight } from '../../styles';
 import { HeaderComponent } from '../general';
 import { data, petLocationsList } from '../list/ListContainer';
 import GeneralMapComponent from './components/GeneralMapComponent';
@@ -51,59 +50,41 @@ export default function MapContainer(props: any) {
 
   const toggleFilters = () => {};
 
-  const saveLocation = () => {};
-
   const reportList = data;
   const petLocations = petLocationsList;
-  const petMode = route.params.petMode;
-  const viewMode = route.params.viewMode;
+  const petMode = route?.params?.petMode;
 
   return (
     <View style={styles.container}>
       <HeaderComponent
-        title={
-          petMode
-            ? `${route.params.petReport.name}'s Location`
-            : viewMode
-            ? 'Map'
-            : 'Choose a location'
-        }
+        title={petMode ? `${route.params?.petReport.name}'s Location` : 'Map'}
         leftButtonAction={onBack}
         leftButtonIcon={{
           type: 'MaterialIcons',
           name: 'arrow-back'
         }}
-        rightButtonAction={
-          petMode ? undefined : viewMode ? toggleFilters : saveLocation
-        }
+        rightButtonAction={petMode ? undefined : toggleFilters}
         rightButtonIcon={
           petMode
             ? undefined
-            : viewMode
-            ? {
-                type: 'MaterialIcons',
-                name: 'filter-list'
-              }
             : {
                 type: 'MaterialIcons',
-                name: 'done'
+                name: 'filter-list'
               }
         }
       />
       {petMode ? (
         <PetMapComponent
           reportedLocations={petLocations}
-          position={route.params.petReport.coordinates}
+          position={route.params?.petReport.coordinates}
           positionPending={positionPending}
-          petReport={route.params.petReport}
+          petReport={route.params?.petReport}
         />
       ) : (
         <GeneralMapComponent
-          viewMode={viewMode}
           data={reportList}
           position={position}
           positionPending={positionPending}
-          petReport={route.params.petReport}
         />
       )}
     </View>

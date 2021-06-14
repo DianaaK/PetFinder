@@ -14,3 +14,17 @@ export async function requestLocationPermission() {
     console.warn(err);
   }
 }
+
+export async function requestCameraPermission() {
+  try {
+    let granted;
+    if (isIOS) {
+      granted = await request(PERMISSIONS.IOS.CAMERA);
+    } else {
+      granted = await request(PERMISSIONS.ANDROID.CAMERA);
+    }
+    return granted;
+  } catch (err) {
+    console.warn(err);
+  }
+}

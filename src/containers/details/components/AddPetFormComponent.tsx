@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
@@ -7,30 +8,38 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
-  Keyboard
+  Keyboard,
+  Alert,
+  Image
 } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Checkbox, RadioButton } from 'react-native-paper';
 import {
   PetGender,
   PetReportDTO,
   PetSpecies,
-  ReportType,
-  ReportUserDTO
+  ReportType
 } from '../../../redux/types';
 import { colors, DEVICE_WIDTH, fonts, isIOS } from '../../../styles';
-import { requestLocationPermission } from '../../../utils';
+import {
+  cloudinaryUpload,
+  requestCameraPermission,
+  requestLocationPermission
+} from '../../../utils';
 import { IconComponent, TextComponent } from '../../general';
 
 export default function AddPetFormComponent(props: any) {
   const navigation = useNavigation();
-  const positionBottom = new Animated.Value(0);
-  let keyboardShowListener: any;
-  let keyboardHideListener: any;
+  const route: any = useRoute();
 
   const [petReport, setPetReport] = useState(new PetReportDTO());
   const [phoneContact, setPhoneContact] = useState<boolean>();
   const [emailContact, setEmailContact] = useState<boolean>();
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+
+  const positionBottom = new Animated.Value(0);
+  let keyboardShowListener: any;
+  let keyboardHideListener: any;
 
   useEffect(() => {
     if (isIOS) {
@@ -88,13 +97,106 @@ export default function AddPetFormComponent(props: any) {
     Keyboard.dismiss();
   };
 
+  const uploadImages = () => {
+    Alert.alert(
+      'Do you want to take a photo or choose one from the gallery?',
+      '',
+      [
+        { text: 'Cancel' },
+        { text: 'Choose from the gallery', onPress: launchLibrary },
+        { text: 'Take a photo', onPress: launchPhoneCamera }
+      ]
+    );
+  };
+
+  const launchLibrary = async () => {
+    await requestCameraPermission();
+    const options: any = {
+      mediaType: 'photo',
+      selectionLimit: 8
+    };
+    launchImageLibrary(options, async (response: any) => {
+      if (response.assets?.length) {
+        console.log('response.assets', response.assets);
+        response.assets.forEach((item: any) => {
+          const source = {
+            uri: item.uri,
+            type: item.type,
+            name: item.fileName
+          };
+          cloudinaryUpload(source)
+            .then((data: any) => {
+              if (data.secure_url) {
+                const petMedia = petReport.media;
+                petMedia.push(data.secure_url);
+                setPetReport({ ...petReport, media: petMedia });
+              }
+            })
+            .catch((error) => {
+              console.warn(error);
+            });
+        });
+      }
+    });
+  };
+
+  const launchPhoneCamera = async () => {
+    await requestCameraPermission();
+    const options: any = {
+      mediaType: 'photo',
+      saveToPhotos: true,
+      selectionLimit: 8
+    };
+    launchCamera(options, async (response: any) => {
+      if (response.assets?.length) {
+        const item = response.assets[0];
+        const source = {
+          uri: item.uri,
+          type: item.type,
+          name: item.fileName
+        };
+        cloudinaryUpload(source)
+          .then((data: any) => {
+            if (data.secure_url) {
+              const petMedia = petReport.media;
+              petMedia.push(data.secure_url);
+              setPetReport({ ...petReport, media: petMedia });
+            }
+          })
+          .catch((error) => console.warn(error));
+      }
+    });
+  };
+
+  const deleteMedia = (index: number) => {
+    Alert.alert('Do you want to delete this photo?', '', [
+      { text: 'Cancel' },
+      {
+        text: 'Yes',
+        onPress: () => {
+          const petMedia = petReport.media;
+          petMedia.splice(index, 1);
+          setPetReport({ ...petReport, media: petMedia });
+        }
+      }
+    ]);
+  };
+
   const onMapOpen = async () => {
     await requestLocationPermission();
-    navigation.navigate('GeneralMap', { viewMode: false });
+    navigation.navigate('AddMarkerMap');
   };
 
   const onSaveReport = () => {
-    console.log('petReport', petReport);
+    const dataToSend = {
+      ...petReport,
+      user: props.user._id,
+      phoneContact,
+      emailContact,
+      address: route.params.address,
+      coordinates: route.params.coordinates
+    };
+    props.addPetReportAction(dataToSend);
     navigation.goBack();
   };
 
@@ -263,6 +365,7 @@ export default function AddPetFormComponent(props: any) {
                 }}
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}
+                disabled={!props.user.phone}
               />
               <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
                 Phone number
@@ -288,11 +391,20 @@ export default function AddPetFormComponent(props: any) {
             <TextComponent style={styles.questionText}>
               Upload pet pictures:
             </TextComponent>
-            <TouchableOpacity style={styles.formButton}>
+            <TouchableOpacity style={styles.formButton} onPress={uploadImages}>
               <TextComponent style={styles.formButtonText}>
                 Upload
               </TextComponent>
             </TouchableOpacity>
+            <View style={styles.rowContainer}>
+              {petReport.media?.map((item: string, index: number) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => deleteMedia(index)}>
+                  <Image source={{ uri: item }} style={styles.image} />
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
           <View style={styles.questionContainer}>
@@ -333,7 +445,8 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
   questionContainer: {
     marginBottom: 10
@@ -355,6 +468,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.mainFont
   },
   multilineInput: {
+    padding: 5,
     fontSize: 16,
     fontFamily: fonts.mainFont,
     textAlignVertical: 'top',
@@ -403,5 +517,16 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginHorizontal: 8,
     color: colors.mainColor2
+  },
+  image: {
+    height: 100,
+    width: 100,
+    margin: 8
+  },
+  loadingContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center'
   }
 });

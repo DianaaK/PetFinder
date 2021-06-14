@@ -1,7 +1,9 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, FlatList, Keyboard, BackHandler } from 'react-native';
+import { AppStore } from '../../redux';
+import petReportActions from '../../redux/pet-reports/actions';
 import reduxContainer from '../../redux/reduxContainer';
 import { PetGender, PetSpecies, ReportType } from '../../redux/types';
 import { requestLocationPermission } from '../../utils';
@@ -18,6 +20,10 @@ function ListContainer(props: any) {
   const navigation = useNavigation();
   const forUser = route.params?.forUser;
   const forFavorites = route.params?.forFavorites;
+
+  useEffect(() => {
+    props.getPetReportListAction();
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,13 +50,14 @@ function ListContainer(props: any) {
 
   const onMapOpen = async () => {
     await requestLocationPermission();
-    navigation.navigate('GeneralMap', { viewMode: true });
+    navigation.navigate('GeneralMap');
   };
 
   const onPressItem = (_id: string) => {
     navigation.navigate('Details', { itemId: _id, canNavigate: true });
   };
 
+  console.log('report_list', props.report_list);
   return (
     <View style={styles.container}>
       <HeaderComponent
@@ -86,11 +93,15 @@ function ListContainer(props: any) {
   );
 }
 
-function mapStateToProps(state: any) {
-  return {};
+function mapStateToProps(state: AppStore.states) {
+  return {
+    report_list: state.petReports.report_list
+  };
 }
 
-const dispatchToProps = {};
+const dispatchToProps = {
+  getPetReportListAction: petReportActions.getPetReportListAction
+};
 
 export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
 
