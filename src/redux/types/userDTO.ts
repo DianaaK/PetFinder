@@ -13,3 +13,9 @@ export class RegisterUserDTO {
   email: string = '';
   password: string = '';
 }
+
+export enum ListType {
+  GENERAL,
+  USER,
+  FAVORITES
+}

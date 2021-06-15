@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DrawerContainer from './DrawerContainer';
 import { AuthUtil } from '../utils';
 import { AddMarkerContainer, MapContainer } from './map';
+import { ListType } from '../redux/types';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,7 @@ function MainContainer(props: any) {
       <Stack.Screen
         name="List"
         component={DrawerContainer}
-        initialParams={{ forUser: false, forFavorites: false }}
+        initialParams={{ listType: ListType.GENERAL }}
       />
       <Stack.Screen name="Details" component={PetDetailsContainer} />
       <Stack.Screen name="GeneralMap" component={MapContainer} />

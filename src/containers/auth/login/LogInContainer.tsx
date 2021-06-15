@@ -8,6 +8,7 @@ import { AppStore } from '../../../redux';
 import authActions from '../../../redux/authentication/actions';
 import { useEffect } from 'react';
 import { colors } from '../../../styles';
+import { ListType } from '../../../redux/types';
 
 function LogInContainer(props: any) {
   useFocusEffect(
@@ -24,7 +25,7 @@ function LogInContainer(props: any) {
 
   useEffect(() => {
     if (props.auth_user && !props.login_error) {
-      props.navigation.navigate('List');
+      props.navigation.navigate('List', { listType: ListType.GENERAL });
     }
   }, [props.login_pending]);
 

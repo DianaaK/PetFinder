@@ -4,14 +4,14 @@ import { styles } from './components/styles';
 import SignInComponent from './components/SignInComponent';
 import reduxContainer from '../../../redux/reduxContainer';
 import { AppStore } from '../../../redux';
-import { RegisterUserDTO } from '../../../redux/types';
+import { ListType, RegisterUserDTO } from '../../../redux/types';
 import authActions from '../../../redux/authentication/actions';
 import { colors } from '../../../styles';
 
 function SignInContainer(props: any) {
   useEffect(() => {
     if (props.auth_user && !props.login_pending) {
-      props.navigation.navigate('List');
+      props.navigation.navigate('List', { listType: ListType.GENERAL });
     }
   }, [props.login_pending]);
 

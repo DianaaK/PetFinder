@@ -7,6 +7,7 @@ import authActions from '../../redux/authentication/actions';
 import { AppStore } from '../../redux';
 import ProfileSectionComponent from './components/ProfileSectionComponent';
 import userActions from '../../redux/users/actions';
+import { ListType } from '../../redux/types';
 
 function ProfileContainer(props: any) {
   useEffect(() => {
@@ -27,7 +28,7 @@ function ProfileContainer(props: any) {
 
   const redirectToListAction = () => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('List', { forUser: false, forFavorites: false });
+    props.navigation.navigate('List', { listType: ListType.GENERAL });
   };
 
   const logOutAction = () => {
@@ -37,17 +38,17 @@ function ProfileContainer(props: any) {
 
   const redirectToAddAction = () => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('Add');
+    props.navigation.navigate('Add', { editMode: false });
   };
 
   const redirectToMyReports = () => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('List', { forUser: true, forFavorites: false });
+    props.navigation.navigate('List', { listType: ListType.USER });
   };
 
   const redirectToFavorites = () => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('List', { forUser: false, forFavorites: true });
+    props.navigation.navigate('List', { listType: ListType.FAVORITES });
   };
 
   return (
