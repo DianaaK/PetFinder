@@ -14,7 +14,7 @@ import {
   ReportType
 } from '../../../redux/types';
 import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
-import { getCoordinatesFromAddress } from '../../../utils';
+import { formatDate } from '../../../utils';
 import { TextComponent } from '../../general';
 
 interface IProps {
@@ -126,15 +126,23 @@ export default function PetMapComponent(props: IProps) {
           loadingEnabled={true}
           rotateEnabled={true}
           onPress={onPressMap}>
-          <Marker
-            title={props.petReport.name}
-            description={`Last seen on ${props.petReport.date}`}
-            coordinate={props.petReport.coordinates}
-            pinColor={
-              props.petReport.type === ReportType.LOST ? 'tomato' : 'turquoise'
-            }
-            onPress={toggleButtonVisible}
-          />
+          {props.petReport.coordinates && (
+            <Marker
+              title={props.petReport.name}
+              description={`${
+                props.petReport.type === ReportType.LOST
+                  ? 'Last seen on'
+                  : 'Uploaded on'
+              } ${formatDate(props.petReport.created + '')}`}
+              coordinate={props.petReport.coordinates}
+              pinColor={
+                props.petReport.type === ReportType.LOST
+                  ? 'tomato'
+                  : 'turquoise'
+              }
+              onPress={toggleButtonVisible}
+            />
+          )}
           {props.reportedLocations.map((item: ReportedLocationDTO) =>
             renderPetMarker(item)
           )}

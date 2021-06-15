@@ -52,13 +52,17 @@ export default function PetCardComponent(props: any) {
         </View>
         <TextComponent style={styles.petAge}>{pet.age}</TextComponent>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center'
+        }}>
         <IconComponent
           type="Ionicons"
           name="md-location-sharp"
           style={styles.icon}
         />
-        <TextComponent style={styles.location}>{pet.location}</TextComponent>
+        <TextComponent style={styles.location}>{pet.address}</TextComponent>
       </View>
     </View>
   );

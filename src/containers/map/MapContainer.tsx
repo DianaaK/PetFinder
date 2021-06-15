@@ -2,12 +2,13 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import { AppStore, reduxContainer } from '../../redux';
 import { HeaderComponent } from '../general';
-import { data, petLocationsList } from '../list/ListContainer';
+import { petLocationsList } from '../list/ListContainer';
 import GeneralMapComponent from './components/GeneralMapComponent';
 import PetMapComponent from './components/PetMapComponent';
 
-export default function MapContainer(props: any) {
+function MapContainer(props: any) {
   const route: any = useRoute();
 
   const [position, setPosition] = useState<{
@@ -50,7 +51,7 @@ export default function MapContainer(props: any) {
 
   const toggleFilters = () => {};
 
-  const reportList = data;
+  const reportList = props.report_list;
   const petLocations = petLocationsList;
   const petMode = route?.params?.petMode;
 
@@ -90,6 +91,17 @@ export default function MapContainer(props: any) {
     </View>
   );
 }
+
+function mapStateToProps(state: AppStore.states) {
+  return {
+    report_list: state.petReports.report_list,
+    get_report_list_pending: state.petReports.get_report_list_pending
+  };
+}
+
+const dispatchToProps = {};
+
+export default reduxContainer(MapContainer, mapStateToProps, dispatchToProps);
 
 const styles = StyleSheet.create({
   container: {

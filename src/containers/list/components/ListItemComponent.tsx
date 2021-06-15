@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { assets } from '../../../../assets/images';
 import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
+import { formatDate } from '../../../utils';
 import { IconComponent, TextComponent } from '../../general';
 
 export function ListItemComponent(props: any) {
@@ -53,7 +54,7 @@ export function ListItemComponent(props: any) {
             style={styles.icon}
           />
           <TextComponent style={styles.animalDate}>
-            {props.item.date}
+            {formatDate(props.item.created)}
           </TextComponent>
         </View>
         <View style={styles.nameContainer}>
@@ -94,14 +95,18 @@ export function ListItemComponent(props: any) {
             </TextComponent>
           </View>
         </View>
-        <View style={styles.flexRowContainer}>
+        <View
+          style={[
+            styles.flexRowContainer,
+            { marginVertical: 10, marginRight: 8 }
+          ]}>
           <IconComponent
             type="MaterialIcons"
             name="location-pin"
             style={styles.icon}
           />
           <TextComponent style={styles.location}>
-            {props.item.location}
+            {props.item.address}
           </TextComponent>
         </View>
       </View>
@@ -210,7 +215,7 @@ const styles = StyleSheet.create({
     color: colors.mainColor4,
     fontSize: 12,
     fontWeight: '500',
-    paddingVertical: 4,
+    marginVertical: 10,
     fontFamily: fonts.secondFont
   },
   icon: {

@@ -1,6 +1,8 @@
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Keyboard,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -20,6 +22,12 @@ const LATITUDE_DELTA = 0.007;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function AddMarkerContainer(props: any) {
+  const route: any = useRoute();
+  const initialCoordinates = route.params?.initialCoordinates || {
+    longitude: 26.1025,
+    latitude: 44.4268
+  };
+  const editMode = route.params?.editMode;
   const savedCoordinates = useRef({ longitude: 0, latitude: 0 });
   const [position, setPosition] = useState<{
     latitude: number;
@@ -27,13 +35,11 @@ export default function AddMarkerContainer(props: any) {
   }>({ latitude: 44.4268, longitude: 26.1025 });
   const [positionPending, setPositionPending] = useState(true);
   const [address, setAddress] = useState('');
-  const [currentMarkerPosition, setCurrentMarkerPosition] = useState<{
-    longitude: number;
-    latitude: number;
-  }>({
-    longitude: 26.1025,
-    latitude: 44.4268
-  });
+  const [currentMarkerPosition, setCurrentMarkerPosition] =
+    useState<{
+      longitude: number;
+      latitude: number;
+    }>(initialCoordinates);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -49,7 +55,9 @@ export default function AddMarkerContainer(props: any) {
       longitude: position.coords.longitude
     };
     setPosition(myPosition);
-    setCurrentMarkerPosition(myPosition);
+    if (!editMode) {
+      setCurrentMarkerPosition(myPosition);
+    }
     setPositionPending(false);
   };
 
@@ -77,13 +85,13 @@ export default function AddMarkerContainer(props: any) {
 
   const setMarkerPosition = async (event: any) => {
     event.persist();
-    const coordinates = event.nativeEvent.coordinate;
-    savedCoordinates.current = coordinates;
+    const coords = event.nativeEvent.coordinate;
+    savedCoordinates.current = coords;
     setCurrentMarkerPosition({
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude
+      latitude: coords.latitude,
+      longitude: coords.longitude
     });
-    getAddressFromCoordinates(coordinates.latitude, coordinates.longitude)
+    getAddressFromCoordinates(coords.latitude, coords.longitude)
       .then((result: any) => {
         const address = result.formatted_address;
         setAddress(address || '');
@@ -92,6 +100,7 @@ export default function AddMarkerContainer(props: any) {
   };
 
   const searchAddress = async () => {
+    Keyboard.dismiss();
     getCoordinatesFromAddress(address)
       .then((result: any) => {
         const coords = result.geometry?.location;
@@ -101,6 +110,10 @@ export default function AddMarkerContainer(props: any) {
           latitude: coords.lat,
           longitude: coords.lng
         });
+        savedCoordinates.current = {
+          latitude: coords.lat,
+          longitude: coords.lng
+        };
       })
       .catch((error) => console.warn(error));
   };
@@ -109,6 +122,7 @@ export default function AddMarkerContainer(props: any) {
     provider: PROVIDER_GOOGLE,
     mapType: MAP_TYPES.STANDARD
   };
+
   return (
     <View style={styles.container}>
       <HeaderComponent

@@ -32,36 +32,34 @@ export function SearchComponent(props: any) {
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    width: '95%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     flexDirection: 'row',
-    margin: 8,
-    marginBottom: 0
+    margin: 10
   },
   searchContainer: {
-    width: 250,
-    height: 40,
+    flex: 6,
+    height: 45,
     alignItems: 'center',
     backgroundColor: '#ffffff',
     flexDirection: 'row',
-    borderRadius: 10,
+    borderRadius: 15,
     borderColor: colors.mainColorLight,
     borderWidth: 1
   },
   searchInput: {
     marginLeft: 5,
-    width: '82%'
+    width: '85%'
   },
   searchButton: {
     padding: 8
   },
   filterContainer: {
+    flex: 1,
     height: 45,
-    width: 50,
     marginLeft: 20,
     backgroundColor: colors.mainColorLight3,
-    borderRadius: 10,
+    borderRadius: 15,
     borderColor: colors.mainColorLight2,
     borderWidth: 1
   },

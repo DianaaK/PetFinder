@@ -42,7 +42,7 @@ export default function PetHeaderComponent(props: any) {
               style={styles.icon}
             />
           </TouchableOpacity>
-          {props.canNavigate && (
+          {props.canNavigate && !props.isUserOwner && (
             <TouchableOpacity
               style={{ paddingVertical: 8, paddingHorizontal: 12 }}
               onPress={() => {}}>

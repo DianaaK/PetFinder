@@ -18,5 +18,11 @@ export const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingBottom: 10
+  },
+  loadingContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center'
   }
 });

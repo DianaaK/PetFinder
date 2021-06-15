@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { assets } from '../../../../assets/images';
 import { PetGender, ReportType } from '../../../redux/types';
-import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 import { Popup } from 'react-native-map-link';
+import { formatDate } from '../../../utils';
+import { styles } from './styles';
+import { colors } from '../../../styles';
 
 export default function PetDetailsComponent(props: any) {
   const [showNavigate, setShowNavigate] = useState<boolean>(false);
@@ -20,6 +22,17 @@ export default function PetDetailsComponent(props: any) {
     setShowNavigate(true);
   };
 
+  const goToEdit = () => {
+    navigation.navigate('Add', {
+      editMode: true,
+      reportId: props.item._id
+    });
+  };
+
+  const deleteReport = () => {
+    console.log('to be deleted');
+  };
+
   const renderExternalNavigation = () => (
     <Popup
       isVisible={showNavigate}
@@ -31,8 +44,8 @@ export default function PetDetailsComponent(props: any) {
       }}
       appsWhiteList={['google-maps', 'waze', 'uber']}
       options={{
-        latitude: pet.coordinates.latitude + '',
-        longitude: pet.coordinates.longitude + '',
+        latitude: pet.coordinates?.latitude + '',
+        longitude: pet.coordinates?.longitude + '',
         dialogTitle: `Navigate to ${pet.name}`,
         dialogMessage: 'Choose application',
         cancelText: 'Cancel'
@@ -54,9 +67,9 @@ export default function PetDetailsComponent(props: any) {
         <View style={{ flex: 1, paddingLeft: 8, paddingVertical: 4 }}>
           <View style={styles.rowContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {pet.user.image ? (
+              {pet.user.profileImage ? (
                 <Image
-                  source={{ uri: pet.user.image || '' }}
+                  source={{ uri: pet.user.profileImage || '' }}
                   style={styles.image}
                 />
               ) : (
@@ -76,7 +89,9 @@ export default function PetDetailsComponent(props: any) {
                 name="calendar-today"
                 style={styles.icon}
               />
-              <TextComponent style={styles.date}>{pet.date}</TextComponent>
+              <TextComponent style={styles.date}>
+                {formatDate(pet.created)}
+              </TextComponent>
             </View>
           </View>
           <TextComponent style={styles.userType}>
@@ -97,15 +112,11 @@ export default function PetDetailsComponent(props: any) {
       {props.canNavigate ? (
         <View style={styles.navigateContainer}>
           {props.item.type === ReportType.LOST ? (
-            <View style={styles.centerText}>
-              <TextComponent style={styles.navigateText}>
-                Have you seen {pet.name}?
-              </TextComponent>
-              <TextComponent style={styles.navigateText}>
-                Mark {pet.gender == PetGender.FEMALE ? 'her' : 'his'} location
-                on the map!
-              </TextComponent>
-            </View>
+            <TextComponent style={styles.navigateText}>
+              Have you seen {pet.name}?{'\n'}
+              Mark {pet.gender == PetGender.FEMALE ? 'her' : 'his'} location on
+              the map!
+            </TextComponent>
           ) : null}
           <TouchableOpacity
             style={styles.navigateButton}
@@ -129,75 +140,42 @@ export default function PetDetailsComponent(props: any) {
           </TextComponent>
         </TouchableOpacity>
       )}
+      {props.isUserOwner && (
+        <View style={styles.ownerSection}>
+          <TextComponent style={[styles.navigateText, { paddingVertical: 10 }]}>
+            Author options:
+          </TextComponent>
+          <View style={styles.rowContainer}>
+            <TouchableOpacity
+              style={[styles.ownerButtons, { borderColor: colors.green }]}
+              onPress={goToEdit}>
+              <TextComponent
+                style={[styles.ownerButtonText, { color: colors.green }]}>
+                Edit
+              </TextComponent>
+              <IconComponent
+                type="MaterialIcons"
+                name="edit"
+                style={[styles.buttonIcon, { color: colors.green }]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.ownerButtons, { borderColor: colors.red }]}
+              onPress={deleteReport}>
+              <TextComponent
+                style={[styles.ownerButtonText, { color: colors.red }]}>
+                Delete
+              </TextComponent>
+              <IconComponent
+                type="MaterialIcons"
+                name="delete"
+                style={[styles.buttonIcon, { color: colors.red }]}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       {renderExternalNavigation()}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 32
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  description: {
-    color: colors.mainColor4,
-    lineHeight: 20,
-    fontFamily: fonts.secondFont
-  },
-  username: {
-    fontSize: 16,
-    color: colors.mainColor2,
-    fontFamily: fonts.mainFont
-  },
-  userType: {
-    marginLeft: 38,
-    fontSize: 13,
-    color: colors.mainColor4,
-    fontFamily: fonts.secondFont
-  },
-  date: {
-    fontSize: 14,
-    color: colors.mainColor2,
-    fontFamily: fonts.mainFont
-  },
-  icon: {
-    color: colors.mainColor5,
-    paddingRight: 5,
-    fontSize: 12
-  },
-  image: {
-    height: 30,
-    width: 30,
-    borderRadius: 20,
-    marginRight: 8
-  },
-  centerText: {
-    alignItems: 'center'
-  },
-  navigateContainer: {
-    flex: 1,
-    marginTop: 40,
-    alignItems: 'center'
-  },
-  navigateText: {
-    fontSize: 22,
-    color: colors.mainColor2
-  },
-  navigateButton: {
-    flex: 1,
-    alignSelf: 'center',
-    padding: 15,
-    marginTop: 10,
-    backgroundColor: colors.mainColor3,
-    borderRadius: 40
-  },
-  navigateButtonText: {
-    fontSize: 24,
-    color: 'white'
-  }
-});

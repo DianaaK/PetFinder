@@ -5,8 +5,10 @@ import { PetReportDTO } from '../types';
 
 export interface IPetReportActions {
   getPetReportAction(reportId: string): void;
-  getPetReportListAction(): void;
   addPetReportAction(petReport: PetReportDTO): void;
+  editPetReportAction(reportId: string, report: PetReportDTO): void;
+  getPetReportListAction(): void;
+  getUserReportListAction(userId: string): void;
 }
 
 class PetReportActions implements IPetReportActions {
@@ -31,27 +33,6 @@ class PetReportActions implements IPetReportActions {
     };
   }
 
-  getPetReportListAction() {
-    return async (dispatch: Dispatch<any>) => {
-      dispatch({
-        type: PetReportStore.ActionTypes.GET_REPORT_LIST
-      });
-      await Server.get(`pet-reports`)
-        .then((response: any) => {
-          dispatch({
-            type: PetReportStore.ActionTypes.GET_REPORT_LIST_SUCCESS,
-            payload: response.data as any
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: PetReportStore.ActionTypes.GET_REPORT_LIST_FAILED,
-            payload: Server.errorParse(error)
-          });
-        });
-    };
-  }
-
   addPetReportAction(petReport: PetReportDTO) {
     return async (dispatch: Dispatch<any>) => {
       dispatch({
@@ -67,6 +48,69 @@ class PetReportActions implements IPetReportActions {
         .catch((error) => {
           dispatch({
             type: PetReportStore.ActionTypes.ADD_REPORT_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  editPetReportAction(reportId: string, report: PetReportDTO) {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.EDIT_REPORT
+      });
+      await Server.put(`pet-reports/${reportId}`, report)
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.EDIT_REPORT_SUCCESS,
+            payload: response.data as any
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.EDIT_REPORT_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  getPetReportListAction() {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.GET_REPORT_LIST
+      });
+      await Server.get('pet-reports')
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_REPORT_LIST_SUCCESS,
+            payload: response.data as any
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_REPORT_LIST_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  getUserReportListAction(userId: string) {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST
+      });
+      await Server.get(`pet-reports/user/${userId}`)
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST_SUCCESS,
+            payload: response.data as any
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST_FAILED,
             payload: Server.errorParse(error)
           });
         });

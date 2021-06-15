@@ -12,12 +12,9 @@ export class PetReportDTO {
   phoneContact?: boolean;
   emailContact?: boolean;
   address?: string;
-  coordinates: {
+  coordinates?: {
     latitude: number;
     longitude: number;
-  } = {
-    latitude: 0,
-    longitude: 0
   };
   created?: string;
   isFavorite?: boolean;

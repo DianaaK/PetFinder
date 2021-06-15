@@ -32,9 +32,7 @@ export default function AddPetFormComponent(props: any) {
   const navigation = useNavigation();
   const route: any = useRoute();
 
-  const [petReport, setPetReport] = useState(new PetReportDTO());
-  const [phoneContact, setPhoneContact] = useState<boolean>();
-  const [emailContact, setEmailContact] = useState<boolean>();
+  const [petReport, setPetReport] = useState(props.petReport);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
   const positionBottom = new Animated.Value(0);
@@ -117,7 +115,6 @@ export default function AddPetFormComponent(props: any) {
     };
     launchImageLibrary(options, async (response: any) => {
       if (response.assets?.length) {
-        console.log('response.assets', response.assets);
         response.assets.forEach((item: any) => {
           const source = {
             uri: item.uri,
@@ -184,19 +181,22 @@ export default function AddPetFormComponent(props: any) {
 
   const onMapOpen = async () => {
     await requestLocationPermission();
-    navigation.navigate('AddMarkerMap');
+    navigation.navigate(
+      'AddMarkerMap',
+      props.editMode
+        ? { editMode: true, initialCoordinates: petReport.coordinates }
+        : {}
+    );
   };
 
   const onSaveReport = () => {
     const dataToSend = {
       ...petReport,
-      user: props.user._id,
-      phoneContact,
-      emailContact,
+      user: props.editMode ? undefined : props.user._id,
       address: route.params.address,
       coordinates: route.params.coordinates
     };
-    props.addPetReportAction(dataToSend);
+    props.saveReportAction(dataToSend);
     navigation.goBack();
   };
 
@@ -241,6 +241,7 @@ export default function AddPetFormComponent(props: any) {
           <View style={[styles.questionContainer, styles.rowContainer]}>
             <TextComponent style={styles.questionText}>Pet name:</TextComponent>
             <TextInput
+              value={petReport.name}
               style={styles.input}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, name: value })
@@ -323,6 +324,7 @@ export default function AddPetFormComponent(props: any) {
               Pet breed:
             </TextComponent>
             <TextInput
+              value={petReport.breed}
               style={styles.input}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, breed: value })
@@ -332,6 +334,7 @@ export default function AddPetFormComponent(props: any) {
           <View style={[styles.questionContainer, styles.rowContainer]}>
             <TextComponent style={styles.questionText}>Pet age:</TextComponent>
             <TextInput
+              value={petReport.age}
               style={styles.input}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, age: value })
@@ -344,6 +347,7 @@ export default function AddPetFormComponent(props: any) {
               Pet description:
             </TextComponent>
             <TextInput
+              value={petReport.description}
               style={styles.multilineInput}
               multiline={true}
               numberOfLines={6}
@@ -359,9 +363,12 @@ export default function AddPetFormComponent(props: any) {
             </TextComponent>
             <View style={styles.rowContainer}>
               <Checkbox
-                status={phoneContact ? 'checked' : 'unchecked'}
+                status={petReport.phoneContact ? 'checked' : 'unchecked'}
                 onPress={() => {
-                  setPhoneContact(!phoneContact);
+                  setPetReport({
+                    ...petReport,
+                    phoneContact: !petReport.phoneContact
+                  });
                 }}
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}
@@ -374,9 +381,12 @@ export default function AddPetFormComponent(props: any) {
 
             <View style={styles.rowContainer}>
               <Checkbox
-                status={emailContact ? 'checked' : 'unchecked'}
+                status={petReport.emailContact ? 'checked' : 'unchecked'}
                 onPress={() => {
-                  setEmailContact(!emailContact);
+                  setPetReport({
+                    ...petReport,
+                    emailContact: !petReport.emailContact
+                  });
                 }}
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}
