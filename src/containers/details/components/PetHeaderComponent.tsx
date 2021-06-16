@@ -42,10 +42,12 @@ export default function PetHeaderComponent(props: any) {
               style={styles.icon}
             />
           </TouchableOpacity>
-          {props.canNavigate && !props.isUserOwner && (
+          {!props.isUserOwner && (
             <TouchableOpacity
               style={{ paddingVertical: 8, paddingHorizontal: 12 }}
-              onPress={() => {}}>
+              onPress={() => {
+                props.toggleIsFavorite(!props.isFavorite);
+              }}>
               <IconComponent
                 type="Ionicons"
                 name="md-heart"
@@ -53,9 +55,7 @@ export default function PetHeaderComponent(props: any) {
                   styles.icon,
                   {
                     fontSize: 30,
-                    color: props.item.isFavorite
-                      ? colors.red
-                      : colors.mainColorLight
+                    color: props.isFavorite ? colors.red : colors.mainColorLight
                   }
                 ]}
               />

@@ -9,6 +9,12 @@ export interface IPetReportActions {
   editPetReportAction(reportId: string, report: PetReportDTO): void;
   getPetReportListAction(): void;
   getUserReportListAction(userId: string): void;
+  addFavoriteReportAction(
+    userId: string,
+    reportId: string,
+    favorite: boolean
+  ): void;
+  getFavoriteReportsAction(userId: string): void;
 }
 
 class PetReportActions implements IPetReportActions {
@@ -21,7 +27,7 @@ class PetReportActions implements IPetReportActions {
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_REPORT_SUCCESS,
-            payload: response.data as any
+            payload: response.data as PetReportDTO
           });
         })
         .catch((error) => {
@@ -63,7 +69,7 @@ class PetReportActions implements IPetReportActions {
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.EDIT_REPORT_SUCCESS,
-            payload: response.data as any
+            payload: response.data as PetReportDTO
           });
         })
         .catch((error) => {
@@ -84,7 +90,7 @@ class PetReportActions implements IPetReportActions {
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_REPORT_LIST_SUCCESS,
-            payload: response.data as any
+            payload: response.data as PetReportDTO[]
           });
         })
         .catch((error) => {
@@ -105,12 +111,57 @@ class PetReportActions implements IPetReportActions {
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST_SUCCESS,
-            payload: response.data as any
+            payload: response.data as PetReportDTO[]
           });
         })
         .catch((error) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  addFavoriteReportAction(userId: string, reportId: string, favorite: boolean) {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.ADD_FAVORITE_REPORT
+      });
+      await Server.post(`pet-reports/${userId}/favorite`, {
+        reportId,
+        favorite
+      })
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.ADD_FAVORITE_REPORT_SUCCESS,
+            payload: response.data as PetReportDTO
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.ADD_FAVORITE_REPORT_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  getFavoriteReportsAction(userId: string) {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS
+      });
+      await Server.get(`pet-reports/${userId}/favorites`)
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_SUCCESS,
+            payload: response.data as PetReportDTO[]
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_FAILED,
             payload: Server.errorParse(error)
           });
         });

@@ -119,6 +119,52 @@ function petReportReducer(
         add_report_error: action.payload
       };
     }
+    case PetReportStore.ActionTypes.ADD_FAVORITE_REPORT: {
+      return {
+        ...state,
+        add_favorite_report_pending: true,
+        add_favorite_report_error: null
+      };
+    }
+    case PetReportStore.ActionTypes.ADD_FAVORITE_REPORT_SUCCESS: {
+      const nextState = {
+        ...state,
+        report: action.payload,
+        add_favorite_report_pending: false,
+        add_favorite_report_error: null
+      };
+      return nextState;
+    }
+    case PetReportStore.ActionTypes.ADD_FAVORITE_REPORT_FAILED: {
+      return {
+        ...state,
+        add_favorite_report_pending: false,
+        add_favorite_report_error: action.payload
+      };
+    }
+    case PetReportStore.ActionTypes.GET_FAVORITE_REPORTS: {
+      return {
+        ...state,
+        get_favorite_reports_pending: true,
+        get_favorite_reports_error: null
+      };
+    }
+    case PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_SUCCESS: {
+      const nextState = {
+        ...state,
+        favorite_reports: action.payload,
+        get_favorite_reports_pending: false,
+        get_favorite_reports_error: null
+      };
+      return nextState;
+    }
+    case PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_FAILED: {
+      return {
+        ...state,
+        get_favorite_reports_pending: false,
+        get_favorite_reports_error: action.payload
+      };
+    }
     default:
       return state;
   }

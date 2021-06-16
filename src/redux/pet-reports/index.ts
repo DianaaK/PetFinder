@@ -18,6 +18,11 @@ export namespace PetReportStore {
     get_user_report_list_error: string | null;
     add_report_pending: boolean;
     add_report_error: string | null;
+    add_favorite_report_pending: boolean;
+    add_favorite_report_error: string | null;
+    favorite_reports: PetReportDTO[];
+    get_favorite_reports_pending: boolean;
+    get_favorite_reports_error: string | null;
   };
 
   export const initialState: IState = {
@@ -33,7 +38,12 @@ export namespace PetReportStore {
     get_user_report_list_pending: false,
     get_user_report_list_error: null,
     add_report_pending: false,
-    add_report_error: null
+    add_report_error: null,
+    add_favorite_report_pending: false,
+    add_favorite_report_error: null,
+    favorite_reports: [],
+    get_favorite_reports_pending: false,
+    get_favorite_reports_error: null
   };
 
   export enum ActionTypes {
@@ -51,7 +61,13 @@ export namespace PetReportStore {
     GET_USER_REPORT_LIST_FAILED = 'GET_USER_REPORT_LIST_FAILED',
     ADD_REPORT = 'ADD_REPORT',
     ADD_REPORT_SUCCESS = 'ADD_REPORT_SUCCESS',
-    ADD_REPORT_FAILED = 'ADD_REPORT_FAILED'
+    ADD_REPORT_FAILED = 'ADD_REPORT_FAILED',
+    ADD_FAVORITE_REPORT = 'ADD_FAVORITE_REPORT',
+    ADD_FAVORITE_REPORT_SUCCESS = 'ADD_FAVORITE_REPORT_SUCCESS',
+    ADD_FAVORITE_REPORT_FAILED = 'ADD_FAVORITE_REPORT_FAILED',
+    GET_FAVORITE_REPORTS = 'GET_FAVORITE_REPORTS',
+    GET_FAVORITE_REPORTS_SUCCESS = 'GET_FAVORITE_REPORTS_SUCCESS',
+    GET_FAVORITE_REPORTS_FAILED = 'GET_FAVORITE_REPORTS_FAILED'
   }
 
   export const actions = petReportActions;

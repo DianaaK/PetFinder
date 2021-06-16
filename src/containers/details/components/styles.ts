@@ -44,7 +44,6 @@ export const styles = StyleSheet.create({
     marginRight: 8
   },
   navigateContainer: {
-    flex: 1,
     marginTop: 40,
     alignItems: 'center'
   },
@@ -56,6 +55,7 @@ export const styles = StyleSheet.create({
   navigateButton: {
     flex: 1,
     alignSelf: 'center',
+    justifyContent: 'center',
     padding: 12,
     marginTop: 10,
     backgroundColor: colors.mainColor3,

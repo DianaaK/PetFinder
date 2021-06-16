@@ -40,7 +40,7 @@ function ListContainer(props: any) {
     if (forUser && props.user) {
       props.getUserReportListAction(props.user._id);
     } else if (forFavorites && props.user) {
-      props.getUserReportListAction(props.user._id);
+      props.getFavoriteReportsAction(props.user._id);
     } else if (forGeneral) {
       props.getPetReportListAction();
     }
@@ -118,7 +118,7 @@ function ListContainer(props: any) {
               forUser
                 ? props.user_report_list
                 : forFavorites
-                ? forFavoritesList
+                ? props.favorite_reports
                 : props.report_list
             }
             renderItem={renderItem}
@@ -137,13 +137,16 @@ function mapStateToProps(state: AppStore.states) {
     report_list: state.petReports.report_list,
     get_report_list_pending: state.petReports.get_report_list_pending,
     user_report_list: state.petReports.user_report_list,
-    get_user_report_list_pending: state.petReports.get_user_report_list_pending
+    get_user_report_list_pending: state.petReports.get_user_report_list_pending,
+    favorite_reports: state.petReports.favorite_reports,
+    get_favorite_reports_pending: state.petReports.get_favorite_reports_pending
   };
 }
 
 const dispatchToProps = {
   getPetReportListAction: petReportActions.getPetReportListAction,
-  getUserReportListAction: petReportActions.getUserReportListAction
+  getUserReportListAction: petReportActions.getUserReportListAction,
+  getFavoriteReportsAction: petReportActions.getFavoriteReportsAction
 };
 
 export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
@@ -181,35 +184,5 @@ export const petLocationsList = [
       latitude: 44.46591,
       longitude: 26.09333
     }
-  }
-];
-
-export const forFavoritesList = [
-  {
-    _id: '4',
-    type: ReportType.LOST,
-    name: 'Yuna',
-    species: PetSpecies.DOG,
-    breed: 'Husky',
-    gender: PetGender.FEMALE,
-    age: '4 years',
-    description:
-      'Vestibulum tempor fringilla placerat. Maecenas ipsum nibh, porta finibus tempus in, blandit non libero. Vivamus ac sapien nisl. Curabitur dui massa, efficitur sit amet aliquam vel, malesuada nec diam. Vestibulum et suscipit nunc, non pellentesque libero. Nulla sed ante vitae magna efficitur imperdiet. Praesent sed urna rutrum, sagittis dolor in, congue erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam quis neque faucibus, fermentum nisi at, blandit dolor.',
-    date: '1.03.2021',
-    user: {
-      firstname: 'Sasha',
-      phone: '0765995115'
-    },
-    media: [
-      'https://cdn.shopify.com/s/files/1/0994/0236/articles/siberian-husky_2319x.jpg?v=1502391918',
-      'https://www.taramulanimalelor.com/wp-content/uploads/2019/12/Ce-trebuie-sa-stii-despre-Husky-Siberian.png'
-    ],
-    location: 'Bucharest',
-    distance: '6 Km',
-    coordinates: {
-      latitude: 44.42851,
-      longitude: 26.05298
-    },
-    isFavorite: true
   }
 ];

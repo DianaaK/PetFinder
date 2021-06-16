@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AppStore, reduxContainer } from '../../redux';
 import petReportActions from '../../redux/pet-reports/actions';
+import { PetReportDTO } from '../../redux/types';
 import {
   colors,
   DEVICE_HEIGHT,
@@ -26,7 +27,14 @@ function PetDetailsContainer(props: any) {
     }
   }, []);
 
+  const toggleIsFavorite = (isFavorite: boolean) => {
+    props.addFavoriteReportAction(props.user._id, props.report._id, isFavorite);
+  };
+
   const isUserOwner = props.report?.user._id === props.user?._id;
+  const isFavorite = props.report?.usersFavorite?.find(
+    (item: PetReportDTO) => item === props.user._id
+  );
   return (
     <View style={styles.container}>
       {props.get_report_pending || !props.report ? (
@@ -39,6 +47,8 @@ function PetDetailsContainer(props: any) {
             item={props.report}
             canNavigate={route.params.canNavigate}
             isUserOwner={isUserOwner}
+            isFavorite={isFavorite}
+            toggleIsFavorite={toggleIsFavorite}
           />
           <View style={styles.detailsContainer}>
             <View style={styles.cardContainer}>
@@ -65,7 +75,8 @@ function mapStateToProps(state: AppStore.states) {
 }
 
 const dispatchToProps = {
-  getPetReportAction: petReportActions.getPetReportAction
+  getPetReportAction: petReportActions.getPetReportAction,
+  addFavoriteReportAction: petReportActions.addFavoriteReportAction
 };
 
 export default reduxContainer(
