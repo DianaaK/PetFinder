@@ -102,7 +102,9 @@ export default function PetMapComponent(props: IProps) {
     <Marker
       key={item._id}
       title={item.address || ''}
-      description={`Reported by ${item.user} on ${item.date}`}
+      description={`Reported by ${item.user} on ${formatDate(
+        item.created + ''
+      )}`}
       coordinate={item.coordinates}
       pinColor="violet"
       onPress={toggleButtonVisible}

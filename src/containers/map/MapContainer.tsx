@@ -51,6 +51,8 @@ function MapContainer(props: any) {
 
   const toggleFilters = () => {};
 
+  const addLocation = () => {};
+
   const reportList = props.report_list;
   const petLocations = petLocationsList;
   const petMode = route?.params?.petMode;
@@ -64,10 +66,13 @@ function MapContainer(props: any) {
           type: 'MaterialIcons',
           name: 'arrow-back'
         }}
-        rightButtonAction={petMode ? undefined : toggleFilters}
+        rightButtonAction={petMode ? addLocation : toggleFilters}
         rightButtonIcon={
           petMode
-            ? undefined
+            ? {
+                type: 'MaterialIcons',
+                name: 'add-location'
+              }
             : {
                 type: 'MaterialIcons',
                 name: 'filter-list'
