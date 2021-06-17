@@ -3,18 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { AppStore, reduxContainer } from '../../redux';
-import { HeaderComponent } from '../general';
-import { petLocationsList } from '../list/ListContainer';
+import locationsActions from '../../redux/pet-locations/actions';
+import { CoordinatesDTO } from '../../redux/types';
 import GeneralMapComponent from './components/GeneralMapComponent';
 import PetMapComponent from './components/PetMapComponent';
 
 function MapContainer(props: any) {
   const route: any = useRoute();
 
-  const [position, setPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  }>({ latitude: 44.4268, longitude: 26.1025 });
+  const [position, setPosition] = useState<CoordinatesDTO>(
+    new CoordinatesDTO()
+  );
   const [positionPending, setPositionPending] = useState(true);
 
   useEffect(() => {
@@ -45,46 +44,32 @@ function MapContainer(props: any) {
     setPositionPending(false);
   };
 
-  const onBack = () => {
-    props.navigation.goBack();
+  const addReportedLocation = (
+    address: string,
+    coordinates: { latitude: number; longitude: number }
+  ) => {
+    const reportedLocation = {
+      petId: route.params?.petReport._id,
+      user: props.user._id,
+      address,
+      coordinates
+    };
+    props.addPetLocationAction(reportedLocation);
   };
 
-  const toggleFilters = () => {};
-
-  const addLocation = () => {};
-
   const reportList = props.report_list;
-  const petLocations = petLocationsList;
   const petMode = route?.params?.petMode;
 
   return (
     <View style={styles.container}>
-      <HeaderComponent
-        title={petMode ? `${route.params?.petReport.name}'s Location` : 'Map'}
-        leftButtonAction={onBack}
-        leftButtonIcon={{
-          type: 'MaterialIcons',
-          name: 'arrow-back'
-        }}
-        rightButtonAction={petMode ? addLocation : toggleFilters}
-        rightButtonIcon={
-          petMode
-            ? {
-                type: 'MaterialIcons',
-                name: 'add-location'
-              }
-            : {
-                type: 'MaterialIcons',
-                name: 'filter-list'
-              }
-        }
-      />
       {petMode ? (
         <PetMapComponent
-          reportedLocations={petLocations}
-          position={route.params?.petReport.coordinates}
+          reportedLocations={props.reported_locations}
           positionPending={positionPending}
+          position={route.params?.petReport.coordinates}
           petReport={route.params?.petReport}
+          addPetLocationAction={addReportedLocation}
+          getPetLocationsAction={props.getPetLocationsAction}
         />
       ) : (
         <GeneralMapComponent
@@ -99,12 +84,18 @@ function MapContainer(props: any) {
 
 function mapStateToProps(state: AppStore.states) {
   return {
+    user: state.user.user,
     report_list: state.petReports.report_list,
-    get_report_list_pending: state.petReports.get_report_list_pending
+    get_report_list_pending: state.petReports.get_report_list_pending,
+    reported_locations: state.petLocations.reported_locations,
+    get_locations_list_pending: state.petLocations.get_locations_list_pending
   };
 }
 
-const dispatchToProps = {};
+const dispatchToProps = {
+  addPetLocationAction: locationsActions.addPetLocationAction,
+  getPetLocationsAction: locationsActions.getPetLocationsAction
+};
 
 export default reduxContainer(MapContainer, mapStateToProps, dispatchToProps);
 

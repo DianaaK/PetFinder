@@ -150,39 +150,3 @@ const dispatchToProps = {
 };
 
 export default reduxContainer(ListContainer, mapStateToProps, dispatchToProps);
-
-export const petLocationsList = [
-  {
-    _id: '1',
-    petId: '1',
-    user: 'Marius',
-    date: '04.06.2021',
-    address: 'Strada Aviator Serban Petrescu nr. 24',
-    coordinates: {
-      latitude: 44.46321,
-      longitude: 26.09433
-    }
-  },
-  {
-    _id: '2',
-    petId: '1',
-    user: 'Ana',
-    date: '01.06.2021',
-    address: 'Str. Aviator Popa Marin',
-    coordinates: {
-      latitude: 44.46491,
-      longitude: 26.09533
-    }
-  },
-  {
-    _id: '3',
-    petId: '1',
-    user: 'Sasha',
-    date: '28.05.2021',
-    address: 'Iuliu Tetrat 5',
-    coordinates: {
-      latitude: 44.46591,
-      longitude: 26.09333
-    }
-  }
-];

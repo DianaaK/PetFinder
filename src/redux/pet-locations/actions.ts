@@ -20,6 +20,11 @@ class LocationActions implements ILocationsActions {
             type: ReportedLocationsStore.ActionTypes.ADD_LOCATION_SUCCESS,
             payload: response.data as ReportedLocationDTO
           });
+          dispatch(
+            ReportedLocationsStore.actions.getPetLocationsAction(
+              petLocation.petId
+            )
+          );
         })
         .catch((error) => {
           dispatch({

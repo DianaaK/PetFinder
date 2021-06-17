@@ -12,10 +12,7 @@ export class PetReportDTO {
   phoneContact?: boolean;
   emailContact?: boolean;
   address?: string;
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  };
+  coordinates?: CoordinatesDTO;
   created?: string;
   isFavorite?: boolean;
   status?: ReportStatus;
@@ -26,6 +23,11 @@ export class ReportUserDTO {
   image?: string;
   phone?: string;
   email?: string;
+}
+
+export class CoordinatesDTO {
+  latitude: number = 44.4268;
+  longitude: number = 26.1025;
 }
 
 export enum ReportType {

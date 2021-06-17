@@ -5,7 +5,7 @@ import { assets } from '../../../../assets/images';
 import { PetGender, ReportType } from '../../../redux/types';
 import { IconComponent, TextComponent } from '../../general';
 import { Popup } from 'react-native-map-link';
-import { formatDate } from '../../../utils';
+import { formatDate, requestLocationPermission } from '../../../utils';
 import { styles } from './styles';
 import { colors } from '../../../styles';
 
@@ -20,6 +20,14 @@ export default function PetDetailsComponent(props: any) {
 
   const openNavigationHandler = () => {
     setShowNavigate(true);
+  };
+
+  const navigateToMap = async () => {
+    await requestLocationPermission();
+    navigation.navigate('GeneralMap', {
+      petMode: true,
+      petReport: props.item
+    });
   };
 
   const goToEdit = () => {
@@ -120,12 +128,7 @@ export default function PetDetailsComponent(props: any) {
           ) : null}
           <TouchableOpacity
             style={styles.navigateButton}
-            onPress={() => {
-              navigation.navigate('GeneralMap', {
-                petMode: true,
-                petReport: props.item
-              });
-            }}>
+            onPress={navigateToMap}>
             <TextComponent style={styles.navigateButtonText}>
               Go to map!
             </TextComponent>

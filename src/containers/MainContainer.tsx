@@ -9,7 +9,7 @@ import { ListType } from '../redux/types';
 
 const Stack = createStackNavigator();
 
-function MainContainer(props: any) {
+function MainContainer() {
   const isLogged = AuthUtil.isLogged();
 
   return (

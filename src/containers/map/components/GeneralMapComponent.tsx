@@ -2,16 +2,14 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Animated, ActivityIndicator } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, MAP_TYPES } from 'react-native-maps';
-import { PetReportDTO, ReportType } from '../../../redux/types';
+import { CoordinatesDTO, PetReportDTO, ReportType } from '../../../redux/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
+import { HeaderComponent } from '../../general';
 import { ListItemComponent } from '../../list/components';
 
 interface IProps {
   data: PetReportDTO[];
-  position: {
-    latitude: number;
-    longitude: number;
-  };
+  position: CoordinatesDTO;
   positionPending: boolean;
 }
 
@@ -54,15 +52,25 @@ export default function GeneralMap(props: IProps) {
     navigation.navigate('Details', { itemId: _id, canNavigate: false });
   };
 
-  const renderPetMarker = (item: PetReportDTO) => (
-    <Marker
-      key={item._id}
-      coordinate={item.coordinates}
-      pinColor={item.type === ReportType.LOST ? 'tomato' : 'turquoise'}
-      tracksViewChanges={false}
-      onPress={onMarkerPress(item)}
-    />
-  );
+  const onBack = () => {
+    navigation.goBack();
+  };
+
+  const toggleFilters = () => {};
+
+  const renderPetMarker = (item: PetReportDTO) => {
+    if (item.coordinates) {
+      return (
+        <Marker
+          key={item._id}
+          coordinate={item.coordinates}
+          pinColor={item.type === ReportType.LOST ? 'tomato' : 'turquoise'}
+          tracksViewChanges={false}
+          onPress={onMarkerPress(item)}
+        />
+      );
+    }
+  };
 
   const onPressMap = () => {
     if (showPreviewCard && pet) {
@@ -84,34 +92,49 @@ export default function GeneralMap(props: IProps) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      {props.positionPending ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <MapView
-          provider={user.provider}
-          mapType={user.mapType}
-          style={styles.map}
-          initialRegion={{
-            ...props.position,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          }}
-          showsUserLocation={true}
-          loadingEnabled={true}
-          rotateEnabled={true}
-          onPress={onPressMap}>
-          {props.data.map((item) => renderPetMarker(item))}
-        </MapView>
-      )}
-      {showPreviewCard && pet && (
-        <>
-          <Animated.View style={[styles.preview, { bottom: previewBottom }]}>
-            <ListItemComponent item={pet} onPress={redirectToPet} />
-          </Animated.View>
-        </>
-      )}
-    </View>
+    <>
+      <HeaderComponent
+        title="Map"
+        leftButtonAction={onBack}
+        leftButtonIcon={{
+          type: 'MaterialIcons',
+          name: 'arrow-back'
+        }}
+        rightButtonAction={toggleFilters}
+        rightButtonIcon={{
+          type: 'MaterialIcons',
+          name: 'filter-list'
+        }}
+      />
+      <View style={{ flex: 1 }}>
+        {props.positionPending ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <MapView
+            provider={user.provider}
+            mapType={user.mapType}
+            style={styles.map}
+            initialRegion={{
+              ...props.position,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            }}
+            showsUserLocation={true}
+            loadingEnabled={true}
+            rotateEnabled={true}
+            onPress={onPressMap}>
+            {props.data.map((item) => renderPetMarker(item))}
+          </MapView>
+        )}
+        {showPreviewCard && pet && (
+          <>
+            <Animated.View style={[styles.preview, { bottom: previewBottom }]}>
+              <ListItemComponent item={pet} onPress={redirectToPet} />
+            </Animated.View>
+          </>
+        )}
+      </View>
+    </>
   );
 }
 

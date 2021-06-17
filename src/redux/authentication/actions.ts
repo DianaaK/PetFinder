@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import { AuthStore } from './index';
 import { Server } from '../../utils';
 import { RegisterUserDTO } from '../types';
+import { Alert } from 'react-native';
 
 export interface IAuthActions {
   registerAction(user: RegisterUserDTO): any;
@@ -46,6 +47,11 @@ class AuthActions implements IAuthActions {
           });
         })
         .catch((error) => {
+          Alert.alert(
+            'Username or password is incorrect!',
+            'Please provide a valid email and password combination',
+            [{ text: 'OK' }]
+          );
           dispatch({
             type: AuthStore.ActionTypes.LOGIN_FAILED,
             payload: Server.errorParse(error)

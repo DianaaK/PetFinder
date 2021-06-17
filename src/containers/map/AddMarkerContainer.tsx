@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { MAP_TYPES, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { CoordinatesDTO } from '../../redux/types';
 import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../styles';
 import {
   getAddressFromCoordinates,
@@ -23,23 +24,17 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function AddMarkerContainer(props: any) {
   const route: any = useRoute();
-  const initialCoordinates = route.params?.initialCoordinates || {
-    longitude: 26.1025,
-    latitude: 44.4268
-  };
+  const initialCoordinates =
+    route.params?.initialCoordinates || new CoordinatesDTO();
   const editMode = route.params?.editMode;
-  const savedCoordinates = useRef({ longitude: 0, latitude: 0 });
-  const [position, setPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  }>({ latitude: 44.4268, longitude: 26.1025 });
+  const savedCoordinates = useRef(new CoordinatesDTO());
+  const [position, setPosition] = useState<CoordinatesDTO>(
+    new CoordinatesDTO()
+  );
   const [positionPending, setPositionPending] = useState(true);
   const [address, setAddress] = useState('');
   const [currentMarkerPosition, setCurrentMarkerPosition] =
-    useState<{
-      longitude: number;
-      latitude: number;
-    }>(initialCoordinates);
+    useState<CoordinatesDTO>(initialCoordinates);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -159,6 +154,7 @@ export default function AddMarkerContainer(props: any) {
               draggable
               coordinate={currentMarkerPosition}
               onDragEnd={setMarkerPosition}
+              pinColor="green"
             />
           </MapView>
           <View style={styles.addressInputContainer}>

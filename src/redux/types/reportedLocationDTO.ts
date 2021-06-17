@@ -1,11 +1,10 @@
+import { CoordinatesDTO } from './petReportDTO';
+
 export class ReportedLocationDTO {
   _id: string = '';
   petId: string = '';
-  user: string = '';
+  user: any = '';
   created?: string = '';
   address: string = '';
-  coordinates: { latitude: number; longitude: number } = {
-    latitude: 0,
-    longitude: 0
-  };
+  coordinates: CoordinatesDTO = new CoordinatesDTO();
 }
