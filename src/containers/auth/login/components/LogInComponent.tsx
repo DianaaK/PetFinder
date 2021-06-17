@@ -6,7 +6,12 @@ import { ButtonComponent } from '../../general';
 import { styles } from './styles';
 import { DEVICE_HEIGHT, isIOS } from '../../../../styles/deviceHelper';
 
-const LogInComponent = (props: any) => {
+interface IProps {
+  handleSignIn(): void;
+  handleLogin(user: { email: string; password: string }): void;
+}
+
+const LogInComponent = (props: IProps) => {
   const [user, setUser] = useState({ email: '', password: '' });
 
   const imageHeight = new Animated.Value(180);

@@ -1,7 +1,7 @@
 import { CoordinatesDTO } from './petReportDTO';
 
 export class ReportedLocationDTO {
-  _id: string = '';
+  _id?: string;
   petId: string = '';
   user: any = '';
   created?: string = '';

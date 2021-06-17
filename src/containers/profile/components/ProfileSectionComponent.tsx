@@ -2,12 +2,18 @@ import React from 'react';
 import { View, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { assets } from '../../../../assets/images';
+import { UserDTO } from '../../../redux/types';
 import { colors, DEVICE_WIDTH } from '../../../styles';
 import { formatDate, requestCameraPermission } from '../../../utils';
 import { cloudinaryUpload } from '../../../utils';
 import { TextComponent } from '../../general';
 
-function ProfileSectionComponent(props: any) {
+interface IProps {
+  user: UserDTO;
+  editUser(newUser: any): void;
+}
+
+const ProfileSectionComponent = (props: IProps) => {
   const chooseAvatarHandler = () => {
     Alert.alert(
       'Do you want to take a photo or choose one from the gallery?',
@@ -77,7 +83,7 @@ function ProfileSectionComponent(props: any) {
           onPress={chooseAvatarHandler}>
           {props.user.profileImage ? (
             <Image
-              source={{ uri: props.user.profileImage || '' }}
+              source={{ uri: props.user?.profileImage || '' }}
               style={styles.image}
             />
           ) : (
@@ -93,14 +99,14 @@ function ProfileSectionComponent(props: any) {
             {props.user.firstname + ' ' + props.user.lastname}
           </TextComponent>
           <TextComponent style={[styles.fadedText, { fontSize: 12 }]}>
-            Member since: {formatDate(props.user.created)}
+            Member since: {formatDate(props.user.created || '')}
           </TextComponent>
         </View>
       </View>
       <TextComponent style={styles.fadedText}>{props.user.email}</TextComponent>
     </View>
   );
-}
+};
 
 export default ProfileSectionComponent;
 

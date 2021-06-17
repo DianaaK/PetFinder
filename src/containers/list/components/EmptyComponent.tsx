@@ -1,16 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { colors } from '../../../styles';
-import { IconComponent, TextComponent } from '../../general';
-// interface IProps {
-//   onToggleDrawerButton: (event: GestureResponderEvent) => void;
-// }
+import { StyleSheet, View } from 'react-native';
+import { TextComponent } from '../../general';
 
-export function EmptyComponent(props: any) {
+export const EmptyComponent = () => {
   return (
-    <View>
-      <TextComponent>No results</TextComponent>
+    <View style={styles.container}>
+      <TextComponent style={styles.text}>No results</TextComponent>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  text: {
+    fontSize: 20,
+    marginTop: 15
+  }
+});

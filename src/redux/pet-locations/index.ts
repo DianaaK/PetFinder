@@ -5,7 +5,7 @@ import locationsReducer from './reducer';
 
 export namespace ReportedLocationsStore {
   export type IState = {
-    reported_locations: ReportedLocationDTO | null;
+    reported_locations: ReportedLocationDTO[];
     get_locations_list_pending: boolean;
     get_locations_list_error: string | null;
     add_location_pending: boolean;
@@ -13,7 +13,7 @@ export namespace ReportedLocationsStore {
   };
 
   export const initialState: IState = {
-    reported_locations: null,
+    reported_locations: [],
     get_locations_list_pending: false,
     get_locations_list_error: null,
     add_location_pending: false,

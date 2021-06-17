@@ -4,11 +4,19 @@ import { styles } from './components/styles';
 import SignInComponent from './components/SignInComponent';
 import reduxContainer from '../../../redux/reduxContainer';
 import { AppStore } from '../../../redux';
-import { ListType, RegisterUserDTO } from '../../../redux/types';
+import { ListType, RegisterUserDTO, UserDTO } from '../../../redux/types';
 import authActions from '../../../redux/authentication/actions';
 import { colors } from '../../../styles';
 
-function SignInContainer(props: any) {
+interface IProps {
+  navigation: any;
+  auth_user: UserDTO | null;
+  login_pending: boolean;
+  register_pending: boolean;
+  registerAction(user: RegisterUserDTO): void;
+}
+
+const SignInContainer = (props: IProps) => {
   useEffect(() => {
     if (props.auth_user && !props.login_pending) {
       props.navigation.navigate('List', { listType: ListType.GENERAL });
@@ -41,7 +49,7 @@ function SignInContainer(props: any) {
       />
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

@@ -1,14 +1,24 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { assets } from '../../../../assets/images';
-import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
+import {
+  PetGender,
+  PetReportDTO,
+  PetSpecies,
+  ReportType
+} from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { formatDate } from '../../../utils';
 import { IconComponent, TextComponent } from '../../general';
 
-export function ListItemComponent(props: any) {
+interface IProps {
+  item: PetReportDTO;
+  onPress(reportId: string): void;
+}
+
+export const ListItemComponent = (props: IProps) => {
   const onPressItem = () => {
-    props.onPress(props.item._id);
+    props.onPress(props.item._id || '');
   };
 
   return (
@@ -54,7 +64,7 @@ export function ListItemComponent(props: any) {
             style={styles.icon}
           />
           <TextComponent style={styles.animalDate}>
-            {formatDate(props.item.created)}
+            {formatDate(props.item.created || '')}
           </TextComponent>
         </View>
         <View style={styles.nameContainer}>
@@ -112,7 +122,7 @@ export function ListItemComponent(props: any) {
       </View>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

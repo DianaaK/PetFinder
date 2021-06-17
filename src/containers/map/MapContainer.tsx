@@ -4,11 +4,24 @@ import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { AppStore, reduxContainer } from '../../redux';
 import locationsActions from '../../redux/pet-locations/actions';
-import { CoordinatesDTO } from '../../redux/types';
+import {
+  CoordinatesDTO,
+  PetReportDTO,
+  ReportedLocationDTO,
+  UserDTO
+} from '../../redux/types';
 import GeneralMapComponent from './components/GeneralMapComponent';
 import PetMapComponent from './components/PetMapComponent';
 
-function MapContainer(props: any) {
+interface IProps {
+  user: UserDTO;
+  report_list: PetReportDTO[];
+  reported_locations: ReportedLocationDTO[];
+  addPetLocationAction(petLocation: ReportedLocationDTO): void;
+  getPetLocationsAction(reportId: string): void;
+}
+
+const MapContainer = (props: IProps) => {
   const route: any = useRoute();
 
   const [position, setPosition] = useState<CoordinatesDTO>(
@@ -80,7 +93,7 @@ function MapContainer(props: any) {
       )}
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

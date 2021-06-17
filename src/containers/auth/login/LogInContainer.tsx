@@ -8,9 +8,17 @@ import { AppStore } from '../../../redux';
 import authActions from '../../../redux/authentication/actions';
 import { useEffect } from 'react';
 import { colors } from '../../../styles';
-import { ListType } from '../../../redux/types';
+import { ListType, UserDTO } from '../../../redux/types';
 
-function LogInContainer(props: any) {
+interface IProps {
+  navigation: any;
+  auth_user: UserDTO | null;
+  login_pending: boolean;
+  login_error: string | null;
+  loginAction(email: string, password: string): void;
+}
+
+const LogInContainer = (props: IProps) => {
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -52,7 +60,7 @@ function LogInContainer(props: any) {
       <LogInComponent handleSignIn={signinAction} handleLogin={loginAction} />
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

@@ -1,14 +1,14 @@
-import { StatusBar, Platform, Dimensions, PixelRatio } from "react-native";
-import { initialWindowMetrics } from "react-native-safe-area-context";
-import { colors } from ".";
+import { StatusBar, Platform, Dimensions, PixelRatio } from 'react-native';
+import { initialWindowMetrics } from 'react-native-safe-area-context';
+import { colors } from './colors';
 
-export const DEVICE_HEIGHT = Dimensions.get("screen").height;
-export const WINDOW_HEIGHT = Dimensions.get("window").height;
-export const DEVICE_WIDTH = Dimensions.get("window").width;
+export const DEVICE_HEIGHT = Dimensions.get('screen').height;
+export const WINDOW_HEIGHT = Dimensions.get('window').height;
+export const DEVICE_WIDTH = Dimensions.get('window').width;
 
 const platform = Platform.OS;
-export const isIOS = platform === "ios";
-export const isAndroid = platform === "android";
+export const isIOS = platform === 'ios';
+export const isAndroid = platform === 'android';
 
 export const statusBarHeight = StatusBar.currentHeight || 0;
 const windowMetrics: any = initialWindowMetrics?.insets || {};
@@ -39,7 +39,7 @@ export const tabbarStyles = {
 
 export const doneButtonHeight = 56 + (isIOS ? windowMetrics.bottom / 2 : 0);
 
-export const backIconName = isIOS ? "ios-chevron-back" : "md-arrow-back";
+export const backIconName = isIOS ? 'ios-chevron-back' : 'md-arrow-back';
 export const forwardIconName = isIOS
-  ? "ios-chevron-forward"
-  : "md-arrow-forward";
+  ? 'ios-chevron-forward'
+  : 'md-arrow-forward';

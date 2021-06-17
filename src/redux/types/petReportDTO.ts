@@ -8,19 +8,20 @@ export class PetReportDTO {
   breed: string = '';
   age: string = '';
   media: string[] = [];
-  user?: ReportUserDTO | string;
+  user?: ReportUserDTO;
   phoneContact?: boolean;
   emailContact?: boolean;
   address?: string;
   coordinates?: CoordinatesDTO;
   created?: string;
-  isFavorite?: boolean;
+  usersFavorite?: string[];
   status?: ReportStatus;
 }
 
 export class ReportUserDTO {
+  _id?: string;
   firstname: string = '';
-  image?: string;
+  profileImage?: string;
   phone?: string;
   email?: string;
 }

@@ -18,7 +18,8 @@ import {
   PetGender,
   PetReportDTO,
   PetSpecies,
-  ReportType
+  ReportType,
+  UserDTO
 } from '../../../redux/types';
 import { colors, DEVICE_WIDTH, fonts, isIOS } from '../../../styles';
 import {
@@ -28,7 +29,14 @@ import {
 } from '../../../utils';
 import { IconComponent, TextComponent } from '../../general';
 
-export default function AddPetFormComponent(props: any) {
+interface IProps {
+  editMode: boolean;
+  user: UserDTO;
+  petReport: PetReportDTO;
+  saveReportAction(report: PetReportDTO): void;
+}
+
+const AddPetFormComponent = (props: IProps) => {
   const navigation = useNavigation();
   const route: any = useRoute();
 
@@ -190,7 +198,7 @@ export default function AddPetFormComponent(props: any) {
   };
 
   const onSaveReport = () => {
-    const dataToSend = {
+    const dataToSend: any = {
       ...petReport,
       user: props.editMode ? undefined : props.user._id,
       address: route.params.address,
@@ -446,7 +454,9 @@ export default function AddPetFormComponent(props: any) {
       </View>
     </>
   );
-}
+};
+
+export default AddPetFormComponent;
 
 const styles = StyleSheet.create({
   container: {

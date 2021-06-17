@@ -3,9 +3,6 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { colors } from '../../../styles';
 import { IconComponent } from '../../general';
-// interface IProps {
-//   onToggleDrawerButton: (event: GestureResponderEvent) => void;
-// }
 
 export function SearchComponent(props: any) {
   return (

@@ -5,6 +5,8 @@ export class UserDTO {
   email: string = '';
   phone?: string | null;
   password?: string;
+  profileImage?: string;
+  created?: string;
 }
 
 export class RegisterUserDTO {

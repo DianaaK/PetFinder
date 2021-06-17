@@ -1,3 +1,3 @@
 export { colors } from './colors';
-export { fonts, Montserrat } from './fonts';
+export { fonts } from './fonts';
 export * from './deviceHelper';

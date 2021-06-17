@@ -1,10 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
+import {
+  PetGender,
+  PetReportDTO,
+  PetSpecies,
+  ReportType
+} from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
-export default function PetCardComponent(props: any) {
+interface IProps {
+  item: PetReportDTO;
+}
+
+const PetCardComponent = (props: IProps) => {
   const pet = props.item;
 
   return (
@@ -66,7 +75,9 @@ export default function PetCardComponent(props: any) {
       </View>
     </View>
   );
-}
+};
+
+export default PetCardComponent;
 
 const styles = StyleSheet.create({
   container: {

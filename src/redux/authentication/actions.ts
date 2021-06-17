@@ -5,9 +5,9 @@ import { RegisterUserDTO } from '../types';
 import { Alert } from 'react-native';
 
 export interface IAuthActions {
-  registerAction(user: RegisterUserDTO): any;
-  loginAction(email: string, password: string): any;
-  logoutAction(): any;
+  registerAction(user: RegisterUserDTO): void;
+  loginAction(email: string, password: string): void;
+  logoutAction(): void;
 }
 
 class AuthActions implements IAuthActions {

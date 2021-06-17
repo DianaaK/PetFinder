@@ -7,9 +7,20 @@ import authActions from '../../redux/authentication/actions';
 import { AppStore } from '../../redux';
 import ProfileSectionComponent from './components/ProfileSectionComponent';
 import userActions from '../../redux/users/actions';
-import { ListType } from '../../redux/types';
+import { ListType, UserDTO } from '../../redux/types';
 
-function ProfileContainer(props: any) {
+interface IProps {
+  navigation: any;
+  user: UserDTO;
+  auth_user: UserDTO;
+  logout_pending: boolean;
+  logout_error: string | null;
+  getUserAction(userId: string): void;
+  editUserAction(userId: string, newUser: any): void;
+  logoutAction(): void;
+}
+
+const ProfileContainer = (props: IProps) => {
   useEffect(() => {
     if (!props.user || props.user._id !== props.auth_user._id) {
       props.getUserAction(props.auth_user._id);
@@ -98,7 +109,7 @@ function ProfileContainer(props: any) {
       </View>
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

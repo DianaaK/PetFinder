@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { assets } from '../../../../assets/images';
-import { PetGender, ReportType } from '../../../redux/types';
+import { PetGender, PetReportDTO, ReportType } from '../../../redux/types';
 import { IconComponent, TextComponent } from '../../general';
 import { Popup } from 'react-native-map-link';
 import { formatDate, requestLocationPermission } from '../../../utils';
 import { styles } from './styles';
 import { colors } from '../../../styles';
 
-export default function PetDetailsComponent(props: any) {
+interface IProps {
+  item: PetReportDTO;
+  canNavigate: boolean;
+  isUserOwner: boolean;
+}
+
+const PetDetailsComponent = (props: IProps) => {
   const [showNavigate, setShowNavigate] = useState<boolean>(false);
   const navigation = useNavigation();
   const pet = props.item;
@@ -75,7 +81,7 @@ export default function PetDetailsComponent(props: any) {
         <View style={{ flex: 1, paddingLeft: 8, paddingVertical: 4 }}>
           <View style={styles.rowContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {pet.user.profileImage ? (
+              {pet.user?.profileImage ? (
                 <Image
                   source={{ uri: pet.user.profileImage || '' }}
                   style={styles.image}
@@ -88,7 +94,7 @@ export default function PetDetailsComponent(props: any) {
                 />
               )}
               <TextComponent style={styles.username}>
-                {pet.user.firstname}
+                {pet.user?.firstname}
               </TextComponent>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -98,19 +104,19 @@ export default function PetDetailsComponent(props: any) {
                 style={styles.icon}
               />
               <TextComponent style={styles.date}>
-                {formatDate(pet.created)}
+                {formatDate(pet.created || '')}
               </TextComponent>
             </View>
           </View>
           <TextComponent style={styles.userType}>
             {pet.type === ReportType.LOST ? 'Owner' : 'Rescuer'}
           </TextComponent>
-          {pet.user.email && (
+          {pet.user?.email && (
             <TextComponent style={styles.userType}>
               Mail: {pet.user.email}
             </TextComponent>
           )}
-          {pet.user.phone && (
+          {pet.user?.phone && (
             <TextComponent style={styles.userType}>
               Phone: {pet.user.phone}
             </TextComponent>
@@ -181,4 +187,6 @@ export default function PetDetailsComponent(props: any) {
       {renderExternalNavigation()}
     </View>
   );
-}
+};
+
+export default PetDetailsComponent;

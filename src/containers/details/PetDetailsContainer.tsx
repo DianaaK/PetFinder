@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AppStore, reduxContainer } from '../../redux';
 import petReportActions from '../../redux/pet-reports/actions';
-import { PetReportDTO } from '../../redux/types';
+import { PetReportDTO, UserDTO } from '../../redux/types';
 import {
   colors,
   DEVICE_HEIGHT,
@@ -17,7 +17,19 @@ import {
   PetHeaderComponent
 } from './components';
 
-function PetDetailsContainer(props: any) {
+interface IProps {
+  user: UserDTO;
+  report: PetReportDTO;
+  get_report_pending: boolean;
+  getPetReportAction(reportId: string): void;
+  addFavoriteReportAction(
+    userId: string,
+    reportId: string,
+    favorite: boolean
+  ): void;
+}
+
+const PetDetailsContainer = (props: IProps) => {
   const route: any = useRoute();
 
   useEffect(() => {
@@ -28,12 +40,17 @@ function PetDetailsContainer(props: any) {
   }, []);
 
   const toggleIsFavorite = (isFavorite: boolean) => {
-    props.addFavoriteReportAction(props.user._id, props.report._id, isFavorite);
+    props.addFavoriteReportAction(
+      props.user._id,
+      props.report?._id || '',
+      isFavorite
+    );
   };
 
-  const isUserOwner = props.report?.user._id === props.user?._id;
-  const isFavorite = props.report?.usersFavorite?.find(
-    (item: PetReportDTO) => item === props.user._id
+  const user: any = props.report?.user;
+  const isUserOwner = user?._id === props.user?._id;
+  const isFavorite = !!props.report?.usersFavorite?.find(
+    (item: string) => item === props.user._id
   );
   return (
     <View style={styles.container}>
@@ -45,7 +62,6 @@ function PetDetailsContainer(props: any) {
         <ScrollView>
           <PetHeaderComponent
             item={props.report}
-            canNavigate={route.params.canNavigate}
             isUserOwner={isUserOwner}
             isFavorite={isFavorite}
             toggleIsFavorite={toggleIsFavorite}
@@ -64,7 +80,7 @@ function PetDetailsContainer(props: any) {
       )}
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

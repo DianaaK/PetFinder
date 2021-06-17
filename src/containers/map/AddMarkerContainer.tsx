@@ -22,7 +22,11 @@ const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 const LATITUDE_DELTA = 0.007;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-export default function AddMarkerContainer(props: any) {
+interface IProps {
+  navigation: any;
+}
+
+export default function AddMarkerContainer(props: IProps) {
   const route: any = useRoute();
   const initialCoordinates =
     route.params?.initialCoordinates || new CoordinatesDTO();

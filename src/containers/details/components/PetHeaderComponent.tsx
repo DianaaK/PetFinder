@@ -7,8 +7,16 @@ import { colors, DEVICE_HEIGHT } from '../../../styles';
 import { IconComponent } from '../../general';
 import { assets } from '../../../../assets/images';
 import { SliderBox } from '../../general/GallerySlider';
+import { PetReportDTO } from '../../../redux/types';
 
-export default function PetHeaderComponent(props: any) {
+interface IProps {
+  item: PetReportDTO;
+  isFavorite: boolean;
+  isUserOwner: boolean;
+  toggleIsFavorite(isFavorite: boolean): any;
+}
+
+const PetHeaderComponent = (props: IProps) => {
   const navigation = useNavigation();
   const gradientColors = [
     'rgba(0, 0, 0, 0.7)',
@@ -76,7 +84,9 @@ export default function PetHeaderComponent(props: any) {
       </View>
     </>
   );
-}
+};
+
+export default PetHeaderComponent;
 
 const styles = StyleSheet.create({
   contaier: {

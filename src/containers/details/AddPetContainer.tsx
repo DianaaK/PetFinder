@@ -3,11 +3,19 @@ import React from 'react';
 import { View } from 'react-native';
 import { AppStore, reduxContainer } from '../../redux';
 import petReportActions from '../../redux/pet-reports/actions';
-import { PetReportDTO } from '../../redux/types';
+import { PetReportDTO, UserDTO } from '../../redux/types';
 import { HeaderComponent } from '../general';
 import { AddPetFormComponent } from './components';
 
-function AddPetContainer(props: any) {
+interface IProps {
+  navigation: any;
+  user: UserDTO;
+  report: PetReportDTO | null;
+  addPetReportAction(petReport: PetReportDTO): void;
+  editPetReportAction(reportId: string, report: PetReportDTO): void;
+}
+
+const AddPetContainer = (props: IProps) => {
   const route: any = useRoute();
   const editMode = route.params.editMode;
 
@@ -16,14 +24,15 @@ function AddPetContainer(props: any) {
   };
 
   const saveReport = (report: PetReportDTO) => {
-    if (editMode) {
+    if (editMode && report?._id) {
       props.editPetReportAction(report._id, report);
     } else {
       props.addPetReportAction(report);
     }
   };
 
-  const petReport = editMode ? props.report : new PetReportDTO();
+  const petReport =
+    editMode && props.report ? props.report : new PetReportDTO();
   return (
     <View style={{ flex: 1 }}>
       <HeaderComponent
@@ -42,7 +51,7 @@ function AddPetContainer(props: any) {
       />
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {

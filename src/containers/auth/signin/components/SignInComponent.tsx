@@ -7,7 +7,12 @@ import { styles } from './styles';
 import { DEVICE_HEIGHT, isIOS } from '../../../../styles/deviceHelper';
 import { RegisterUserDTO } from '../../../../redux/types';
 
-const SignInComponent = (props: any) => {
+interface IProps {
+  redirectToLogin(): void;
+  handleSignIn(user: RegisterUserDTO): void;
+}
+
+const SignInComponent = (props: IProps) => {
   const [user, setUser] = useState(new RegisterUserDTO());
 
   const imageHeight = new Animated.Value(180);

@@ -11,7 +11,7 @@ import {
 import { AppStore } from '../../redux';
 import petReportActions from '../../redux/pet-reports/actions';
 import reduxContainer from '../../redux/reduxContainer';
-import { ListType, PetGender, PetSpecies, ReportType } from '../../redux/types';
+import { ListType, PetReportDTO, UserDTO } from '../../redux/types';
 import { colors } from '../../styles';
 import { requestLocationPermission } from '../../utils';
 import { HeaderComponent } from '../general';
@@ -22,7 +22,19 @@ import {
 } from './components';
 import { styles } from './styles';
 
-function ListContainer(props: any) {
+interface IProps {
+  navigation: any;
+  user: UserDTO;
+  report_list: PetReportDTO[];
+  user_report_list: PetReportDTO[];
+  favorite_reports: PetReportDTO[];
+  get_report_list_pending: boolean;
+  getPetReportListAction(): void;
+  getUserReportListAction(userId: string): void;
+  getFavoriteReportsAction(userId: string): void;
+}
+
+const ListContainer = (props: IProps) => {
   const route: any = useRoute();
   const navigation = useNavigation();
   const listType = route.params?.listType;
@@ -74,8 +86,8 @@ function ListContainer(props: any) {
     navigation.navigate('GeneralMap');
   };
 
-  const onPressItem = (_id: string) => {
-    navigation.navigate('Details', { itemId: _id, canNavigate: true });
+  const onPressItem = (reportId: string) => {
+    navigation.navigate('Details', { itemId: reportId, canNavigate: true });
   };
 
   return (
@@ -123,13 +135,13 @@ function ListContainer(props: any) {
             }
             renderItem={renderItem}
             contentContainerStyle={styles.list}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item._id || ''}
           />
         )}
       </View>
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {
