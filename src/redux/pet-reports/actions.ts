@@ -1,20 +1,20 @@
 import { Dispatch } from 'redux';
 import { PetReportStore } from './index';
-import { Server } from '../../utils';
+import { buildCriteria, Server } from '../../utils';
 import { PetReportDTO } from '../types';
 
 export interface IPetReportActions {
   getPetReportAction(reportId: string): void;
   addPetReportAction(petReport: PetReportDTO): void;
   editPetReportAction(reportId: string, report: PetReportDTO): void;
-  getPetReportListAction(): void;
-  getUserReportListAction(userId: string): void;
+  getPetReportListAction(criteria?: any): void;
+  getUserReportListAction(userId: string, criteria?: any): void;
   addFavoriteReportAction(
     userId: string,
     reportId: string,
     favorite: boolean
   ): void;
-  getFavoriteReportsAction(userId: string): void;
+  getFavoriteReportsAction(userId: string, criteria?: any): void;
 }
 
 class PetReportActions implements IPetReportActions {
@@ -81,12 +81,16 @@ class PetReportActions implements IPetReportActions {
     };
   }
 
-  getPetReportListAction() {
+  getPetReportListAction(criteria?: any) {
     return async (dispatch: Dispatch<any>) => {
       dispatch({
         type: PetReportStore.ActionTypes.GET_REPORT_LIST
       });
-      await Server.get('pet-reports')
+      let url = 'pet-reports';
+      if (criteria) {
+        url += buildCriteria(criteria);
+      }
+      await Server.get(url)
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_REPORT_LIST_SUCCESS,
@@ -102,12 +106,16 @@ class PetReportActions implements IPetReportActions {
     };
   }
 
-  getUserReportListAction(userId: string) {
+  getUserReportListAction(userId: string, criteria?: any) {
     return async (dispatch: Dispatch<any>) => {
       dispatch({
         type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST
       });
-      await Server.get(`pet-reports/user/${userId}`)
+      let url = `pet-reports/user/${userId}`;
+      if (criteria) {
+        url += buildCriteria(criteria);
+      }
+      await Server.get(url)
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_USER_REPORT_LIST_SUCCESS,
@@ -147,12 +155,16 @@ class PetReportActions implements IPetReportActions {
     };
   }
 
-  getFavoriteReportsAction(userId: string) {
+  getFavoriteReportsAction(userId: string, criteria?: any) {
     return async (dispatch: Dispatch<any>) => {
       dispatch({
         type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS
       });
-      await Server.get(`pet-reports/${userId}/favorites`)
+      let url = `pet-reports/${userId}/favorites`;
+      if (criteria) {
+        url += buildCriteria(criteria);
+      }
+      await Server.get(url)
         .then((response: any) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_SUCCESS,

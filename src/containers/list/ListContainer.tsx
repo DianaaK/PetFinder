@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -29,12 +29,17 @@ interface IProps {
   user_report_list: PetReportDTO[];
   favorite_reports: PetReportDTO[];
   get_report_list_pending: boolean;
-  getPetReportListAction(): void;
-  getUserReportListAction(userId: string): void;
-  getFavoriteReportsAction(userId: string): void;
+  get_user_report_list_pending: boolean;
+  get_favorite_reports_pending: boolean;
+  getPetReportListAction(criteria?: any): void;
+  getUserReportListAction(userId: string, criteria?: any): void;
+  getFavoriteReportsAction(userId: string, criteria?: any): void;
 }
 
 const ListContainer = (props: IProps) => {
+  const [initialFilters, setInitialFilters] = useState<any>({});
+  const [initialSearch, setInitialSearch] = useState('');
+
   const route: any = useRoute();
   const navigation = useNavigation();
   const listType = route.params?.listType;
@@ -56,6 +61,8 @@ const ListContainer = (props: IProps) => {
     } else if (forGeneral) {
       props.getPetReportListAction();
     }
+    setInitialFilters({});
+    setInitialSearch('');
   }, [listType]);
 
   useFocusEffect(
@@ -90,6 +97,22 @@ const ListContainer = (props: IProps) => {
     navigation.navigate('Details', { itemId: reportId, canNavigate: true });
   };
 
+  const saveQuery = (search: string, filters: any) => {
+    setInitialSearch(search);
+    setInitialFilters(filters);
+    if (forUser && props.user) {
+      props.getUserReportListAction(props.user._id, { search, filters });
+    } else if (forFavorites && props.user) {
+      props.getFavoriteReportsAction(props.user._id, { search, filters });
+    } else if (forGeneral) {
+      props.getPetReportListAction({ search, filters });
+    }
+  };
+
+  const isPending =
+    props.get_report_list_pending ||
+    props.get_user_report_list_pending ||
+    props.get_favorite_reports_pending;
   return (
     <View style={styles.container}>
       <HeaderComponent
@@ -118,26 +141,31 @@ const ListContainer = (props: IProps) => {
         }
       />
       <View style={styles.contentContainer}>
-        {props.get_report_list_pending ? (
+        {isPending && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.mainColorLight} />
+            <ActivityIndicator size="large" color={colors.mainColor5} />
           </View>
-        ) : (
-          <FlatList
-            ListHeaderComponent={<SearchComponent />}
-            ListEmptyComponent={<EmptyComponent />}
-            data={
-              forUser
-                ? props.user_report_list
-                : forFavorites
-                ? props.favorite_reports
-                : props.report_list
-            }
-            renderItem={renderItem}
-            contentContainerStyle={styles.list}
-            keyExtractor={(item) => item._id || ''}
-          />
         )}
+        <FlatList
+          ListHeaderComponent={
+            <SearchComponent
+              initialSearch={initialSearch}
+              initialFilters={initialFilters}
+              saveQuery={saveQuery}
+            />
+          }
+          ListEmptyComponent={<EmptyComponent />}
+          data={
+            forUser
+              ? props.user_report_list
+              : forFavorites
+              ? props.favorite_reports
+              : props.report_list
+          }
+          renderItem={renderItem}
+          contentContainerStyle={styles.list}
+          keyExtractor={(item) => item._id || ''}
+        />
       </View>
     </View>
   );

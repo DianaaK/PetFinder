@@ -4,7 +4,6 @@ import { statusBarHeight, maxHeightScreenWithNavbar } from '../../styles';
 
 export const styles = StyleSheet.create({
   container: {
-    // marginTop: statusBarHeight,
     flex: 1
   },
   contentContainer: {
@@ -23,6 +22,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 3
   }
 });
