@@ -18,6 +18,8 @@ export const rootReducer: Reducer<any> = combineReducers({
 export const appReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {
     state.users = undefined;
+    state.petReports = undefined;
+    state.petLocations = undefined;
     if (state && state.appConfig) {
       const persistState = { appConfig: state.appConfig };
       state = persistState;

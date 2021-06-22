@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import { store, AuthStore } from '../redux';
 
-const defOrigin = 'http://192.168.1.4:3000';
+const defOrigin = 'https://pet-finder-licenta.herokuapp.com';
 
 /*
   Class that implements all server functions.

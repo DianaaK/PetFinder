@@ -22,7 +22,7 @@ interface IProps {
 
 const ProfileContainer = (props: IProps) => {
   useEffect(() => {
-    if (!props.user || props.user._id !== props.auth_user._id) {
+    if (!props.user || props.user?._id !== props.auth_user?._id) {
       props.getUserAction(props.auth_user._id);
     }
   }, []);

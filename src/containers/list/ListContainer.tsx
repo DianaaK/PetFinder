@@ -104,7 +104,7 @@ const ListContainer = (props: IProps) => {
       props.getUserReportListAction(props.user._id, { search, filters });
     } else if (forFavorites && props.user) {
       props.getFavoriteReportsAction(props.user._id, { search, filters });
-    } else if (forGeneral) {
+    } else if (forGeneral || !listType?.toString()) {
       props.getPetReportListAction({ search, filters });
     }
   };

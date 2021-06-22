@@ -380,7 +380,7 @@ const AddPetFormComponent = (props: IProps) => {
                 }}
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}
-                disabled={!props.user.phone}
+                disabled={!props.user?.phone}
               />
               <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
                 Phone number

@@ -3,10 +3,10 @@ import { Component } from 'react';
 import { Animated, StyleSheet, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import { RadioButton } from 'react-native-paper';
 import { PetGender, PetSpecies, ReportType } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
+import { SearchForm } from './SearchForm';
 
 interface IProps {
   initialFilters: {
@@ -17,6 +17,7 @@ interface IProps {
   initialSearch: string;
   saveQuery(search: string, filters: any): void;
 }
+
 interface IState {
   filtersHeight: any;
   textOpacity: any;
@@ -28,6 +29,7 @@ interface IState {
     gender: PetGender | null;
   };
 }
+
 export class SearchComponent extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
@@ -148,118 +150,11 @@ export class SearchComponent extends Component<IProps, IState> {
             colors={[colors.lightGray, colors.mainColorLight3]}
             style={styles.linearGradient}>
             <Animated.View style={{ opacity: this.state.textOpacity }}>
-              <TextComponent style={styles.radioText}>
-                Report Type:
-              </TextComponent>
-              <RadioButton.Group
-                onValueChange={(value) => {
-                  this.handleRadio(value, 'type');
-                }}
-                value={filters.type + ''}>
-                <View
-                  style={[
-                    styles.rowContainer,
-                    { justifyContent: 'space-around' }
-                  ]}>
-                  <View style={styles.rowContainer}>
-                    <RadioButton
-                      value={ReportType.LOST + ''}
-                      color={colors.mainColor2}
-                      uncheckedColor={colors.mainColor2}
-                    />
-                    <TextComponent>Lost</TextComponent>
-                  </View>
-                  <View style={styles.rowContainer}>
-                    <RadioButton
-                      value={ReportType.FOUND + ''}
-                      color={colors.mainColor2}
-                      uncheckedColor={colors.mainColor2}
-                    />
-                    <TextComponent>Found</TextComponent>
-                  </View>
-                </View>
-              </RadioButton.Group>
-
-              <TextComponent style={styles.radioText}>
-                Pet Species:
-              </TextComponent>
-              <RadioButton.Group
-                onValueChange={(value) => {
-                  this.handleRadio(value, 'species');
-                }}
-                value={filters.species + ''}>
-                <View style={styles.rowContainer}>
-                  <RadioButton
-                    value={PetSpecies.CAT + ''}
-                    color={colors.mainColor2}
-                    uncheckedColor={colors.mainColor2}
-                  />
-                  <TextComponent>Cat</TextComponent>
-                </View>
-                <View style={styles.rowContainer}>
-                  <RadioButton
-                    value={PetSpecies.DOG + ''}
-                    color={colors.mainColor2}
-                    uncheckedColor={colors.mainColor2}
-                  />
-                  <TextComponent>Dog</TextComponent>
-                </View>
-                <View style={styles.rowContainer}>
-                  <RadioButton
-                    value={PetSpecies.OTHER + ''}
-                    color={colors.mainColor2}
-                    uncheckedColor={colors.mainColor2}
-                  />
-                  <TextComponent>Other</TextComponent>
-                </View>
-              </RadioButton.Group>
-
-              <TextComponent style={styles.radioText}>
-                Pet Gender:
-              </TextComponent>
-              <RadioButton.Group
-                onValueChange={(value) => {
-                  this.handleRadio(value, 'gender');
-                }}
-                value={filters.gender + ''}>
-                <View
-                  style={[
-                    styles.rowContainer,
-                    { justifyContent: 'space-around' }
-                  ]}>
-                  <View style={styles.rowContainer}>
-                    <RadioButton
-                      value={PetGender.MALE + ''}
-                      color={colors.mainColor2}
-                      uncheckedColor={colors.mainColor2}
-                    />
-                    <TextComponent>Male</TextComponent>
-                  </View>
-                  <View style={styles.rowContainer}>
-                    <RadioButton
-                      value={PetGender.FEMALE + ''}
-                      color={colors.mainColor2}
-                      uncheckedColor={colors.mainColor2}
-                    />
-                    <TextComponent>Female</TextComponent>
-                  </View>
-                </View>
-              </RadioButton.Group>
-
-              <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity
-                  style={styles.doneButton}
-                  onPress={this.setQuery}>
-                  <TextComponent
-                    style={{
-                      textTransform: 'uppercase',
-                      color: colors.mainColor3,
-                      fontSize: 16
-                    }}>
-                    Done
-                  </TextComponent>
-                </TouchableOpacity>
-              </View>
+              <SearchForm
+                filters={filters}
+                handleRadio={this.handleRadio}
+                setQuery={this.setQuery}
+              />
             </Animated.View>
           </LinearGradient>
         </Animated.View>
@@ -331,22 +226,5 @@ const styles = StyleSheet.create({
   linearGradient: {
     height: '100%',
     paddingHorizontal: 15
-  },
-  radioText: {
-    marginVertical: 8
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap'
-  },
-  doneButton: {
-    width: 100,
-    borderRadius: 15,
-    borderColor: colors.mainColorLight2,
-    backgroundColor: colors.mainColorLight,
-    borderWidth: 1,
-    padding: 8,
-    alignItems: 'center'
   }
 });
