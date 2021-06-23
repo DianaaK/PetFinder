@@ -6,6 +6,7 @@ import DrawerContainer from './DrawerContainer';
 import { AuthUtil } from '../utils';
 import { AddMarkerContainer, MapContainer } from './map';
 import { ListType } from '../redux/types';
+import { ChangePasswordContainer, UserContainer } from './profile';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,8 @@ function MainContainer() {
       <Stack.Screen name="GeneralMap" component={MapContainer} />
       <Stack.Screen name="Add" component={AddPetContainer} />
       <Stack.Screen name="AddMarkerMap" component={AddMarkerContainer} />
+      <Stack.Screen name="Settings" component={UserContainer} />
+      <Stack.Screen name="Password" component={ChangePasswordContainer} />
     </Stack.Navigator>
   );
 }

@@ -23,7 +23,7 @@ interface IProps {
 const ProfileContainer = (props: IProps) => {
   useEffect(() => {
     if (!props.user || props.user?._id !== props.auth_user?._id) {
-      props.getUserAction(props.auth_user._id);
+      props.getUserAction(props.auth_user?._id);
     }
   }, []);
 
@@ -37,29 +37,17 @@ const ProfileContainer = (props: IProps) => {
     props.editUserAction(props.user._id, newUser);
   };
 
-  const redirectToListAction = () => {
-    props.navigation.closeDrawer();
-    props.navigation.navigate('List', { listType: ListType.GENERAL });
-  };
-
   const logOutAction = () => {
     props.navigation.closeDrawer();
     props.logoutAction();
   };
 
-  const redirectToAddAction = () => {
+  const redirect = (screen: string, params?: any) => {
     props.navigation.closeDrawer();
-    props.navigation.navigate('Add', { editMode: false });
-  };
-
-  const redirectToMyReports = () => {
-    props.navigation.closeDrawer();
-    props.navigation.navigate('List', { listType: ListType.USER });
-  };
-
-  const redirectToFavorites = () => {
-    props.navigation.closeDrawer();
-    props.navigation.navigate('List', { listType: ListType.FAVORITES });
+    if (params) {
+      props.navigation.navigate(screen, params);
+    }
+    props.navigation.navigate(screen);
   };
 
   return (
@@ -72,25 +60,33 @@ const ProfileContainer = (props: IProps) => {
           title="Lost & Found"
           iconType="MaterialIcons"
           iconName="pets"
-          onPress={redirectToListAction}
+          onPress={() => {
+            redirect('List', { listType: ListType.GENERAL });
+          }}
         />
         <MenuButtonComponent
           title="Add pet"
           iconType="FontAwesome"
           iconName="plus"
-          onPress={redirectToAddAction}
+          onPress={() => {
+            redirect('Add', { editMode: false });
+          }}
         />
         <MenuButtonComponent
           title="My reports"
           iconType="MaterialIcons"
           iconName="my-library-books"
-          onPress={redirectToMyReports}
+          onPress={() => {
+            redirect('List', { listType: ListType.USER });
+          }}
         />
         <MenuButtonComponent
           title="My Favorites"
           iconType="FontAwesome"
           iconName="heart"
-          onPress={redirectToFavorites}
+          onPress={() => {
+            redirect('List', { listType: ListType.FAVORITES });
+          }}
         />
       </View>
       <View style={styles.bottomMenu}>
@@ -98,7 +94,9 @@ const ProfileContainer = (props: IProps) => {
           title="Settings"
           iconType="MaterialIcons"
           iconName="settings"
-          onPress={() => {}}
+          onPress={() => {
+            redirect('Settings');
+          }}
         />
         <MenuButtonComponent
           title="Log out"

@@ -7,6 +7,8 @@ export class UserDTO {
   password?: string;
   profileImage?: string;
   created?: string;
+  useGoogleMaps?: boolean;
+  useSatelliteView?: boolean;
 }
 
 export class RegisterUserDTO {
