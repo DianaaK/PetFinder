@@ -10,7 +10,7 @@ import {
   Keyboard
 } from 'react-native';
 import { Popup } from 'react-native-map-link';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, MAP_TYPES } from 'react-native-maps';
 import {
   CoordinatesDTO,
   PetReportDTO,
@@ -26,6 +26,7 @@ import {
 import { HeaderComponent, IconComponent, TextComponent } from '../../general';
 
 interface IProps {
+  mapPreferences: { provider: 'google' | null; type: any };
   position: CoordinatesDTO;
   positionPending: boolean;
   petReport: PetReportDTO;
@@ -213,7 +214,8 @@ export default function PetMapComponent(props: IProps) {
           <ActivityIndicator size="large" />
         ) : (
           <MapView
-            provider={PROVIDER_GOOGLE}
+            provider={props.mapPreferences?.provider || PROVIDER_GOOGLE}
+            mapType={props.mapPreferences?.type || MAP_TYPES.STANDARD}
             style={styles.map}
             initialRegion={{
               ...props.position,

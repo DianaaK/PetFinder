@@ -16,6 +16,7 @@ interface IProps {
     type: string;
     name: string;
   };
+  rightButtonBadge?: string;
 }
 
 export default function HeaderComponent(props: IProps) {
@@ -44,15 +45,24 @@ export default function HeaderComponent(props: IProps) {
           </View>
         </View>
         {props.rightButtonIcon ? (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={props.rightButtonAction}>
-            <IconComponent
-              type={props.rightButtonIcon.type}
-              name={props.rightButtonIcon.name}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
+          <>
+            {props.rightButtonBadge ? (
+              <View style={styles.badge}>
+                <TextComponent style={styles.badgeText}>
+                  {props.rightButtonBadge}
+                </TextComponent>
+              </View>
+            ) : null}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={props.rightButtonAction}>
+              <IconComponent
+                type={props.rightButtonIcon.type}
+                name={props.rightButtonIcon.name}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </>
         ) : (
           <View style={styles.button} />
         )}
@@ -86,6 +96,20 @@ const styles = StyleSheet.create({
   icon: {
     color: colors.mainColor2,
     fontSize: 30,
-    marginRight: 5
+    marginRight: 10
+  },
+  badge: {
+    position: 'absolute',
+    right: 5,
+    zIndex: 2,
+    backgroundColor: colors.mainColor5,
+    height: 20,
+    width: 20,
+    borderRadius: 10
+  },
+  badgeText: {
+    fontSize: 14,
+    color: colors.mainColorLight,
+    textAlign: 'center'
   }
 });

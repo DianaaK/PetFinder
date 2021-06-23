@@ -66,7 +66,8 @@ export class SearchComponent extends Component<IProps, IState> {
         useNativeDriver: false
       }),
       Animated.timing(this.state.textOpacity, {
-        duration: 300,
+        duration: 200,
+        delay: this.state.showFilterMenu ? 0 : 250,
         toValue: this.state.showFilterMenu ? 0 : 1,
         useNativeDriver: false
       })

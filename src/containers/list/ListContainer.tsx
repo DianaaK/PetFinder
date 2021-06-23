@@ -37,11 +37,14 @@ interface IProps {
 }
 
 const ListContainer = (props: IProps) => {
-  const [initialFilters, setInitialFilters] = useState<any>({});
-  const [initialSearch, setInitialSearch] = useState('');
-
   const route: any = useRoute();
   const navigation = useNavigation();
+
+  const [initialFilters, setInitialFilters] = useState<any>(
+    route.params?.filters || {}
+  );
+  const [initialSearch, setInitialSearch] = useState('');
+
   const listType = route.params?.listType;
   const forUser = listType === ListType.USER;
   const forFavorites = listType === ListType.FAVORITES;
@@ -90,7 +93,7 @@ const ListContainer = (props: IProps) => {
 
   const onMapOpen = async () => {
     await requestLocationPermission();
-    navigation.navigate('GeneralMap');
+    navigation.navigate('GeneralMap', { filters: initialFilters });
   };
 
   const onPressItem = (reportId: string) => {

@@ -2,8 +2,10 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import { MAP_TYPES, PROVIDER_GOOGLE } from 'react-native-maps';
 import { AppStore, reduxContainer } from '../../redux';
 import locationsActions from '../../redux/pet-locations/actions';
+import petReportActions from '../../redux/pet-reports/actions';
 import {
   CoordinatesDTO,
   PetReportDTO,
@@ -19,6 +21,7 @@ interface IProps {
   reported_locations: ReportedLocationDTO[];
   addPetLocationAction(petLocation: ReportedLocationDTO): void;
   getPetLocationsAction(reportId: string): void;
+  getPetReportListAction(criteria: any): void;
 }
 
 const MapContainer = (props: IProps) => {
@@ -72,11 +75,16 @@ const MapContainer = (props: IProps) => {
 
   const reportList = props.report_list;
   const petMode = route?.params?.petMode;
+  const mapPreferences = {
+    provider: props.user.useGoogleMaps ? PROVIDER_GOOGLE : null,
+    type: props.user.useSatelliteView ? MAP_TYPES.SATELLITE : MAP_TYPES.STANDARD
+  };
 
   return (
     <View style={styles.container}>
       {petMode ? (
         <PetMapComponent
+          mapPreferences={mapPreferences}
           reportedLocations={props.reported_locations}
           positionPending={positionPending}
           position={route.params?.petReport.coordinates}
@@ -86,9 +94,11 @@ const MapContainer = (props: IProps) => {
         />
       ) : (
         <GeneralMapComponent
+          mapPreferences={mapPreferences}
           data={reportList}
           position={position}
           positionPending={positionPending}
+          getPetReportListAction={props.getPetReportListAction}
         />
       )}
     </View>
@@ -107,7 +117,8 @@ function mapStateToProps(state: AppStore.states) {
 
 const dispatchToProps = {
   addPetLocationAction: locationsActions.addPetLocationAction,
-  getPetLocationsAction: locationsActions.getPetLocationsAction
+  getPetLocationsAction: locationsActions.getPetLocationsAction,
+  getPetReportListAction: petReportActions.getPetReportListAction
 };
 
 export default reduxContainer(MapContainer, mapStateToProps, dispatchToProps);

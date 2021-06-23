@@ -197,7 +197,7 @@ const AddPetFormComponent = (props: IProps) => {
     );
   };
 
-  const onSaveReport = () => {
+  const saveReport = () => {
     const dataToSend: any = {
       ...petReport,
       user: props.editMode ? undefined : props.user._id,
@@ -441,7 +441,7 @@ const AddPetFormComponent = (props: IProps) => {
       <View style={styles.sendButtonContainer}>
         <TouchableOpacity
           style={styles.sendButton}
-          onPress={keyboardVisible ? dismissKeyboard : onSaveReport}>
+          onPress={keyboardVisible ? dismissKeyboard : saveReport}>
           <TextComponent style={styles.sendButtonText}>
             {keyboardVisible ? '' : 'Send'}
           </TextComponent>
