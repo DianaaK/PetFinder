@@ -165,6 +165,28 @@ function petReportReducer(
         get_favorite_reports_error: action.payload
       };
     }
+    case PetReportStore.ActionTypes.DELETE_REPORT: {
+      return {
+        ...state,
+        delete_report_pending: true,
+        delete_report_error: null
+      };
+    }
+    case PetReportStore.ActionTypes.DELETE_REPORT_SUCCESS: {
+      const nextState = {
+        ...state,
+        delete_report_pending: false,
+        delete_report_error: null
+      };
+      return nextState;
+    }
+    case PetReportStore.ActionTypes.DELETE_REPORT_FAILED: {
+      return {
+        ...state,
+        delete_report_pending: false,
+        delete_report_error: action.payload
+      };
+    }
     default:
       return state;
   }

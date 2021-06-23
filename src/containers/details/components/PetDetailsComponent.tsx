@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { assets } from '../../../../assets/images';
 import { PetGender, PetReportDTO, ReportType } from '../../../redux/types';
@@ -13,6 +13,7 @@ interface IProps {
   item: PetReportDTO;
   canNavigate: boolean;
   isUserOwner: boolean;
+  deleteReport(reportId: string): void;
 }
 
 const PetDetailsComponent = (props: IProps) => {
@@ -44,7 +45,22 @@ const PetDetailsComponent = (props: IProps) => {
   };
 
   const deleteReport = () => {
-    console.log('to be deleted');
+    Alert.alert(
+      'Are you sure you want to delete this report?',
+      'This action cannot be undone!',
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Delete',
+          onPress: () => {
+            if (props.item._id) {
+              props.deleteReport(props.item._id);
+              navigation.goBack();
+            }
+          }
+        }
+      ]
+    );
   };
 
   const renderExternalNavigation = () => (
@@ -111,12 +127,12 @@ const PetDetailsComponent = (props: IProps) => {
           <TextComponent style={styles.userType}>
             {pet.type === ReportType.LOST ? 'Owner' : 'Rescuer'}
           </TextComponent>
-          {pet.user?.email && (
+          {pet.emailContact && pet.user?.email && (
             <TextComponent style={styles.userType}>
               Mail: {pet.user.email}
             </TextComponent>
           )}
-          {pet.user?.phone && (
+          {pet.phoneContact && pet.user?.phone && (
             <TextComponent style={styles.userType}>
               Phone: {pet.user.phone}
             </TextComponent>

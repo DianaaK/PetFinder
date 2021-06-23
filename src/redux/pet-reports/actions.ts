@@ -15,6 +15,7 @@ export interface IPetReportActions {
     favorite: boolean
   ): void;
   getFavoriteReportsAction(userId: string, criteria?: any): void;
+  deleteReportAction(reportId: string): void;
 }
 
 class PetReportActions implements IPetReportActions {
@@ -50,6 +51,10 @@ class PetReportActions implements IPetReportActions {
             type: PetReportStore.ActionTypes.ADD_REPORT_SUCCESS,
             payload: response.data as PetReportDTO
           });
+          dispatch(
+            PetReportStore.actions.getUserReportListAction(response.data.user)
+          );
+          dispatch(PetReportStore.actions.getPetReportListAction());
         })
         .catch((error) => {
           dispatch({
@@ -174,6 +179,33 @@ class PetReportActions implements IPetReportActions {
         .catch((error) => {
           dispatch({
             type: PetReportStore.ActionTypes.GET_FAVORITE_REPORTS_FAILED,
+            payload: Server.errorParse(error)
+          });
+        });
+    };
+  }
+
+  deleteReportAction(reportId: string) {
+    return async (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: PetReportStore.ActionTypes.DELETE_REPORT
+      });
+      await Server.delete(`pet-reports/${reportId}`)
+        .then((response: any) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.DELETE_REPORT_SUCCESS,
+            payload: response.data as PetReportDTO
+          });
+          dispatch(
+            PetReportStore.actions.getUserReportListAction(
+              response.data.user._id
+            )
+          );
+          dispatch(PetReportStore.actions.getPetReportListAction());
+        })
+        .catch((error) => {
+          dispatch({
+            type: PetReportStore.ActionTypes.DELETE_REPORT_FAILED,
             payload: Server.errorParse(error)
           });
         });

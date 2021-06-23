@@ -23,6 +23,8 @@ export namespace PetReportStore {
     favorite_reports: PetReportDTO[];
     get_favorite_reports_pending: boolean;
     get_favorite_reports_error: string | null;
+    delete_report_pending: boolean;
+    delete_report_error: string | null;
   };
 
   export const initialState: IState = {
@@ -43,7 +45,9 @@ export namespace PetReportStore {
     add_favorite_report_error: null,
     favorite_reports: [],
     get_favorite_reports_pending: false,
-    get_favorite_reports_error: null
+    get_favorite_reports_error: null,
+    delete_report_pending: false,
+    delete_report_error: null
   };
 
   export enum ActionTypes {
@@ -67,7 +71,10 @@ export namespace PetReportStore {
     ADD_FAVORITE_REPORT_FAILED = 'ADD_FAVORITE_REPORT_FAILED',
     GET_FAVORITE_REPORTS = 'GET_FAVORITE_REPORTS',
     GET_FAVORITE_REPORTS_SUCCESS = 'GET_FAVORITE_REPORTS_SUCCESS',
-    GET_FAVORITE_REPORTS_FAILED = 'GET_FAVORITE_REPORTS_FAILED'
+    GET_FAVORITE_REPORTS_FAILED = 'GET_FAVORITE_REPORTS_FAILED',
+    DELETE_REPORT = 'DELETE_REPORT',
+    DELETE_REPORT_SUCCESS = 'DELETE_REPORT_SUCCESS',
+    DELETE_REPORT_FAILED = 'DELETE_REPORT_FAILED'
   }
 
   export const actions = petReportActions;

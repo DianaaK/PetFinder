@@ -22,6 +22,7 @@ interface IProps {
   report: PetReportDTO;
   get_report_pending: boolean;
   getPetReportAction(reportId: string): void;
+  deleteReportAction(reportId: string): void;
   addFavoriteReportAction(
     userId: string,
     reportId: string,
@@ -74,6 +75,7 @@ const PetDetailsContainer = (props: IProps) => {
               item={props.report}
               canNavigate={route.params.canNavigate}
               isUserOwner={isUserOwner}
+              deleteReport={props.deleteReportAction}
             />
           </View>
         </ScrollView>
@@ -92,6 +94,7 @@ function mapStateToProps(state: AppStore.states) {
 
 const dispatchToProps = {
   getPetReportAction: petReportActions.getPetReportAction,
+  deleteReportAction: petReportActions.deleteReportAction,
   addFavoriteReportAction: petReportActions.addFavoriteReportAction
 };
 
