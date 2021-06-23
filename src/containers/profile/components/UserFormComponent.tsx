@@ -6,7 +6,6 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Animated,
   Keyboard,
   Switch
 } from 'react-native';
@@ -30,61 +29,30 @@ const UserFormComponent = (props: IProps) => {
   const [user, setUser] = useState(props.user);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
-  const positionBottom = new Animated.Value(0);
   let keyboardShowListener: any;
   let keyboardHideListener: any;
 
   useEffect(() => {
     if (isIOS) {
-      keyboardShowListener = Keyboard.addListener(
-        'keyboardWillShow',
-        keyboardShow
-      );
-      keyboardHideListener = Keyboard.addListener(
-        'keyboardWillHide',
-        keyboardHide
-      );
+      keyboardShowListener = Keyboard.addListener('keyboardWillShow', () => {
+        setKeyboardVisible(true);
+      });
+      keyboardHideListener = Keyboard.addListener('keyboardWillHide', () => {
+        setKeyboardVisible(false);
+      });
     } else {
-      keyboardShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        androidKeyboardShow
-      );
-      keyboardHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        androidKeyboardHide
-      );
+      keyboardShowListener = Keyboard.addListener('keyboardDidShow', () => {
+        setKeyboardVisible(true);
+      });
+      keyboardHideListener = Keyboard.addListener('keyboardDidHide', () => {
+        setKeyboardVisible(false);
+      });
     }
     return () => {
       keyboardShowListener.remove();
       keyboardHideListener.remove();
     };
   }, []);
-
-  const androidKeyboardShow = () => {
-    setKeyboardVisible(true);
-  };
-
-  const androidKeyboardHide = () => {
-    setKeyboardVisible(false);
-  };
-
-  const keyboardShow = (event: any) => {
-    Animated.timing(positionBottom, {
-      duration: event.duration,
-      toValue: event.endCoordinates.height,
-      useNativeDriver: true
-    }).start();
-    setKeyboardVisible(true);
-  };
-
-  const keyboardHide = (event: any) => {
-    Animated.timing(positionBottom, {
-      duration: event.duration,
-      toValue: 0,
-      useNativeDriver: true
-    }).start();
-    setKeyboardVisible(false);
-  };
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -167,14 +135,18 @@ const UserFormComponent = (props: IProps) => {
           </View>
         ) : null}
 
-        <TouchableOpacity style={styles.formButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.formButton}
+          onPress={() => {
+            navigation.navigate('Password');
+          }}>
           <TextComponent style={styles.formButtonText}>
             Change Password
           </TextComponent>
         </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.sendButtonContainer}>
+      <View style={styles.saveButtonContainer}>
         <TouchableOpacity
           style={styles.sendButton}
           onPress={keyboardVisible ? dismissKeyboard : saveUser}>
@@ -238,7 +210,7 @@ const styles = StyleSheet.create({
     color: colors.mainColor2,
     textTransform: 'uppercase'
   },
-  sendButtonContainer: {
+  saveButtonContainer: {
     height: 50,
     width: '100%',
     backgroundColor: 'white',

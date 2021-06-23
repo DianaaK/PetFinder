@@ -8,6 +8,11 @@ export interface IAuthActions {
   registerAction(user: RegisterUserDTO): void;
   loginAction(email: string, password: string): void;
   logoutAction(): void;
+  changePasswordAction(
+    username: string,
+    oldPassword: string,
+    newPassword: string
+  ): void;
 }
 
 class AuthActions implements IAuthActions {
@@ -65,6 +70,37 @@ class AuthActions implements IAuthActions {
       Server.logout().then(() => {
         dispatch({ type: AuthStore.ActionTypes.LOGOUT });
       });
+    };
+  }
+
+  changePasswordAction(
+    username: string,
+    oldPassword: string,
+    newPassword: string
+  ) {
+    return (dispatch: Dispatch<any>) => {
+      dispatch({
+        type: AuthStore.ActionTypes.CHANGE_PASSWORD
+      });
+      Server.post('auth/change-password', {
+        username,
+        password: oldPassword,
+        newPassword
+      })
+        .then((response: any) => {
+          dispatch({
+            type: AuthStore.ActionTypes.CHANGE_PASSWORD_SUCCESS,
+            payload: response.data
+          });
+          Alert.alert('Password changed successfully!', '', [{ text: 'OK' }]);
+        })
+        .catch((error) => {
+          dispatch({
+            type: AuthStore.ActionTypes.CHANGE_PASSWORD_FAILED,
+            payload: error
+          });
+          Alert.alert('Old password is incorrect', '', [{ text: 'OK' }]);
+        });
     };
   }
 }

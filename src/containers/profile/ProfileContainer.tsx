@@ -31,6 +31,9 @@ const ProfileContainer = (props: IProps) => {
     if (!props.auth_user && !props.logout_pending && !props.logout_error) {
       props.navigation.navigate('LogIn');
     }
+    if (!props.user || props.user?._id !== props.auth_user?._id) {
+      props.getUserAction(props.auth_user?._id);
+    }
   }, [props.auth_user]);
 
   const editUser = (newUser: any) => {

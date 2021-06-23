@@ -67,6 +67,27 @@ function authReducer(
         change_password_error: null
       };
     }
+    case AuthStore.ActionTypes.CHANGE_PASSWORD: {
+      return {
+        ...state,
+        change_password_pending: true,
+        change_password_error: null
+      };
+    }
+    case AuthStore.ActionTypes.CHANGE_PASSWORD_SUCCESS: {
+      return {
+        ...state,
+        change_password_pending: false,
+        change_password_error: null
+      };
+    }
+    case AuthStore.ActionTypes.CHANGE_PASSWORD_FAILED: {
+      return {
+        ...state,
+        change_password_pending: false,
+        change_password_error: action.payload
+      };
+    }
     default:
       return state;
   }

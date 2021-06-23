@@ -27,7 +27,9 @@ const UserContainer = (props: IProps) => {
           name: 'arrow-back'
         }}
       />
-      <UserFormComponent user={props.user} editUser={props.editUserAction} />
+      {props.user ? (
+        <UserFormComponent user={props.user} editUser={props.editUserAction} />
+      ) : null}
     </View>
   );
 };
