@@ -14,6 +14,7 @@ import {
 } from '../../redux/types';
 import GeneralMapComponent from './components/GeneralMapComponent';
 import PetMapComponent from './components/PetMapComponent';
+import { mapStyles } from './components/styles';
 
 interface IProps {
   user: UserDTO;
@@ -36,7 +37,7 @@ const MapContainer = (props: IProps) => {
     Geolocation.getCurrentPosition(
       getCurrentPositionSuccess,
       setDefaultPosition,
-      { timeout: 3000 }
+      { timeout: 4000 }
     );
   }, []);
 
@@ -49,14 +50,7 @@ const MapContainer = (props: IProps) => {
     setPositionPending(false);
   };
 
-  const setDefaultPosition = (coordinates: any) => {
-    if (coordinates && coordinates.length === 2) {
-      const myPosition = {
-        latitude: coordinates[1],
-        longitude: coordinates[0]
-      };
-      setPosition(myPosition);
-    }
+  const setDefaultPosition = () => {
     setPositionPending(false);
   };
 
@@ -81,7 +75,7 @@ const MapContainer = (props: IProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={mapStyles.container}>
       {petMode ? (
         <PetMapComponent
           mapPreferences={mapPreferences}
@@ -122,9 +116,3 @@ const dispatchToProps = {
 };
 
 export default reduxContainer(MapContainer, mapStateToProps, dispatchToProps);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});

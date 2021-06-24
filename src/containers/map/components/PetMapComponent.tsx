@@ -17,13 +17,14 @@ import {
   ReportedLocationDTO,
   ReportType
 } from '../../../redux/types';
-import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
 import {
   formatDate,
   getAddressFromCoordinates,
   getCoordinatesFromAddress
 } from '../../../utils';
 import { HeaderComponent, IconComponent, TextComponent } from '../../general';
+import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
+import { mapStyles } from './styles';
 
 interface IProps {
   mapPreferences: { provider: 'google' | null; type: any };
@@ -211,12 +212,14 @@ export default function PetMapComponent(props: IProps) {
       />
       <View style={{ flex: 1 }}>
         {props.positionPending ? (
-          <ActivityIndicator size="large" />
+          <View style={mapStyles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.mainColorLight} />
+          </View>
         ) : (
           <MapView
             provider={props.mapPreferences?.provider || PROVIDER_GOOGLE}
             mapType={props.mapPreferences?.type || MAP_TYPES.STANDARD}
-            style={styles.map}
+            style={mapStyles.map}
             initialRegion={{
               ...props.position,
               latitudeDelta: LATITUDE_DELTA,
@@ -291,12 +294,6 @@ export default function PetMapComponent(props: IProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  map: {
-    flex: 1
-  },
   navigateButton: {
     alignSelf: 'center',
     position: 'absolute',

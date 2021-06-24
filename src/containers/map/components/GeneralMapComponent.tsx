@@ -14,6 +14,7 @@ import {
 import { HeaderComponent } from '../../general';
 import { ListItemComponent } from '../../list/components';
 import { SearchForm } from '../../list/components/SearchForm';
+import { mapStyles } from './styles';
 
 interface IProps {
   mapPreferences: { provider: 'google' | null; type: any };
@@ -179,12 +180,14 @@ export default function GeneralMap(props: IProps) {
       </Animated.View>
       <View style={{ flex: 1 }}>
         {props.positionPending ? (
-          <ActivityIndicator size="large" />
+          <View style={mapStyles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.mainColorLight} />
+          </View>
         ) : (
           <MapView
             provider={props.mapPreferences?.provider || PROVIDER_GOOGLE}
             mapType={props.mapPreferences?.type || MAP_TYPES.STANDARD}
-            style={styles.map}
+            style={mapStyles.map}
             initialRegion={{
               ...props.position,
               latitudeDelta: LATITUDE_DELTA,
@@ -210,12 +213,6 @@ export default function GeneralMap(props: IProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  map: {
-    flex: 1
-  },
   preview: {
     position: 'absolute',
     width: '100%',
