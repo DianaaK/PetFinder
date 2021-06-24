@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import reduxContainer from '../../redux/reduxContainer';
 import { MenuButtonComponent } from '../general';
-import { styles } from './styles';
-import authActions from '../../redux/authentication/actions';
-import { AppStore } from '../../redux';
 import ProfileSectionComponent from './components/ProfileSectionComponent';
+import { styles } from './styles';
+import { AppStore } from '../../redux';
+import reduxContainer from '../../redux/reduxContainer';
 import userActions from '../../redux/users/actions';
+import authActions from '../../redux/authentication/actions';
 import { ListType, UserDTO } from '../../redux/types';
 
 interface IProps {
@@ -22,16 +22,16 @@ interface IProps {
 
 const ProfileContainer = (props: IProps) => {
   useEffect(() => {
-    if (!props.user || props.user?._id !== props.auth_user?._id) {
+    if (props.auth_user?._id && !props.user) {
       props.getUserAction(props.auth_user?._id);
     }
-  }, []);
+  }, [props.getUserAction]);
 
   useEffect(() => {
     if (!props.auth_user && !props.logout_pending && !props.logout_error) {
       props.navigation.navigate('LogIn');
     }
-    if (!props.user || props.user?._id !== props.auth_user?._id) {
+    if (props.auth_user?._id && props.user?._id !== props.auth_user?._id) {
       props.getUserAction(props.auth_user?._id);
     }
   }, [props.auth_user]);
@@ -68,7 +68,7 @@ const ProfileContainer = (props: IProps) => {
           }}
         />
         <MenuButtonComponent
-          title="Add pet"
+          title="Add pet report"
           iconType="FontAwesome"
           iconName="plus"
           onPress={() => {

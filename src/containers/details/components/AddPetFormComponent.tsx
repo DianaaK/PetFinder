@@ -7,7 +7,6 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Animated,
   Keyboard,
   Alert,
   Image
@@ -21,7 +20,13 @@ import {
   ReportType,
   UserDTO
 } from '../../../redux/types';
-import { colors, DEVICE_WIDTH, fonts, isIOS } from '../../../styles';
+import {
+  colors,
+  DEVICE_WIDTH,
+  fonts,
+  formStyles,
+  isIOS
+} from '../../../styles';
 import {
   cloudinaryUpload,
   requestCameraPermission,
@@ -219,7 +224,7 @@ const AddPetFormComponent = (props: IProps) => {
             <TextComponent style={styles.questionText}>Pet name:</TextComponent>
             <TextInput
               value={petReport.name}
-              style={styles.input}
+              style={[formStyles.input, styles.input]}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, name: value })
               }
@@ -302,7 +307,7 @@ const AddPetFormComponent = (props: IProps) => {
             </TextComponent>
             <TextInput
               value={petReport.breed}
-              style={styles.input}
+              style={[formStyles.input, styles.input]}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, breed: value })
               }
@@ -312,7 +317,7 @@ const AddPetFormComponent = (props: IProps) => {
             <TextComponent style={styles.questionText}>Pet age:</TextComponent>
             <TextInput
               value={petReport.age}
-              style={styles.input}
+              style={[formStyles.input, styles.input]}
               onChangeText={(value) =>
                 setPetReport({ ...petReport, age: value })
               }
@@ -378,8 +383,10 @@ const AddPetFormComponent = (props: IProps) => {
             <TextComponent style={styles.questionText}>
               Upload pet pictures:
             </TextComponent>
-            <TouchableOpacity style={styles.formButton} onPress={uploadImages}>
-              <TextComponent style={styles.formButtonText}>
+            <TouchableOpacity
+              style={[formStyles.formButton, styles.formButton]}
+              onPress={uploadImages}>
+              <TextComponent style={formStyles.formButtonText}>
                 Upload
               </TextComponent>
             </TouchableOpacity>
@@ -398,26 +405,33 @@ const AddPetFormComponent = (props: IProps) => {
             <TextComponent style={styles.questionText}>
               Set last seen location:
             </TextComponent>
-            <TouchableOpacity style={styles.formButton} onPress={onMapOpen}>
-              <TextComponent style={styles.formButtonText}>
+            <TouchableOpacity
+              style={[formStyles.formButton, styles.formButton]}
+              onPress={onMapOpen}>
+              <TextComponent style={formStyles.formButtonText}>
                 Open Map
               </TextComponent>
             </TouchableOpacity>
           </View>
+          {(petReport.address || route.params?.address) && (
+            <TextComponent style={styles.questionText}>
+              {props.editMode ? petReport.address : route.params?.address}
+            </TextComponent>
+          )}
         </View>
       </ScrollView>
 
-      <View style={styles.sendButtonContainer}>
+      <View style={formStyles.saveButtonContainer}>
         <TouchableOpacity
-          style={styles.sendButton}
+          style={formStyles.saveButton}
           onPress={keyboardVisible ? dismissKeyboard : saveReport}>
-          <TextComponent style={styles.sendButtonText}>
+          <TextComponent style={formStyles.saveButtonText}>
             {keyboardVisible ? '' : 'Send'}
           </TextComponent>
           <IconComponent
             type="MaterialIcons"
             name={keyboardVisible ? 'keyboard-arrow-down' : 'arrow-forward-ios'}
-            style={[styles.icon, { fontSize: keyboardVisible ? 30 : 22 }]}
+            style={[formStyles.icon, { fontSize: keyboardVisible ? 30 : 22 }]}
           />
         </TouchableOpacity>
       </View>
@@ -446,15 +460,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   input: {
-    color: colors.mainColor2,
-    borderBottomColor: colors.mainColor3,
-    borderBottomWidth: 1,
-    width: DEVICE_WIDTH / 2,
-    marginBottom: 10,
-    marginLeft: 8,
-    padding: 0,
-    fontSize: 16,
-    fontFamily: fonts.mainFont
+    width: DEVICE_WIDTH / 2
   },
   multilineInput: {
     padding: 5,
@@ -467,45 +473,11 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   formButton: {
-    height: 45,
-    padding: 5,
+    marginTop: 0,
     width: DEVICE_WIDTH / 2.3,
-    backgroundColor: colors.mainColorLight3,
-    borderRadius: 10,
-    borderColor: colors.mainColorLight2,
-    borderWidth: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  },
-  formButtonText: {
-    fontSize: 14,
-    color: colors.mainColor2,
-    textTransform: 'uppercase'
-  },
-  sendButtonContainer: {
-    height: 50,
-    width: '100%',
-    backgroundColor: 'white',
-    borderTopColor: colors.mainColorLight,
-    borderTopWidth: 1
-  },
-  sendButton: {
-    height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingHorizontal: 15
-  },
-  sendButtonText: {
-    fontSize: 24,
-    fontFamily: fonts.secondFont,
-    color: colors.mainColor2,
-    marginBottom: 5
-  },
-  icon: {
-    fontSize: 22,
-    marginHorizontal: 8,
-    color: colors.mainColor2
+    alignSelf: 'flex-start'
   },
   image: {
     height: 100,

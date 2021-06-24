@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { HeaderComponent } from '../general';
 import UserFormComponent from './components/UserFormComponent';
@@ -9,10 +9,18 @@ import userActions from '../../redux/users/actions';
 interface IProps {
   navigation: any;
   user: UserDTO;
+  auth_user: UserDTO;
+  getUserAction(userId: string): void;
   editUserAction(userId: string, user: UserDTO): void;
 }
 
 const UserContainer = (props: IProps) => {
+  useEffect(() => {
+    if (props.auth_user?._id && !props.user) {
+      props.getUserAction(props.auth_user?._id);
+    }
+  }, [props.getUserAction]);
+
   const onBack = () => {
     props.navigation.goBack();
   };
@@ -36,12 +44,14 @@ const UserContainer = (props: IProps) => {
 
 function mapStateToProps(state: AppStore.states) {
   return {
-    user: state.user.user
+    user: state.user.user,
+    auth_user: state.auth.auth_user
   };
 }
 
 const dispatchToProps = {
-  editUserAction: userActions.editUserAction
+  editUserAction: userActions.editUserAction,
+  getUserAction: userActions.getUserAction
 };
 
 export default reduxContainer(UserContainer, mapStateToProps, dispatchToProps);

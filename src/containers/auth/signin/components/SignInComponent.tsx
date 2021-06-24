@@ -41,7 +41,7 @@ const SignInComponent = (props: IProps) => {
       }),
       Animated.timing(backImageHeight, {
         duration: event.duration,
-        toValue: 100,
+        toValue: 0,
         useNativeDriver: false
       })
     ]).start();
@@ -50,12 +50,12 @@ const SignInComponent = (props: IProps) => {
   const keyboardHide = (event: any) => {
     Animated.parallel([
       Animated.timing(imageHeight, {
-        duration: event ? event.duration : 100,
+        duration: event.duration,
         toValue: 180,
         useNativeDriver: false
       }),
       Animated.timing(backImageHeight, {
-        duration: event ? event.duration : 100,
+        duration: event.duration,
         toValue: DEVICE_HEIGHT / 3,
         useNativeDriver: false
       })
@@ -87,10 +87,7 @@ const SignInComponent = (props: IProps) => {
   return (
     <View style={styles.container}>
       <Animated.View
-        style={[
-          styles.logoContainer,
-          { display: imageHeight ? 'flex' : 'none' }
-        ]}>
+        style={[styles.logoContainer, { height: backImageHeight }]}>
         <Animated.Image
           source={assets.logoSmall}
           style={{ height: imageHeight }}

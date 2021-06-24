@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
   View,
   TextInput,
   ScrollView,
@@ -9,7 +8,7 @@ import {
   Keyboard,
   Alert
 } from 'react-native';
-import { colors, fonts, isIOS } from '../../../styles';
+import { isIOS, formStyles } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
 interface IProps {
@@ -84,40 +83,44 @@ const UserFormComponent = (props: IProps) => {
 
   return (
     <>
-      <ScrollView style={styles.container}>
-        <TextComponent style={styles.questionText}>Old password:</TextComponent>
+      <View style={formStyles.container}>
+        <TextComponent style={formStyles.questionText}>
+          Old password:
+        </TextComponent>
         <TextInput
           value={oldPassword}
-          style={styles.input}
+          style={formStyles.input}
           onChangeText={(value) => setOldPassword(value)}
         />
-        <TextComponent style={styles.questionText}>New password:</TextComponent>
+        <TextComponent style={formStyles.questionText}>
+          New password:
+        </TextComponent>
         <TextInput
           value={newPassword}
-          style={styles.input}
+          style={formStyles.input}
           onChangeText={(value) => setNewPassword(value)}
         />
-        <TextComponent style={styles.questionText}>
+        <TextComponent style={formStyles.questionText}>
           Repeat new password:
         </TextComponent>
         <TextInput
           value={confirmNewPassword}
-          style={styles.input}
+          style={formStyles.input}
           onChangeText={(value) => setConfirmNewPassword(value)}
         />
-      </ScrollView>
+      </View>
 
-      <View style={styles.saveButtonContainer}>
+      <View style={formStyles.saveButtonContainer}>
         <TouchableOpacity
-          style={styles.sendButton}
+          style={formStyles.saveButton}
           onPress={keyboardVisible ? dismissKeyboard : handleChangePassword}>
-          <TextComponent style={styles.sendButtonText}>
+          <TextComponent style={formStyles.saveButtonText}>
             {keyboardVisible ? '' : 'Change Password'}
           </TextComponent>
           <IconComponent
             type="MaterialIcons"
             name={keyboardVisible ? 'keyboard-arrow-down' : 'arrow-forward-ios'}
-            style={[styles.icon, { fontSize: keyboardVisible ? 30 : 22 }]}
+            style={[formStyles.icon, { fontSize: keyboardVisible ? 30 : 22 }]}
           />
         </TouchableOpacity>
       </View>
@@ -126,52 +129,3 @@ const UserFormComponent = (props: IProps) => {
 };
 
 export default UserFormComponent;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.lightGray2,
-    padding: 20
-  },
-  questionText: {
-    fontSize: 16,
-    color: colors.mainColor,
-    margin: 8
-  },
-  input: {
-    color: colors.mainColor2,
-    borderBottomColor: colors.mainColor3,
-    borderBottomWidth: 1,
-    width: '100%',
-    marginBottom: 10,
-    marginHorizontal: 8,
-    padding: 0,
-    fontSize: 16,
-    fontFamily: fonts.mainFont
-  },
-  saveButtonContainer: {
-    height: 50,
-    width: '100%',
-    backgroundColor: 'white',
-    borderTopColor: colors.mainColorLight,
-    borderTopWidth: 1
-  },
-  sendButton: {
-    height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 15
-  },
-  sendButtonText: {
-    fontSize: 24,
-    fontFamily: fonts.secondFont,
-    color: colors.mainColor2,
-    marginBottom: 5
-  },
-  icon: {
-    fontSize: 22,
-    marginHorizontal: 8,
-    color: colors.mainColor2
-  }
-});

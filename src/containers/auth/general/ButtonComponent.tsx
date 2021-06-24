@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 4,
     shadowOpacity: 1,
-    borderRadius: 28,
+    borderRadius: 15,
     marginVertical: 10,
     opacity: 0.8,
     elevation: 3,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    borderRadius: 24
+    borderRadius: 15
   },
   icon: {
     color: 'white'
