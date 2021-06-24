@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Checkbox, RadioButton } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 import {
   PetGender,
   PetReportDTO,
@@ -38,6 +39,8 @@ interface IProps {
   editMode: boolean;
   user: UserDTO;
   petReport: PetReportDTO;
+  pending: boolean;
+  error: string | null;
   saveReportAction(report: PetReportDTO): void;
 }
 
@@ -46,6 +49,7 @@ const AddPetFormComponent = (props: IProps) => {
   const route: any = useRoute();
 
   const [petReport, setPetReport] = useState(props.petReport);
+  const [isDirty, setIsDirty] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
   let keyboardShowListener: any;
@@ -72,6 +76,16 @@ const AddPetFormComponent = (props: IProps) => {
       keyboardHideListener.remove();
     };
   }, []);
+
+  useEffect(() => {
+    console.log(isDirty);
+    console.log(props.pending);
+    if (isDirty && !props.pending && !props.error) {
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+    }
+  }, [props.pending]);
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -109,6 +123,7 @@ const AddPetFormComponent = (props: IProps) => {
                 const petMedia = petReport.media;
                 petMedia.push(data.secure_url);
                 setPetReport({ ...petReport, media: petMedia });
+                setIsDirty(true);
               }
             })
             .catch((error) => {
@@ -140,6 +155,7 @@ const AddPetFormComponent = (props: IProps) => {
               const petMedia = petReport.media;
               petMedia.push(data.secure_url);
               setPetReport({ ...petReport, media: petMedia });
+              setIsDirty(true);
             }
           })
           .catch((error) => console.warn(error));
@@ -156,6 +172,7 @@ const AddPetFormComponent = (props: IProps) => {
           const petMedia = petReport.media;
           petMedia.splice(index, 1);
           setPetReport({ ...petReport, media: petMedia });
+          setIsDirty(true);
         }
       }
     ]);
@@ -171,15 +188,63 @@ const AddPetFormComponent = (props: IProps) => {
     );
   };
 
+  const handleChange = (field: string, value: any) => {
+    setIsDirty(true);
+    setPetReport({ ...petReport, [field]: value });
+  };
+
+  const isValid = () => {
+    const incompleteData = !(
+      petReport.name &&
+      petReport.description &&
+      petReport.breed &&
+      petReport.age
+    );
+    const invalidTypes =
+      petReport.type === null ||
+      petReport.gender === null ||
+      petReport.species === null;
+    if (incompleteData || invalidTypes) {
+      Toast.show({
+        type: 'info',
+        text1: 'You must complete all the fields!',
+        visibilityTime: 2500
+      });
+      return false;
+    } else if (!petReport.media.length) {
+      Toast.show({
+        type: 'info',
+        text1: 'You must upload at least one photo!',
+        visibilityTime: 2500
+      });
+      return false;
+    } else if (!(petReport.address || route.params.address)) {
+      Toast.show({
+        type: 'info',
+        text1: 'You must provide an address!',
+        visibilityTime: 2500
+      });
+      return false;
+    }
+    return true;
+  };
+
   const saveReport = () => {
-    const dataToSend: any = {
-      ...petReport,
-      user: props.editMode ? undefined : props.user._id,
-      address: route.params.address,
-      coordinates: route.params.coordinates
-    };
-    props.saveReportAction(dataToSend);
-    navigation.goBack();
+    if (isValid() && isDirty) {
+      const dataToSend: any = {
+        ...petReport,
+        user: props.editMode ? undefined : props.user._id,
+        address: route.params.address,
+        coordinates: route.params.coordinates
+      };
+      props.saveReportAction(dataToSend);
+    } else if (!isDirty) {
+      Toast.show({
+        type: 'info',
+        text1: 'No modified fields!',
+        visibilityTime: 1000
+      });
+    }
   };
 
   return (
@@ -225,9 +290,7 @@ const AddPetFormComponent = (props: IProps) => {
             <TextInput
               value={petReport.name}
               style={[formStyles.input, styles.input]}
-              onChangeText={(value) =>
-                setPetReport({ ...petReport, name: value })
-              }
+              onChangeText={(value) => handleChange('name', value)}
             />
           </View>
 
@@ -236,9 +299,7 @@ const AddPetFormComponent = (props: IProps) => {
               Pet gender:
             </TextComponent>
             <RadioButton.Group
-              onValueChange={(value) =>
-                setPetReport({ ...petReport, gender: Number(value) })
-              }
+              onValueChange={(value) => handleChange('gender', Number(value))}
               value={petReport.gender + ''}>
               <View
                 style={[
@@ -270,9 +331,7 @@ const AddPetFormComponent = (props: IProps) => {
               Pet species:
             </TextComponent>
             <RadioButton.Group
-              onValueChange={(value) =>
-                setPetReport({ ...petReport, species: Number(value) })
-              }
+              onValueChange={(value) => handleChange('species', Number(value))}
               value={petReport.species + ''}>
               <View style={styles.rowContainer}>
                 <RadioButton
@@ -308,9 +367,7 @@ const AddPetFormComponent = (props: IProps) => {
             <TextInput
               value={petReport.breed}
               style={[formStyles.input, styles.input]}
-              onChangeText={(value) =>
-                setPetReport({ ...petReport, breed: value })
-              }
+              onChangeText={(value) => handleChange('breed', value)}
             />
           </View>
           <View style={[styles.questionContainer, styles.rowContainer]}>
@@ -318,9 +375,7 @@ const AddPetFormComponent = (props: IProps) => {
             <TextInput
               value={petReport.age}
               style={[formStyles.input, styles.input]}
-              onChangeText={(value) =>
-                setPetReport({ ...petReport, age: value })
-              }
+              onChangeText={(value) => handleChange('age', value)}
             />
           </View>
 
@@ -333,9 +388,7 @@ const AddPetFormComponent = (props: IProps) => {
               style={styles.multilineInput}
               multiline={true}
               numberOfLines={6}
-              onChangeText={(value) =>
-                setPetReport({ ...petReport, description: value })
-              }
+              onChangeText={(value) => handleChange('description', value)}
             />
           </View>
 
@@ -347,6 +400,7 @@ const AddPetFormComponent = (props: IProps) => {
               <Checkbox
                 status={petReport.phoneContact ? 'checked' : 'unchecked'}
                 onPress={() => {
+                  handleChange('phoneContact', !petReport.phoneContact);
                   setPetReport({
                     ...petReport,
                     phoneContact: !petReport.phoneContact
@@ -365,10 +419,7 @@ const AddPetFormComponent = (props: IProps) => {
               <Checkbox
                 status={petReport.emailContact ? 'checked' : 'unchecked'}
                 onPress={() => {
-                  setPetReport({
-                    ...petReport,
-                    emailContact: !petReport.emailContact
-                  });
+                  handleChange('emailContact', !petReport.emailContact);
                 }}
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}

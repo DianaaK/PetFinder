@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import Toast from 'react-native-toast-message';
 import { PetReportStore } from './index';
 import { buildCriteria, Server } from '../../utils';
 import { PetReportDTO } from '../types';
@@ -51,6 +52,11 @@ class PetReportActions implements IPetReportActions {
             type: PetReportStore.ActionTypes.ADD_REPORT_SUCCESS,
             payload: response.data as PetReportDTO
           });
+          Toast.show({
+            type: 'success',
+            text1: 'Pet report added successfully!',
+            visibilityTime: 2500
+          });
           dispatch(
             PetReportStore.actions.getUserReportListAction(response.data.user)
           );
@@ -60,6 +66,11 @@ class PetReportActions implements IPetReportActions {
           dispatch({
             type: PetReportStore.ActionTypes.ADD_REPORT_FAILED,
             payload: Server.errorParse(error)
+          });
+          Toast.show({
+            type: 'error',
+            text1: 'Due to an error, the pet report could not be added!',
+            visibilityTime: 2500
           });
         });
     };
@@ -76,11 +87,21 @@ class PetReportActions implements IPetReportActions {
             type: PetReportStore.ActionTypes.EDIT_REPORT_SUCCESS,
             payload: response.data as PetReportDTO
           });
+          Toast.show({
+            type: 'success',
+            text1: 'Pet report edited successfully!',
+            visibilityTime: 2500
+          });
         })
         .catch((error) => {
           dispatch({
             type: PetReportStore.ActionTypes.EDIT_REPORT_FAILED,
             payload: Server.errorParse(error)
+          });
+          Toast.show({
+            type: 'error',
+            text1: 'Due to an error, the pet report could not be edited!',
+            visibilityTime: 2500
           });
         });
     };
@@ -196,6 +217,11 @@ class PetReportActions implements IPetReportActions {
             type: PetReportStore.ActionTypes.DELETE_REPORT_SUCCESS,
             payload: response.data as PetReportDTO
           });
+          Toast.show({
+            type: 'success',
+            text1: 'Pet report deleted successfully!',
+            visibilityTime: 2500
+          });
           dispatch(
             PetReportStore.actions.getUserReportListAction(
               response.data.user._id
@@ -207,6 +233,11 @@ class PetReportActions implements IPetReportActions {
           dispatch({
             type: PetReportStore.ActionTypes.DELETE_REPORT_FAILED,
             payload: Server.errorParse(error)
+          });
+          Toast.show({
+            type: 'error',
+            text1: 'Due to an error, the pet report could not be deleted!',
+            visibilityTime: 2500
           });
         });
     };

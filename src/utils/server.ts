@@ -3,9 +3,6 @@ import { store, AuthStore } from '../redux';
 
 const defOrigin = 'https://pet-finder-licenta.herokuapp.com';
 
-/*
-  Class that implements all server functions.
-*/
 class Server {
   origin?: string;
   token?: string;

@@ -11,6 +11,10 @@ interface IProps {
   navigation: any;
   user: UserDTO;
   report: PetReportDTO | null;
+  add_report_pending: boolean;
+  add_report_error: string | null;
+  edit_report_pending: boolean;
+  edit_report_error: string | null;
   addPetReportAction(petReport: PetReportDTO): void;
   editPetReportAction(reportId: string, report: PetReportDTO): void;
 }
@@ -47,6 +51,10 @@ const AddPetContainer = (props: IProps) => {
         user={props.user}
         editMode={editMode}
         petReport={petReport}
+        pending={
+          editMode ? props.edit_report_pending : props.add_report_pending
+        }
+        error={editMode ? props.edit_report_error : props.add_report_error}
         saveReportAction={saveReport}
       />
     </View>
@@ -56,7 +64,11 @@ const AddPetContainer = (props: IProps) => {
 function mapStateToProps(state: AppStore.states) {
   return {
     user: state.user.user,
-    report: state.petReports.report
+    report: state.petReports.report,
+    add_report_pending: state.petReports.add_report_pending,
+    add_report_error: state.petReports.add_report_error,
+    edit_report_pending: state.petReports.edit_report_pending,
+    edit_report_error: state.petReports.edit_report_error
   };
 }
 

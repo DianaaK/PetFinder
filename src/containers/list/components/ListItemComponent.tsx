@@ -108,16 +108,18 @@ export const ListItemComponent = (props: IProps) => {
         <View
           style={[
             styles.flexRowContainer,
-            { marginVertical: 10, marginRight: 8 }
+            { marginVertical: 10, marginRight: 8, paddingBottom: 5 }
           ]}>
           <IconComponent
             type="MaterialIcons"
             name="location-pin"
             style={styles.icon}
           />
-          <TextComponent style={styles.location}>
-            {props.item.address}
-          </TextComponent>
+          <View style={styles.locationContainer}>
+            <TextComponent style={styles.location} noOfLines={2}>
+              {props.item.address}
+            </TextComponent>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -221,11 +223,15 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     fontFamily: fonts.secondFont
   },
+  locationContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
   location: {
     color: colors.mainColor4,
     fontSize: 12,
     fontWeight: '500',
-    marginVertical: 10,
     fontFamily: fonts.secondFont
   },
   icon: {

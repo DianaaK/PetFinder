@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import Toast from 'react-native-toast-message';
 import { ReportedLocationsStore } from './index';
 import { Server } from '../../utils';
 import { ReportedLocationDTO } from '../types';
@@ -20,6 +21,11 @@ class LocationActions implements ILocationsActions {
             type: ReportedLocationsStore.ActionTypes.ADD_LOCATION_SUCCESS,
             payload: response.data as ReportedLocationDTO
           });
+          Toast.show({
+            type: 'success',
+            text1: 'Pet location added successfully!',
+            visibilityTime: 2500
+          });
           dispatch(
             ReportedLocationsStore.actions.getPetLocationsAction(
               petLocation.petId
@@ -30,6 +36,11 @@ class LocationActions implements ILocationsActions {
           dispatch({
             type: ReportedLocationsStore.ActionTypes.ADD_LOCATION_FAILED,
             payload: Server.errorParse(error)
+          });
+          Toast.show({
+            type: 'error',
+            text1: 'Due to an error, the pet location could not be added!',
+            visibilityTime: 2500
           });
         });
     };
