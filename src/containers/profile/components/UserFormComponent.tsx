@@ -8,6 +8,7 @@ import {
   Keyboard,
   Switch
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { UserDTO } from '../../../redux/types';
 import { colors, formStyles, isIOS } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
@@ -19,6 +20,8 @@ const trackColors = {
 
 interface IProps {
   user: UserDTO;
+  edit_user_pending: boolean;
+  edit_user_error: string | null;
   editUser(userId: string, user: UserDTO): void;
 }
 
@@ -26,6 +29,7 @@ const UserFormComponent = (props: IProps) => {
   const navigation = useNavigation();
 
   const [user, setUser] = useState(props.user);
+  const [isDirty, setIsDirty] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
   let keyboardShowListener: any;
@@ -53,11 +57,25 @@ const UserFormComponent = (props: IProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isDirty && !props.edit_user_pending && !props.edit_user_error) {
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+    }
+  }, [props.edit_user_pending]);
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
 
+  const handleChange = (field: string, value: string) => {
+    setIsDirty(true);
+    setUser({ ...user, [field]: value });
+  };
+
   const toggleSwitch = (field: string) => {
+    setIsDirty(true);
     if (field === 'useSatelliteView') {
       setUser({ ...user, useSatelliteView: !user.useSatelliteView });
     } else {
@@ -65,11 +83,44 @@ const UserFormComponent = (props: IProps) => {
     }
   };
 
+  const isValid = () => {
+    const emailRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+    const numberRegex = new RegExp('^[0-9]+$');
+    if (!user.email || !user.firstname || !user.lastname) {
+      Toast.show({
+        type: 'info',
+        text1: 'Name and email fields are required!',
+        visibilityTime: 1000
+      });
+      return false;
+    } else if (!emailRegex.test(user.email.trim())) {
+      Toast.show({
+        type: 'info',
+        text1: 'Email address is not valid!',
+        visibilityTime: 1000
+      });
+      return false;
+    } else if (user.phone && !numberRegex.test(user.phone)) {
+      Toast.show({
+        type: 'info',
+        text1: 'Phone number is not valid!',
+        visibilityTime: 1000
+      });
+      return false;
+    }
+    return true;
+  };
+
   const saveUser = () => {
-    props.editUser(user._id, user);
-    setTimeout(() => {
-      navigation.goBack();
-    }, 1000);
+    if (isDirty && isValid()) {
+      props.editUser(user._id, user);
+    } else if (!isDirty) {
+      Toast.show({
+        type: 'info',
+        text1: 'No modified fields!',
+        visibilityTime: 1000
+      });
+    }
   };
 
   return (
@@ -81,7 +132,7 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={user.firstname}
           style={formStyles.input}
-          onChangeText={(value) => setUser({ ...user, firstname: value })}
+          onChangeText={(value) => handleChange('firstname', value)}
         />
         <TextComponent style={formStyles.questionText}>
           Last name:
@@ -89,13 +140,14 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={user.lastname}
           style={formStyles.input}
-          onChangeText={(value) => setUser({ ...user, lastname: value })}
+          onChangeText={(value) => handleChange('lastname', value)}
         />
         <TextComponent style={formStyles.questionText}>Email:</TextComponent>
         <TextInput
           value={user.email}
           style={formStyles.input}
-          onChangeText={(value) => setUser({ ...user, email: value })}
+          autoCapitalize="none"
+          onChangeText={(value) => handleChange('email', value)}
         />
         <TextComponent style={formStyles.questionText}>
           Phone number:
@@ -103,7 +155,7 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={user.phone || ''}
           style={formStyles.input}
-          onChangeText={(value) => setUser({ ...user, phone: value })}
+          onChangeText={(value) => handleChange('phone', value)}
         />
 
         <View style={formStyles.rowContainer}>

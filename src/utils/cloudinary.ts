@@ -1,3 +1,5 @@
+import Toast from 'react-native-toast-message';
+
 export const cloudinaryUpload = async (photo: any) => {
   const data = new FormData();
   data.append('file', photo);
@@ -9,6 +11,11 @@ export const cloudinaryUpload = async (photo: any) => {
   })
     .then((res) => res.json())
     .catch(() => {
+      Toast.show({
+        type: 'error',
+        text1: 'Due to an error, we could not upload your image!',
+        visibilityTime: 1000
+      });
       return null;
     });
 };

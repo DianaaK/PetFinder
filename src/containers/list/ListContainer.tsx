@@ -157,7 +157,7 @@ const ListContainer = (props: IProps) => {
               saveQuery={saveQuery}
             />
           }
-          ListEmptyComponent={<EmptyComponent />}
+          ListEmptyComponent={!isPending ? <EmptyComponent /> : null}
           data={
             forUser
               ? props.user_report_list

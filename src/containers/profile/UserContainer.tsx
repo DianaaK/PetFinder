@@ -9,6 +9,8 @@ import userActions from '../../redux/users/actions';
 interface IProps {
   navigation: any;
   user: UserDTO;
+  edit_user_pending: boolean;
+  edit_user_error: string | null;
   auth_user: UserDTO;
   getUserAction(userId: string): void;
   editUserAction(userId: string, user: UserDTO): void;
@@ -36,7 +38,12 @@ const UserContainer = (props: IProps) => {
         }}
       />
       {props.user ? (
-        <UserFormComponent user={props.user} editUser={props.editUserAction} />
+        <UserFormComponent
+          user={props.user}
+          edit_user_pending={props.edit_user_pending}
+          edit_user_error={props.edit_user_error}
+          editUser={props.editUserAction}
+        />
       ) : null}
     </View>
   );
@@ -45,6 +52,8 @@ const UserContainer = (props: IProps) => {
 function mapStateToProps(state: AppStore.states) {
   return {
     user: state.user.user,
+    edit_user_pending: state.user.edit_user_pending,
+    edit_user_error: state.user.edit_user_error,
     auth_user: state.auth.auth_user
   };
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import Toast from 'react-native-toast-message';
 import { assets } from '../../../../assets/images';
 import { UserDTO } from '../../../redux/types';
 import { colors, DEVICE_WIDTH } from '../../../styles';
@@ -45,7 +46,13 @@ const ProfileSectionComponent = (props: IProps) => {
               props.editUser({ profileImage: data.secure_url });
             }
           })
-          .catch((error) => console.warn(error));
+          .catch(() =>
+            Toast.show({
+              type: 'error',
+              text1: 'Due to an error, we could not upload your image!',
+              visibilityTime: 1000
+            })
+          );
       }
     });
   };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, View, Animated, Alert } from 'react-native';
+import { Keyboard, View, Animated } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { assets } from '../../../../../assets/images';
 import { InputComponent } from '../../../general';
 import { ButtonComponent } from '../../general';
@@ -71,16 +72,40 @@ const SignInComponent = (props: IProps) => {
     props.redirectToLogin();
   };
 
+  const isValid = () => {
+    const incompleteUser = Object.values(user).some((item) => !item);
+    const emailRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+    if (incompleteUser) {
+      Toast.show({
+        type: 'error',
+        topOffset: 50,
+        text1: 'No credentials!',
+        text2: 'Please provide all the information required.',
+        visibilityTime: 2500
+      });
+      return false;
+    } else if (!emailRegex.test(user.email.trim())) {
+      Toast.show({
+        type: 'info',
+        text1: 'Email address is not valid!',
+        visibilityTime: 1000
+      });
+      return false;
+    } else if (user.password.length < 6) {
+      Toast.show({
+        type: 'info',
+        text1: 'Password must have at least 6 characters!',
+        visibilityTime: 2500
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSignIn = () => {
     Keyboard.dismiss();
-    if (user.email && user.password) {
+    if (isValid()) {
       props.handleSignIn(user);
-    } else {
-      Alert.alert(
-        'No credentials!',
-        'Please provide all the information required.',
-        [{ text: 'OK' }]
-      );
     }
   };
 

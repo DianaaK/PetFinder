@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Popup } from 'react-native-map-link';
 import MapView, { PROVIDER_GOOGLE, Marker, MAP_TYPES } from 'react-native-maps';
+import Toast from 'react-native-toast-message';
 import {
   CoordinatesDTO,
   PetReportDTO,
@@ -115,9 +116,24 @@ export default function PetMapComponent(props: IProps) {
     setAddMarkerMode(true);
   };
 
+  const isValid = () => {
+    if (!address) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid address!',
+        text2: 'The new address must be different from the reported one.',
+        visibilityTime: 1000
+      });
+      return false;
+    }
+    return true;
+  };
+
   const saveReportedLocation = () => {
-    props.addPetLocationAction(address, savedCoordinates.current);
-    setAddMarkerMode(false);
+    if (isValid()) {
+      props.addPetLocationAction(address, savedCoordinates.current);
+      setAddMarkerMode(false);
+    }
   };
 
   const searchAddress = async () => {
@@ -136,7 +152,13 @@ export default function PetMapComponent(props: IProps) {
           longitude: coords.lng
         };
       })
-      .catch((error) => console.warn(error));
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'We could not find any results for this location!',
+          visibilityTime: 1000
+        });
+      });
   };
 
   const setMarkerPosition = async (event: any) => {
@@ -152,7 +174,13 @@ export default function PetMapComponent(props: IProps) {
         const address = result.formatted_address;
         setAddress(address || '');
       })
-      .catch((error) => console.warn(error));
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'We could not find any results for this location!',
+          visibilityTime: 1000
+        });
+      });
   };
 
   const renderExternalNavigation = () => (
@@ -274,17 +302,21 @@ export default function PetMapComponent(props: IProps) {
           </>
         )}
         {addMarkerMode && (
-          <View style={styles.addressInputContainer}>
+          <View style={mapStyles.addressInputContainer}>
             <TextInput
               placeholder={'Write an address'}
               value={address}
               onChangeText={setAddress}
-              style={styles.addressInput}
+              style={mapStyles.addressInput}
             />
             <TouchableOpacity
-              style={styles.sendAddressButton}
+              style={mapStyles.sendAddressButton}
               onPress={searchAddress}>
-              <IconComponent type="Ionicons" name="send" style={styles.icon} />
+              <IconComponent
+                type="Ionicons"
+                name="send"
+                style={mapStyles.icon}
+              />
             </TouchableOpacity>
           </View>
         )}
@@ -307,29 +339,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 24,
-    color: 'white'
-  },
-  addressInputContainer: {
-    position: 'absolute',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    bottom: 0,
-    marginHorizontal: '10%',
-    marginBottom: 10
-  },
-  addressInput: {
-    backgroundColor: colors.mainColorLight,
-    width: '90%'
-  },
-  sendAddressButton: {
-    left: -4,
-    width: 50,
-    backgroundColor: colors.mainColorLight2,
-    justifyContent: 'center'
-  },
-  icon: {
-    fontSize: 20,
     color: 'white'
   }
 });

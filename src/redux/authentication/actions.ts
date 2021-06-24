@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
+import Toast from 'react-native-toast-message';
 import { AuthStore } from './index';
 import { Server } from '../../utils';
 import { RegisterUserDTO } from '../types';
-import { Alert } from 'react-native';
 
 export interface IAuthActions {
   registerAction(user: RegisterUserDTO): void;
@@ -52,11 +52,12 @@ class AuthActions implements IAuthActions {
           });
         })
         .catch((error) => {
-          Alert.alert(
-            'Username or password is incorrect!',
-            'Please provide a valid email and password combination',
-            [{ text: 'OK' }]
-          );
+          Toast.show({
+            type: 'error',
+            topOffset: 50,
+            text1: 'Username or password is incorrect!',
+            text2: 'Please provide a valid email and password combination.'
+          });
           dispatch({
             type: AuthStore.ActionTypes.LOGIN_FAILED,
             payload: Server.errorParse(error)
@@ -92,14 +93,22 @@ class AuthActions implements IAuthActions {
             type: AuthStore.ActionTypes.CHANGE_PASSWORD_SUCCESS,
             payload: response.data
           });
-          Alert.alert('Password changed successfully!', '', [{ text: 'OK' }]);
+          Toast.show({
+            type: 'success',
+            text1: 'Password changed successfully!',
+            visibilityTime: 2500
+          });
         })
         .catch((error) => {
           dispatch({
             type: AuthStore.ActionTypes.CHANGE_PASSWORD_FAILED,
             payload: error
           });
-          Alert.alert('Old password is incorrect', '', [{ text: 'OK' }]);
+          Toast.show({
+            type: 'error',
+            text1: 'Incorrect old password!',
+            visibilityTime: 2500
+          });
         });
     };
   }

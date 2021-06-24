@@ -1,13 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Keyboard,
-  Alert
-} from 'react-native';
+import { View, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { isIOS, formStyles } from '../../../styles';
 import { IconComponent, TextComponent } from '../../general';
 
@@ -69,14 +63,36 @@ const UserFormComponent = (props: IProps) => {
     Keyboard.dismiss();
   };
 
+  const isValid = () => {
+    if (!newPassword || !confirmNewPassword) {
+      Toast.show({
+        type: 'error',
+        text1: !newPassword
+          ? 'Please enter a new password!'
+          : 'Please confirm your new password!',
+        visibilityTime: 2500
+      });
+      return false;
+    } else if (newPassword !== confirmNewPassword) {
+      Toast.show({
+        type: 'error',
+        text1: 'Passwords are not identical!',
+        visibilityTime: 2500
+      });
+      return false;
+    } else if (newPassword.length < 6) {
+      Toast.show({
+        type: 'info',
+        text1: 'Password must have at least 6 characters!',
+        visibilityTime: 2500
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleChangePassword = () => {
-    if (newPassword !== confirmNewPassword) {
-      Alert.alert(
-        'Passwords are not identical!',
-        'Please check your new password!',
-        [{ text: 'OK' }]
-      );
-    } else {
+    if (isValid()) {
       props.changePassword(props.userEmail, oldPassword, newPassword);
     }
   };
@@ -90,6 +106,7 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={oldPassword}
           style={formStyles.input}
+          secureTextEntry={true}
           onChangeText={(value) => setOldPassword(value)}
         />
         <TextComponent style={formStyles.questionText}>
@@ -98,6 +115,7 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={newPassword}
           style={formStyles.input}
+          secureTextEntry={true}
           onChangeText={(value) => setNewPassword(value)}
         />
         <TextComponent style={formStyles.questionText}>
@@ -106,6 +124,7 @@ const UserFormComponent = (props: IProps) => {
         <TextInput
           value={confirmNewPassword}
           style={formStyles.input}
+          secureTextEntry={true}
           onChangeText={(value) => setConfirmNewPassword(value)}
         />
       </View>

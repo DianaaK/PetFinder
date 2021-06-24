@@ -29,7 +29,10 @@ const ProfileContainer = (props: IProps) => {
 
   useEffect(() => {
     if (!props.auth_user && !props.logout_pending && !props.logout_error) {
-      props.navigation.navigate('LogIn');
+      props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'LogIn' }]
+      });
     }
     if (props.auth_user?._id && props.user?._id !== props.auth_user?._id) {
       props.getUserAction(props.auth_user?._id);

@@ -460,7 +460,8 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   input: {
-    width: DEVICE_WIDTH / 2
+    width: DEVICE_WIDTH / 2,
+    paddingLeft: 5
   },
   multilineInput: {
     padding: 5,

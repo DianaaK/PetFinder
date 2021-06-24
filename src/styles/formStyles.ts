@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { DEVICE_WIDTH, fonts } from '.';
 import { colors } from './colors';
+import { isIOS } from './deviceHelper';
 
 export const formStyles = StyleSheet.create({
   container: {
@@ -15,8 +16,7 @@ export const formStyles = StyleSheet.create({
   questionText: {
     fontSize: 16,
     color: colors.mainColor,
-    margin: 8,
-    marginBottom: 3
+    marginVertical: 5
   },
   input: {
     color: colors.mainColor2,
@@ -24,8 +24,8 @@ export const formStyles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%',
     marginBottom: 10,
-    marginHorizontal: 8,
-    padding: 0,
+    marginRight: 8,
+    padding: isIOS ? 5 : 0,
     fontSize: 16,
     fontFamily: fonts.mainFont
   },

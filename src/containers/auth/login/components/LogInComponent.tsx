@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, View, Animated, Alert } from 'react-native';
+import { Keyboard, View, Animated } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { assets } from '../../../../../assets/images';
 import { InputComponent } from '../../../general';
 import { ButtonComponent } from '../../general';
@@ -65,14 +66,24 @@ const LogInComponent = (props: IProps) => {
     setUser({ ...user, [field]: text });
   };
 
+  const isValid = () => {
+    if (!user.email || !user.password) {
+      Toast.show({
+        type: 'error',
+        topOffset: 50,
+        text1: 'No credentials!',
+        text2: 'Please provide both email and password.',
+        visibilityTime: 2500
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleLogin = () => {
     Keyboard.dismiss();
-    if (user.email && user.password) {
+    if (isValid()) {
       props.handleLogin(user);
-    } else {
-      Alert.alert('No credentials!', 'Please provide both email and password', [
-        { text: 'OK' }
-      ]);
     }
   };
 

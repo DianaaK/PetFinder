@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Keyboard,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   View
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { MAP_TYPES, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import Toast from 'react-native-toast-message';
 import { CoordinatesDTO } from '../../redux/types';
 import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../styles';
 import {
@@ -17,6 +17,7 @@ import {
   getCoordinatesFromAddress
 } from '../../utils';
 import { HeaderComponent, IconComponent } from '../general';
+import { mapStyles } from './components/styles';
 
 const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 const LATITUDE_DELTA = 0.007;
@@ -44,7 +45,7 @@ export default function AddMarkerContainer(props: IProps) {
     Geolocation.getCurrentPosition(
       getCurrentPositionSuccess,
       setDefaultPosition,
-      { timeout: 3000 }
+      { timeout: 4000 }
     );
   }, []);
 
@@ -95,7 +96,13 @@ export default function AddMarkerContainer(props: IProps) {
         const address = result.formatted_address;
         setAddress(address || '');
       })
-      .catch((error) => console.warn(error));
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'We could not find any results for this location!',
+          visibilityTime: 1000
+        });
+      });
   };
 
   const searchAddress = async () => {
@@ -114,7 +121,13 @@ export default function AddMarkerContainer(props: IProps) {
           longitude: coords.lng
         };
       })
-      .catch((error) => console.warn(error));
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'We could not find any results for this location!',
+          visibilityTime: 1000
+        });
+      });
   };
 
   const user = {
@@ -123,7 +136,7 @@ export default function AddMarkerContainer(props: IProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={mapStyles.container}>
       <HeaderComponent
         title="Choose a location"
         leftButtonAction={onBack}
@@ -138,7 +151,7 @@ export default function AddMarkerContainer(props: IProps) {
         }}
       />
       {positionPending ? (
-        <View style={styles.loadingContainer}>
+        <View style={mapStyles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.mainColorLight} />
         </View>
       ) : (
@@ -146,7 +159,7 @@ export default function AddMarkerContainer(props: IProps) {
           <MapView
             provider={user.provider}
             mapType={user.mapType}
-            style={styles.map}
+            style={mapStyles.map}
             initialRegion={{
               ...position,
               latitudeDelta: LATITUDE_DELTA,
@@ -161,17 +174,21 @@ export default function AddMarkerContainer(props: IProps) {
               pinColor="green"
             />
           </MapView>
-          <View style={styles.addressInputContainer}>
+          <View style={mapStyles.addressInputContainer}>
             <TextInput
               placeholder={'Write an address'}
               value={address}
               onChangeText={setAddress}
-              style={styles.addressInput}
+              style={mapStyles.addressInput}
             />
             <TouchableOpacity
-              style={styles.sendAddressButton}
+              style={mapStyles.sendAddressButton}
               onPress={searchAddress}>
-              <IconComponent type="Ionicons" name="send" style={styles.icon} />
+              <IconComponent
+                type="Ionicons"
+                name="send"
+                style={mapStyles.icon}
+              />
             </TouchableOpacity>
           </View>
         </>
@@ -179,41 +196,3 @@ export default function AddMarkerContainer(props: IProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  map: {
-    flex: 1
-  },
-  addressInputContainer: {
-    position: 'absolute',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    bottom: 0,
-    marginHorizontal: '10%',
-    marginBottom: 10
-  },
-  addressInput: {
-    backgroundColor: colors.mainColorLight,
-    width: '90%'
-  },
-  sendAddressButton: {
-    left: -4,
-    width: 50,
-    backgroundColor: colors.mainColorLight2,
-    justifyContent: 'center'
-  },
-  icon: {
-    fontSize: 20,
-    color: 'white'
-  },
-  loadingContainer: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center'
-  }
-});
