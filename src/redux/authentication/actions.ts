@@ -27,7 +27,7 @@ class AuthActions implements IAuthActions {
             type: AuthStore.ActionTypes.REGISTER_SUCCESS
           });
           dispatch(
-            AuthStore.actions.loginAction(user.data.email, user.data.password)
+            authActions.loginAction(user.data.email, user.data.password)
           );
         })
         .catch((error) => {
