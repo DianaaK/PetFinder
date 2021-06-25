@@ -44,8 +44,8 @@ const ProfileContainer = (props: IProps) => {
   };
 
   const logOutAction = () => {
-    props.navigation.closeDrawer();
     props.logoutAction();
+    props.navigation.closeDrawer();
   };
 
   const redirect = (screen: string, params?: any) => {

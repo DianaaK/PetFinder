@@ -157,13 +157,15 @@ const PetDetailsComponent = (props: IProps) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <TouchableOpacity
-          style={styles.navigateButton}
-          onPress={openNavigationHandler}>
-          <TextComponent style={styles.navigateButtonText}>
-            Navigate to {pet.name}!
-          </TextComponent>
-        </TouchableOpacity>
+        <View style={styles.navigateContainer}>
+          <TouchableOpacity
+            style={styles.navigateButton}
+            onPress={openNavigationHandler}>
+            <TextComponent style={styles.navigateButtonText}>
+              Navigate to {pet.name}!
+            </TextComponent>
+          </TouchableOpacity>
+        </View>
       )}
       {props.isUserOwner && (
         <View style={styles.ownerSection}>

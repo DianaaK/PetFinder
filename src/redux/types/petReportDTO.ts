@@ -48,6 +48,6 @@ export enum PetGender {
 }
 
 export enum ReportStatus {
-  ACTIVE,
-  INACTIVE
+  INACTIVE,
+  ACTIVE
 }

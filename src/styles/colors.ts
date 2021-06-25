@@ -11,6 +11,7 @@ export const colors = {
   lightGray: '#f1f1f1',
   lightGray2: '#efefef',
   itemBorderBottom: '#ccddee',
+  lightGreen: '#abe0b9',
   green: '#50a166',
   red: '#c23c42'
 };

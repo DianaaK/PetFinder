@@ -16,7 +16,7 @@ export const formStyles = StyleSheet.create({
   questionText: {
     fontSize: 16,
     color: colors.mainColor,
-    marginVertical: 5
+    marginRight: 8
   },
   input: {
     color: colors.mainColor2,

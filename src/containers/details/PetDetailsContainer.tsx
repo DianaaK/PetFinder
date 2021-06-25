@@ -106,7 +106,6 @@ export default reduxContainer(
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: statusBarHeight,
     flex: 1
   },
   detailsContainer: {

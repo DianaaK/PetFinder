@@ -17,11 +17,9 @@ export const rootReducer: Reducer<any> = combineReducers({
 
 export const appReducer = (state: any, action: any) => {
   if (action.type === 'LOGOUT') {
-    setTimeout(() => {
-      state.user = undefined;
-      state.petReports = undefined;
-      state.petLocations = undefined;
-    }, 1000);
+    state.user = undefined;
+    state.petReports = undefined;
+    state.petLocations = undefined;
     if (state && state.appConfig) {
       const persistState = { appConfig: state.appConfig };
       state = persistState;

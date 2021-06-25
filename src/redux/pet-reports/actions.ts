@@ -92,6 +92,12 @@ class PetReportActions implements IPetReportActions {
             text1: 'Pet report edited successfully!',
             visibilityTime: 2500
           });
+          dispatch(
+            PetReportStore.actions.getUserReportListAction(
+              response.data.user._id
+            )
+          );
+          dispatch(PetReportStore.actions.getPetReportListAction());
         })
         .catch((error) => {
           dispatch({

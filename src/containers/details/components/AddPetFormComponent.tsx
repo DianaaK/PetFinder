@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Keyboard,
   Alert,
-  Image
+  Image,
+  Switch
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Checkbox, RadioButton } from 'react-native-paper';
@@ -18,6 +19,7 @@ import {
   PetGender,
   PetReportDTO,
   PetSpecies,
+  ReportStatus,
   ReportType,
   UserDTO
 } from '../../../redux/types';
@@ -78,12 +80,8 @@ const AddPetFormComponent = (props: IProps) => {
   }, []);
 
   useEffect(() => {
-    console.log(isDirty);
-    console.log(props.pending);
     if (isDirty && !props.pending && !props.error) {
-      setTimeout(() => {
-        navigation.goBack();
-      }, 1000);
+      navigation.goBack();
     }
   }, [props.pending]);
 
@@ -193,6 +191,15 @@ const AddPetFormComponent = (props: IProps) => {
     setPetReport({ ...petReport, [field]: value });
   };
 
+  const handleToggle = () => {
+    const newStatus =
+      petReport.status === ReportStatus.ACTIVE
+        ? ReportStatus.INACTIVE
+        : ReportStatus.ACTIVE;
+    setIsDirty(true);
+    setPetReport({ ...petReport, status: newStatus });
+  };
+
   const isValid = () => {
     const incompleteData = !(
       petReport.name &&
@@ -233,10 +240,12 @@ const AddPetFormComponent = (props: IProps) => {
     if (isValid() && isDirty) {
       const dataToSend: any = {
         ...petReport,
-        user: props.editMode ? undefined : props.user._id,
-        address: route.params.address,
-        coordinates: route.params.coordinates
+        user: props.editMode ? undefined : props.user._id
       };
+      if (!props.editMode) {
+        dataToSend.address = route.params.address;
+        dataToSend.coordinates = route.params.coordinates;
+      }
       props.saveReportAction(dataToSend);
     } else if (!isDirty) {
       Toast.show({
@@ -251,14 +260,44 @@ const AddPetFormComponent = (props: IProps) => {
     <>
       <ScrollView style={styles.container}>
         <View style={{ padding: 20 }}>
+          {props.editMode && (
+            <View style={styles.statusContainer}>
+              <TextComponent style={formStyles.questionText}>
+                Report status:
+              </TextComponent>
+              <Switch
+                trackColor={{
+                  false: colors.mainColor4,
+                  true: colors.lightGreen
+                }}
+                thumbColor={petReport.status ? colors.green : colors.lightGray2}
+                onValueChange={handleToggle}
+                value={!!petReport.status}
+              />
+              <TextComponent
+                style={[
+                  formStyles.questionText,
+                  {
+                    marginLeft: 8,
+                    marginTop: 2,
+                    color:
+                      petReport.status === ReportStatus.ACTIVE
+                        ? colors.green
+                        : colors.mainColor4
+                  }
+                ]}>
+                {petReport.status === ReportStatus.ACTIVE
+                  ? 'ACTIVE'
+                  : 'INACTIVE'}
+              </TextComponent>
+            </View>
+          )}
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent style={formStyles.questionText}>
               Report type:
             </TextComponent>
             <RadioButton.Group
-              onValueChange={(value) =>
-                setPetReport({ ...petReport, type: Number(value) })
-              }
+              onValueChange={(value) => handleChange('type', Number(value))}
               value={petReport.type + ''}>
               <View
                 style={[
@@ -286,7 +325,9 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={[styles.questionContainer, styles.rowContainer]}>
-            <TextComponent style={styles.questionText}>Pet name:</TextComponent>
+            <TextComponent style={formStyles.questionText}>
+              Pet name:
+            </TextComponent>
             <TextInput
               value={petReport.name}
               style={[formStyles.input, styles.input]}
@@ -295,7 +336,7 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent style={formStyles.questionText}>
               Pet gender:
             </TextComponent>
             <RadioButton.Group
@@ -327,7 +368,7 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent style={formStyles.questionText}>
               Pet species:
             </TextComponent>
             <RadioButton.Group
@@ -361,7 +402,7 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={[styles.questionContainer, styles.rowContainer]}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent style={formStyles.questionText}>
               Pet breed:
             </TextComponent>
             <TextInput
@@ -371,7 +412,9 @@ const AddPetFormComponent = (props: IProps) => {
             />
           </View>
           <View style={[styles.questionContainer, styles.rowContainer]}>
-            <TextComponent style={styles.questionText}>Pet age:</TextComponent>
+            <TextComponent style={formStyles.questionText}>
+              Pet age:
+            </TextComponent>
             <TextInput
               value={petReport.age}
               style={[formStyles.input, styles.input]}
@@ -380,7 +423,8 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent
+              style={[formStyles.questionText, { marginBottom: 8 }]}>
               Pet description:
             </TextComponent>
             <TextInput
@@ -393,7 +437,8 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent
+              style={[formStyles.questionText, { marginBottom: 5 }]}>
               Contact info:
             </TextComponent>
             <View style={styles.rowContainer}>
@@ -410,7 +455,8 @@ const AddPetFormComponent = (props: IProps) => {
                 uncheckedColor={colors.mainColor2}
                 disabled={!props.user?.phone}
               />
-              <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
+              <TextComponent
+                style={[formStyles.questionText, { marginBottom: 0 }]}>
                 Phone number
               </TextComponent>
             </View>
@@ -424,14 +470,16 @@ const AddPetFormComponent = (props: IProps) => {
                 color={colors.mainColor2}
                 uncheckedColor={colors.mainColor2}
               />
-              <TextComponent style={[styles.questionText, { marginBottom: 0 }]}>
+              <TextComponent
+                style={[formStyles.questionText, { marginBottom: 0 }]}>
                 Email
               </TextComponent>
             </View>
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent
+              style={[formStyles.questionText, { marginBottom: 8 }]}>
               Upload pet pictures:
             </TextComponent>
             <TouchableOpacity
@@ -453,7 +501,8 @@ const AddPetFormComponent = (props: IProps) => {
           </View>
 
           <View style={styles.questionContainer}>
-            <TextComponent style={styles.questionText}>
+            <TextComponent
+              style={[formStyles.questionText, { marginBottom: 8 }]}>
               Set last seen location:
             </TextComponent>
             <TouchableOpacity
@@ -465,7 +514,7 @@ const AddPetFormComponent = (props: IProps) => {
             </TouchableOpacity>
           </View>
           {(petReport.address || route.params?.address) && (
-            <TextComponent style={styles.questionText}>
+            <TextComponent style={formStyles.questionText}>
               {props.editMode ? petReport.address : route.params?.address}
             </TextComponent>
           )}
@@ -477,7 +526,7 @@ const AddPetFormComponent = (props: IProps) => {
           style={formStyles.saveButton}
           onPress={keyboardVisible ? dismissKeyboard : saveReport}>
           <TextComponent style={formStyles.saveButtonText}>
-            {keyboardVisible ? '' : 'Send'}
+            {keyboardVisible ? '' : props.editMode ? 'Save' : 'Send'}
           </TextComponent>
           <IconComponent
             type="MaterialIcons"
@@ -497,22 +546,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.lightGray2
   },
+  statusContainer: {
+    flexDirection: 'row',
+    marginBottom: 15
+  },
   rowContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap'
+    alignItems: 'center'
   },
   questionContainer: {
-    marginBottom: 10
-  },
-  questionText: {
-    fontSize: 16,
-    color: colors.mainColor,
-    marginBottom: 10
+    marginBottom: 15
   },
   input: {
     width: DEVICE_WIDTH / 2,
-    paddingLeft: 5
+    paddingLeft: 5,
+    top: 5
   },
   multilineInput: {
     padding: 5,

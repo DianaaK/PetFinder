@@ -5,6 +5,7 @@ import {
   PetGender,
   PetReportDTO,
   PetSpecies,
+  ReportStatus,
   ReportType
 } from '../../../redux/types';
 import { colors, fonts } from '../../../styles';
@@ -27,6 +28,14 @@ export const ListItemComponent = (props: IProps) => {
       style={styles.container}
       onPress={onPressItem}>
       <View style={styles.imageContainer}>
+        {props.item.status === ReportStatus.INACTIVE ? (
+          <View style={[styles.imageStyle, styles.inactiveContainer]}>
+            <TextComponent
+              style={{ fontWeight: '700', color: colors.mainColor }}>
+              INACTIVE
+            </TextComponent>
+          </View>
+        ) : null}
         <View style={styles.genderContainer}>
           <IconComponent
             type="Ionicons"
@@ -238,5 +247,13 @@ const styles = StyleSheet.create({
     color: colors.mainColor5,
     paddingRight: 5,
     fontSize: 12
+  },
+  inactiveContainer: {
+    position: 'absolute',
+    backgroundColor: colors.mainColor4,
+    opacity: 0.7,
+    zIndex: 3,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

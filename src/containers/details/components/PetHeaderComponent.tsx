@@ -3,7 +3,7 @@ import React from 'react';
 import { Image, StatusBar, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors, DEVICE_HEIGHT } from '../../../styles';
+import { colors, DEVICE_HEIGHT, statusBarHeight } from '../../../styles';
 import { IconComponent } from '../../general';
 import { assets } from '../../../../assets/images';
 import { SliderBox } from '../../general/GallerySlider';
@@ -20,16 +20,18 @@ const PetHeaderComponent = (props: IProps) => {
   const navigation = useNavigation();
   const gradientColors = [
     'rgba(0, 0, 0, 0.7)',
-    'rgba(0, 0, 0, 0.5)',
+    'rgba(0, 0, 0, 0.4)',
     'rgba(0, 0, 0, 0.2)',
-    'rgba(0, 0, 0, 0.0)'
+    'rgba(0, 0, 0, 0.15)',
+    'rgba(0, 0, 0, 0.1)',
+    'rgba(0, 0, 0, 0)'
   ];
-  const gradientLocations = [0.1, 0.4, 0.7, 1];
+  const gradientLocations = [0.1, 0.4, 0.7, 0.8, 0.85, 1];
   return (
     <>
       <StatusBar
         translucent
-        barStyle="dark-content"
+        barStyle="light-content"
         backgroundColor="transparent"
       />
       <View style={styles.contaier}>
@@ -98,12 +100,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: statusBarHeight,
     zIndex: 2
   },
   linearGradient: {
     position: 'absolute',
+    top: -5,
     width: '100%',
-    height: '100%'
+    height: statusBarHeight * 3.2
   },
   image: {
     height: '100%',
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   icon: {
-    color: colors.mainColorLight,
+    color: colors.lightGray,
     padding: 8,
     fontSize: 26
   }
