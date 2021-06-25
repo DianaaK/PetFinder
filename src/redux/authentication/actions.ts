@@ -31,6 +31,22 @@ class AuthActions implements IAuthActions {
           );
         })
         .catch((error) => {
+          if (
+            Server.errorParse(error) &&
+            Server.errorParse(error).name === 'UserExistsError'
+          ) {
+            Toast.show({
+              type: 'error',
+              text1: 'An account with this email address already exists!',
+              visibilityTime: 2500
+            });
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Due to an error, the account could not be created!',
+              visibilityTime: 2500
+            });
+          }
           dispatch({
             type: AuthStore.ActionTypes.REGISTER_FAILED,
             payload: error
