@@ -9,6 +9,7 @@ export class UserDTO {
   created?: string;
   useGoogleMaps?: boolean;
   useSatelliteView?: boolean;
+  deviceId?: string;
 }
 
 export class RegisterUserDTO {
@@ -16,6 +17,7 @@ export class RegisterUserDTO {
   lastname: string = '';
   email: string = '';
   password: string = '';
+  deviceId?: string;
 }
 
 export enum ListType {

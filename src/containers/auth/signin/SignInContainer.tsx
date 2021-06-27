@@ -7,6 +7,7 @@ import { AppStore } from '../../../redux';
 import { ListType, RegisterUserDTO, UserDTO } from '../../../redux/types';
 import authActions from '../../../redux/authentication/actions';
 import { colors } from '../../../styles';
+import OneSignal from 'react-native-onesignal';
 
 interface IProps {
   navigation: any;
@@ -18,6 +19,10 @@ interface IProps {
 
 const SignInContainer = (props: IProps) => {
   useEffect(() => {
+    OneSignal.setAppId('75c10a26-b37a-4efa-9b72-fc70b51ca8a5');
+  }, []);
+
+  useEffect(() => {
     if (props.auth_user && !props.login_pending) {
       props.navigation.navigate('List', { listType: ListType.GENERAL });
     }
@@ -27,8 +32,10 @@ const SignInContainer = (props: IProps) => {
     props.navigation.navigate('LogIn');
   };
 
-  const signinAction = (user: RegisterUserDTO) => {
-    props.registerAction(user);
+  const signinAction = async (user: RegisterUserDTO) => {
+    const device = await OneSignal.getDeviceState();
+    const deviceUser = { ...user, deviceId: device.userId };
+    props.registerAction(deviceUser);
   };
 
   return (
