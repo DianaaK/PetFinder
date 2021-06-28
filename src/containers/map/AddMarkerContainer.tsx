@@ -9,7 +9,12 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, { MAP_TYPES, Marker, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, {
+  MAP_TYPES,
+  Marker,
+  PROVIDER_GOOGLE,
+  PROVIDER_DEFAULT
+} from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import { CoordinatesDTO, UserDTO } from '../../redux/types';
 import { AppStore, reduxContainer } from '../../redux';
@@ -20,7 +25,6 @@ import {
 } from '../../utils';
 import { HeaderComponent, IconComponent } from '../general';
 import { mapStyles } from './components/styles';
-import { Header } from 'react-navigation-stack';
 
 const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 const LATITUDE_DELTA = 0.007;
@@ -178,49 +182,53 @@ const AddMarkerContainer = (props: IProps) => {
               pinColor="green"
             />
           </MapView>
-          {isIOS ?           <KeyboardAvoidingView
-            keyboardVerticalOffset = {10}
-                style={mapStyles.addressInputContainer}
-                behavior="padding">
-            <TextInput
-              placeholder='Write an address'
-              value={address}
-              onChangeText={setAddress}
-              style={mapStyles.addressInput}
-              placeholderTextColor={colors.mainColor}
-            />
-            <TouchableOpacity
-              style={mapStyles.sendAddressButton}
-              onPress={searchAddress}>
-              <IconComponent
-                type="Ionicons"
-                name="send"
-                style={mapStyles.icon}
+          {isIOS ? (
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={10}
+              style={mapStyles.addressInputContainer}
+              behavior="padding">
+              <TextInput
+                placeholder="Write an address"
+                value={address}
+                onChangeText={setAddress}
+                style={mapStyles.addressInput}
+                placeholderTextColor={colors.mainColor}
               />
-            </TouchableOpacity>
-          </KeyboardAvoidingView>: <View style={mapStyles.addressInputContainer}>
-          <TextInput
-            placeholder='Write an address'
-            value={address}
-            onChangeText={setAddress}
-            style={mapStyles.addressInput}
-            placeholderTextColor={colors.mainColor}
-          />
-          <TouchableOpacity
-            style={mapStyles.sendAddressButton}
-            onPress={searchAddress}>
-            <IconComponent
-              type="Ionicons"
-              name="send"
-              style={mapStyles.icon}
-            />
-          </TouchableOpacity>
-        </View>}
+              <TouchableOpacity
+                style={mapStyles.sendAddressButton}
+                onPress={searchAddress}>
+                <IconComponent
+                  type="Ionicons"
+                  name="send"
+                  style={mapStyles.icon}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+          ) : (
+            <View style={mapStyles.addressInputContainer}>
+              <TextInput
+                placeholder="Write an address"
+                value={address}
+                onChangeText={setAddress}
+                style={mapStyles.addressInput}
+                placeholderTextColor={colors.mainColor}
+              />
+              <TouchableOpacity
+                style={mapStyles.sendAddressButton}
+                onPress={searchAddress}>
+                <IconComponent
+                  type="Ionicons"
+                  name="send"
+                  style={mapStyles.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </>
       )}
     </View>
   );
-}
+};
 
 function mapStateToProps(state: AppStore.states) {
   return {
@@ -228,6 +236,10 @@ function mapStateToProps(state: AppStore.states) {
   };
 }
 
-const dispatchToProps = { };
+const dispatchToProps = {};
 
-export default reduxContainer(AddMarkerContainer, mapStateToProps, dispatchToProps);
+export default reduxContainer(
+  AddMarkerContainer,
+  mapStateToProps,
+  dispatchToProps
+);

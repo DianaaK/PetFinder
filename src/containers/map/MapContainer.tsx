@@ -1,8 +1,12 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { MAP_TYPES, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
+import {
+  MAP_TYPES,
+  PROVIDER_DEFAULT,
+  PROVIDER_GOOGLE
+} from 'react-native-maps';
 import { AppStore, reduxContainer } from '../../redux';
 import locationsActions from '../../redux/pet-locations/actions';
 import petReportActions from '../../redux/pet-reports/actions';

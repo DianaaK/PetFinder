@@ -303,47 +303,49 @@ export default function PetMapComponent(props: IProps) {
             {renderExternalNavigation()}
           </>
         )}
-        {addMarkerMode && ( isIOS ? 
-          <KeyboardAvoidingView
-          keyboardVerticalOffset = {Header.HEIGHT + 20}
+        {addMarkerMode &&
+          (isIOS ? (
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={Header.HEIGHT + 20}
               style={mapStyles.addressInputContainer}
               behavior="padding">
-            <TextInput
-              placeholder={'Write an address'}
-              value={address}
-              onChangeText={setAddress}
-              style={mapStyles.addressInput}
-              placeholderTextColor={colors.mainColor}
-            />
-            <TouchableOpacity
-              style={mapStyles.sendAddressButton}
-              onPress={searchAddress}>
-              <IconComponent
-                type="Ionicons"
-                name="send"
-                style={mapStyles.icon}
+              <TextInput
+                placeholder={'Write an address'}
+                value={address}
+                onChangeText={setAddress}
+                style={mapStyles.addressInput}
+                placeholderTextColor={colors.mainColor}
               />
-            </TouchableOpacity>
-        </KeyboardAvoidingView> :
-          <View style={mapStyles.addressInputContainer}>
-            <TextInput
-              placeholder={'Write an address'}
-              value={address}
-              onChangeText={setAddress}
-              style={mapStyles.addressInput}
-              placeholderTextColor={colors.mainColor}
-            />
-            <TouchableOpacity
-              style={mapStyles.sendAddressButton}
-              onPress={searchAddress}>
-              <IconComponent
-                type="Ionicons"
-                name="send"
-                style={mapStyles.icon}
+              <TouchableOpacity
+                style={mapStyles.sendAddressButton}
+                onPress={searchAddress}>
+                <IconComponent
+                  type="Ionicons"
+                  name="send"
+                  style={mapStyles.icon}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+          ) : (
+            <View style={mapStyles.addressInputContainer}>
+              <TextInput
+                placeholder={'Write an address'}
+                value={address}
+                onChangeText={setAddress}
+                style={mapStyles.addressInput}
+                placeholderTextColor={colors.mainColor}
               />
-            </TouchableOpacity>
-          </View>
-        )}
+              <TouchableOpacity
+                style={mapStyles.sendAddressButton}
+                onPress={searchAddress}>
+                <IconComponent
+                  type="Ionicons"
+                  name="send"
+                  style={mapStyles.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
       </View>
     </>
   );
