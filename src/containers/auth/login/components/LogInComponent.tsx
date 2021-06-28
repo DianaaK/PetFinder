@@ -14,9 +14,10 @@ interface IProps {
 
 const LogInComponent = (props: IProps) => {
   const [user, setUser] = useState({ email: '', password: '' });
-
-  const imageHeight = new Animated.Value(180);
-  const backImageHeight = new Animated.Value(DEVICE_HEIGHT / 3);
+  const [imageHeight, setImageHeight] = useState(new Animated.Value(180));
+  const [containerHeight, setContainerHeight] = useState(
+    new Animated.Value(DEVICE_HEIGHT / 3)
+  );
 
   useEffect(() => {
     if (isIOS) {
@@ -39,7 +40,7 @@ const LogInComponent = (props: IProps) => {
         toValue: 0,
         useNativeDriver: false
       }),
-      Animated.timing(backImageHeight, {
+      Animated.timing(containerHeight, {
         duration: event.duration,
         toValue: 0,
         useNativeDriver: false
@@ -54,7 +55,7 @@ const LogInComponent = (props: IProps) => {
         toValue: 180,
         useNativeDriver: false
       }),
-      Animated.timing(backImageHeight, {
+      Animated.timing(containerHeight, {
         duration: event.duration,
         toValue: DEVICE_HEIGHT / 3,
         useNativeDriver: false
@@ -95,7 +96,7 @@ const LogInComponent = (props: IProps) => {
   return (
     <View style={styles.container}>
       <Animated.View
-        style={[styles.logoContainer, { height: backImageHeight }]}>
+        style={[styles.logoContainer, { height: containerHeight }]}>
         <Animated.Image
           source={assets.logoSmall}
           style={{ height: imageHeight }}

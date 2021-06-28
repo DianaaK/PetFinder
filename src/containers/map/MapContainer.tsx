@@ -2,7 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { MAP_TYPES, PROVIDER_GOOGLE } from 'react-native-maps';
+import { MAP_TYPES, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { AppStore, reduxContainer } from '../../redux';
 import locationsActions from '../../redux/pet-locations/actions';
 import petReportActions from '../../redux/pet-reports/actions';
@@ -70,7 +70,7 @@ const MapContainer = (props: IProps) => {
   const reportList = props.report_list;
   const petMode = route?.params?.petMode;
   const mapPreferences = {
-    provider: props.user.useGoogleMaps ? PROVIDER_GOOGLE : null,
+    provider: props.user.useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT,
     type: props.user.useSatelliteView ? MAP_TYPES.SATELLITE : MAP_TYPES.STANDARD
   };
 

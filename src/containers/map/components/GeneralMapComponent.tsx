@@ -9,6 +9,7 @@ import {
   colors,
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
+  isIOS,
   navbarStyles
 } from '../../../styles';
 import { HeaderComponent } from '../../general';
@@ -185,7 +186,7 @@ export default function GeneralMap(props: IProps) {
           </View>
         ) : (
           <MapView
-            provider={props.mapPreferences?.provider || PROVIDER_GOOGLE}
+            provider={isIOS ? props.mapPreferences?.provider : PROVIDER_GOOGLE}
             mapType={props.mapPreferences?.type || MAP_TYPES.STANDARD}
             style={mapStyles.map}
             initialRegion={{
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     height: 180
   },
   animatedContainer: {
-    top: navbarStyles.height - 5,
+    top: isIOS ? navbarStyles.height + 5 : navbarStyles.height - 5,
     position: 'absolute',
     width: '100%',
     zIndex: 3,

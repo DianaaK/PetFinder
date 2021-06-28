@@ -5,29 +5,33 @@ import {
   Keyboard,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  KeyboardAvoidingView
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, { MAP_TYPES, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { MAP_TYPES, Marker, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
-import { CoordinatesDTO } from '../../redux/types';
-import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../styles';
+import { CoordinatesDTO, UserDTO } from '../../redux/types';
+import { AppStore, reduxContainer } from '../../redux';
+import { colors, DEVICE_HEIGHT, DEVICE_WIDTH, isIOS } from '../../styles';
 import {
   getAddressFromCoordinates,
   getCoordinatesFromAddress
 } from '../../utils';
 import { HeaderComponent, IconComponent } from '../general';
 import { mapStyles } from './components/styles';
+import { Header } from 'react-navigation-stack';
 
 const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 const LATITUDE_DELTA = 0.007;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 interface IProps {
+  user: UserDTO;
   navigation: any;
 }
 
-export default function AddMarkerContainer(props: IProps) {
+const AddMarkerContainer = (props: IProps) => {
   const route: any = useRoute();
   const initialCoordinates =
     route.params?.initialCoordinates || new CoordinatesDTO();
@@ -130,9 +134,9 @@ export default function AddMarkerContainer(props: IProps) {
       });
   };
 
-  const user = {
-    provider: PROVIDER_GOOGLE,
-    mapType: MAP_TYPES.STANDARD
+  const mapPreferences = {
+    provider: props.user.useGoogleMaps ? PROVIDER_GOOGLE : PROVIDER_DEFAULT,
+    type: props.user.useSatelliteView ? MAP_TYPES.SATELLITE : MAP_TYPES.STANDARD
   };
 
   return (
@@ -157,8 +161,8 @@ export default function AddMarkerContainer(props: IProps) {
       ) : (
         <>
           <MapView
-            provider={user.provider}
-            mapType={user.mapType}
+            provider={isIOS ? mapPreferences.provider : PROVIDER_GOOGLE}
+            mapType={mapPreferences.type || MAP_TYPES.STANDARD}
             style={mapStyles.map}
             initialRegion={{
               ...position,
@@ -174,12 +178,16 @@ export default function AddMarkerContainer(props: IProps) {
               pinColor="green"
             />
           </MapView>
-          <View style={mapStyles.addressInputContainer}>
+          {isIOS ?           <KeyboardAvoidingView
+            keyboardVerticalOffset = {10}
+                style={mapStyles.addressInputContainer}
+                behavior="padding">
             <TextInput
-              placeholder={'Write an address'}
+              placeholder='Write an address'
               value={address}
               onChangeText={setAddress}
               style={mapStyles.addressInput}
+              placeholderTextColor={colors.mainColor}
             />
             <TouchableOpacity
               style={mapStyles.sendAddressButton}
@@ -190,9 +198,36 @@ export default function AddMarkerContainer(props: IProps) {
                 style={mapStyles.icon}
               />
             </TouchableOpacity>
-          </View>
+          </KeyboardAvoidingView>: <View style={mapStyles.addressInputContainer}>
+          <TextInput
+            placeholder='Write an address'
+            value={address}
+            onChangeText={setAddress}
+            style={mapStyles.addressInput}
+            placeholderTextColor={colors.mainColor}
+          />
+          <TouchableOpacity
+            style={mapStyles.sendAddressButton}
+            onPress={searchAddress}>
+            <IconComponent
+              type="Ionicons"
+              name="send"
+              style={mapStyles.icon}
+            />
+          </TouchableOpacity>
+        </View>}
         </>
       )}
     </View>
   );
 }
+
+function mapStateToProps(state: AppStore.states) {
+  return {
+    user: state.user.user
+  };
+}
+
+const dispatchToProps = { };
+
+export default reduxContainer(AddMarkerContainer, mapStateToProps, dispatchToProps);

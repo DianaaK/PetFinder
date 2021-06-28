@@ -9,10 +9,12 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginTop: 20,
     justifyContent: 'center'
   },
   content: {
     marginHorizontal: 30,
+    flex: 2,
     display: 'flex',
     alignItems: 'center'
   },

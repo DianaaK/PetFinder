@@ -3,7 +3,7 @@ import React from 'react';
 import { Image, StatusBar, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors, DEVICE_HEIGHT, statusBarHeight } from '../../../styles';
+import { colors, DEVICE_HEIGHT, isIOS, statusBarHeight } from '../../../styles';
 import { IconComponent } from '../../general';
 import { assets } from '../../../../assets/images';
 import { SliderBox } from '../../general/GallerySlider';
@@ -42,7 +42,7 @@ const PetHeaderComponent = (props: IProps) => {
             style={styles.linearGradient}
           />
           <TouchableOpacity
-            style={{ paddingVertical: 8, paddingHorizontal: 12 }}
+            style={{ paddingVertical: isIOS ? 20 : 8, paddingHorizontal: 12 }}
             onPress={() => {
               navigation.canGoBack() && navigation.goBack();
             }}>

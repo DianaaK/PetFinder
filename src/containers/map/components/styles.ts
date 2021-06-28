@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../../styles';
+import { colors, fonts } from '../../../styles';
 
 export const mapStyles = StyleSheet.create({
   container: {
@@ -29,6 +29,10 @@ export const mapStyles = StyleSheet.create({
   },
   addressInput: {
     backgroundColor: colors.mainColorLight,
+    color: colors.mainColor,
+    height: 50,
+    padding: 5,
+    fontFamily: fonts.mainFont,
     width: '90%'
   },
   sendAddressButton: {

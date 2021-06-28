@@ -7,11 +7,13 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView
 } from 'react-native';
 import { Popup } from 'react-native-map-link';
 import MapView, { PROVIDER_GOOGLE, Marker, MAP_TYPES } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
+import { Header } from 'react-navigation-stack';
 import {
   CoordinatesDTO,
   PetReportDTO,
@@ -24,7 +26,7 @@ import {
   getCoordinatesFromAddress
 } from '../../../utils';
 import { HeaderComponent, IconComponent, TextComponent } from '../../general';
-import { colors, DEVICE_HEIGHT, DEVICE_WIDTH } from '../../../styles';
+import { colors, DEVICE_HEIGHT, DEVICE_WIDTH, isIOS } from '../../../styles';
 import { mapStyles } from './styles';
 
 interface IProps {
@@ -245,7 +247,7 @@ export default function PetMapComponent(props: IProps) {
           </View>
         ) : (
           <MapView
-            provider={props.mapPreferences?.provider || PROVIDER_GOOGLE}
+            provider={isIOS ? props.mapPreferences?.provider : PROVIDER_GOOGLE}
             mapType={props.mapPreferences?.type || MAP_TYPES.STANDARD}
             style={mapStyles.map}
             initialRegion={{
@@ -301,13 +303,35 @@ export default function PetMapComponent(props: IProps) {
             {renderExternalNavigation()}
           </>
         )}
-        {addMarkerMode && (
+        {addMarkerMode && ( isIOS ? 
+          <KeyboardAvoidingView
+          keyboardVerticalOffset = {Header.HEIGHT + 20}
+              style={mapStyles.addressInputContainer}
+              behavior="padding">
+            <TextInput
+              placeholder={'Write an address'}
+              value={address}
+              onChangeText={setAddress}
+              style={mapStyles.addressInput}
+              placeholderTextColor={colors.mainColor}
+            />
+            <TouchableOpacity
+              style={mapStyles.sendAddressButton}
+              onPress={searchAddress}>
+              <IconComponent
+                type="Ionicons"
+                name="send"
+                style={mapStyles.icon}
+              />
+            </TouchableOpacity>
+        </KeyboardAvoidingView> :
           <View style={mapStyles.addressInputContainer}>
             <TextInput
               placeholder={'Write an address'}
               value={address}
               onChangeText={setAddress}
               style={mapStyles.addressInput}
+              placeholderTextColor={colors.mainColor}
             />
             <TouchableOpacity
               style={mapStyles.sendAddressButton}
