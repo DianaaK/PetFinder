@@ -1,11 +1,12 @@
 import Toast from 'react-native-toast-message';
+import { CLOUDINARY_URL, CLOUDINARY_NAME } from '@env';
 
 export const cloudinaryUpload = async (photo: any) => {
   const data = new FormData();
   data.append('file', photo);
   data.append('upload_preset', 'petfinder');
-  data.append('cloud_name', 'dktt1998');
-  return fetch('https://api.cloudinary.com/v1_1/dktt1998/upload', {
+  data.append('cloud_name', CLOUDINARY_NAME);
+  return fetch(CLOUDINARY_URL, {
     method: 'post',
     body: data
   })
